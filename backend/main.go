@@ -1,9 +1,7 @@
-package backend
+package main
 
 import "fmt"
 
-func main(){
-	fmt.Print("Hallo welt!")
-
-
+func main() {
+	fmt.Println("Hallo welt!")
 }
