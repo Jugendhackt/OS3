@@ -115,19 +115,63 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 
 	}
 
-	w.Write([]byte("Logging in...\n"))
 }
 
 func registerHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-	w.Write([]byte("Registering...\n"))
+
+	switch req.Method {
+	case ("POST"):
+		fmt.Println("\n\n\n")
+		req.ParseForm()
+		fmt.Printf("%v\n\n\n", req.Form)
+
+		username := req.Form["username"]
+		password := req.Form["password"]
+		token := req.Form["token"]
+		displayname := req.Form["displayname"]
+		email := req.Form["email"]
+
+		fmt.Println(username)
+		fmt.Println(password)
+		fmt.Println(token)
+		fmt.Println(displayname)
+		fmt.Println(email)
+
+		uid, err := database.Query("SELECT userid FROM users WHERE username = ?", username)
+
+		if uid != nil && err == nil {
+			w.Write([]byte("\n\nUsername already used.\n\n"))
+		} else if err != nil {
+			w.Write([]byte("\n\nSomething went wrong.\n\n"))
+		} else {
+
+            fmt.Println(len(password))
+			hash, errr := hashPassword(password[0])
+
+            if errr == nil{
+                database.Exec("INSERT INTO users (username,password,displayname,email) VALUES (?,?,?,?)", username,hash,displayname,email)
+                w.Write([]byte("\n\nNew User Created.\n\n"))
+            }else{
+                w.Write([]byte("\n\nSomething went wrong.\n\n"))
+            }
+
+
+		}
+
+	default:
+		fmt.Printf("\n\n%v\n", req)
+		fmt.Println(req.Form)
+		w.Write([]byte("\nRegistering in...\n\n"))
+
+	}
+
 }
 
 func checkDataBase(db *sql.DB) {
-	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(32) NOT NULL,displayname VARCHAR(32),profilePicture MEDIUMBLOB,email VARCHAR(64))")
+	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(32) NOT NULL,displayname VARCHAR(32),profilePicture MEDIUMBLOB,email VARCHAR(64))")
 
-    db.Exec("INSERT ")
 	/*
 			if rows != nil {
 		        fmt.Printf("%v\n", rows)
