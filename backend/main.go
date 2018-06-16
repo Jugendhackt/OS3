@@ -5,15 +5,17 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-    "net/http"
-    //"encode/json"
+	"net/http"
 
-	//"golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/bcrypt"
+	//"encode/json"
+
+	_ "golang.org/x/crypto/bcrypt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-
+var database *sql.DB
 
 func main() {
 	db, err := sql.Open("mysql", "root:testdb@tcp(localhost)/OS3?charset=utf8")
@@ -21,6 +23,8 @@ func main() {
 		fmt.Println(db)
 	}
 	checkErr(err)
+
+	database = db
 
 	checkDataBase(db)
 
@@ -63,24 +67,46 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 	switch req.Method {
-    case ("POST"):
-        fmt.Println("\n\n\n")
-        req.ParseForm()
-        fmt.Printf("%v\n\n\n", req.Form)
+	case ("POST"):
+		fmt.Println("\n\n\n")
+		req.ParseForm()
+		fmt.Printf("%v\n\n\n", req.Form)
 
-        uname := req.Form["username"]
-        pass :=  req.Form["password"]
-        token := req.Form["token"]
+		username := req.Form["username"]
+		password := req.Form["password"]
+		token := req.Form["token"]
 
-        fmt.Println(uname)
-        fmt.Println(pass)
-        fmt.Println(token)
+		fmt.Println(username)
+		fmt.Println(password)
+		fmt.Println(token)
 
-        for _,text := range req.Form{
-            fmt.Println(text)
-        }
-		
-		w.Write([]byte("\n\nLogin successful.\n\n"))
+		uid, err := database.Query("SELECT userid FROM users WHERE username = ?", username)
+
+		if err != nil {
+			w.Write([]byte("\n\nLogin unsuccessful.\n\n"))
+		} else {
+			pass, errr := database.Query("SELECT password FROM users WHERE userid = ?", uid)
+
+			if errr == nil {
+
+				var hash string
+
+				for pass.Next() {
+					errr = pass.Scan(&hash)
+				}
+
+				if checkPasswordHash(password[0], hash) && errr == nil {
+					w.Write([]byte("\n\nLogin successful.\n\n"))
+				} else if errr == nil {
+					w.Write([]byte("\n\nPassword wrong.\n\n"))
+				} else {
+					w.Write([]byte("\n\nLogin unsuccessful.\n\n"))
+				}
+			} else {
+				w.Write([]byte("\n\nLogin unsuccessful.\n\n"))
+			}
+
+		}
 
 	default:
 		fmt.Printf("\n\n%v\n", req)
@@ -101,6 +127,7 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 func checkDataBase(db *sql.DB) {
 	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(32) NOT NULL,displayname VARCHAR(32),profilePicture MEDIUMBLOB,email VARCHAR(64))")
 
+    db.Exec("INSERT ")
 	/*
 			if rows != nil {
 		        fmt.Printf("%v\n", rows)
@@ -131,7 +158,6 @@ func checkErr(err error) {
 	}
 }
 
-/*
 func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
@@ -141,4 +167,3 @@ func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
-*/
