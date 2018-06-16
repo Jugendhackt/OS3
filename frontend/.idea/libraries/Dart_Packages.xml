@@ -226,6 +226,20 @@
             </list>
           </value>
         </entry>
+        <entry key="dbcrypt">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/dbcrypt-0.2.1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="drandom">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/drandom-0.0.3/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="firebase">
           <value>
             <list>
@@ -583,10 +597,24 @@
             </list>
           </value>
         </entry>
+        <entry key="unittest">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/unittest-0.11.7/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="utf">
           <value>
             <list>
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/utf-0.9.0+4/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="uuid">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/uuid-1.0.0/lib" />
             </list>
           </value>
         </entry>
@@ -653,6 +681,8 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/csslib-0.14.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/dart_internal-0.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/dart_style-1.0.14/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/dbcrypt-0.2.1/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/drandom-0.0.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase-4.5.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/fixnum-0.10.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/front_end-0.1.1/lib" />
@@ -704,7 +734,9 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/test-0.12.42/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/tuple-1.0.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/typed_data-1.1.5/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/unittest-0.11.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/utf-0.9.0+4/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/uuid-1.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/vm_service_client-0.2.4+3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/watcher-0.9.7+8/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-1.0.8/lib" />

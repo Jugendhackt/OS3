@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
-import 'package:atlive/src/firebase_service.dart';
+import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/layouts/image.dart';
 import 'package:atlive/src/routes.dart';
 import 'package:atlive/src/site_part.dart';
