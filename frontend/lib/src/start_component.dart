@@ -5,7 +5,7 @@ import 'package:angular_router/angular_router.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
-import 'package:atlive/src/firebase_service.dart';
+import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/routes.dart';
 import 'package:atlive/src/site_part.dart';
 import 'package:atlive/src/source_component.dart';
@@ -26,9 +26,9 @@ import 'package:atlive/src/tile_component.dart';
   providers: const [materialProviders],
 )
 class StartComponent implements OnInit {
-  StartComponent(this.routes, FBService this.fbservice);
+  StartComponent(this.routes, BService this.fbservice);
 
-  final FBService fbservice;
+  final BService fbservice;
   final Routes routes;
 
   /*List htmlTable = [

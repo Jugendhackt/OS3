@@ -3,14 +3,16 @@ import 'dart:async';
 
 import 'package:angular/angular.dart';
 import 'package:firebase/firebase.dart' as fb;
+import 'package:uuid/uuid.dart';
+
 /*
 import 'package:firebase/firestore.dart' as fs;*/
 
 @Injectable()
-class FBService {
+class BService {
   fb.User user;
 
-  FBService() {
+  BService() {
 /*
     fb.messaging().requestPermission();
 */
@@ -38,6 +40,17 @@ class FBService {
 
     /* _fbGithubAuthProvider = new fb.GithubAuthProvider();
     _fbTwitterAuthProvider = new fb.TwitterAuthProvider();*/
+  }
+
+  String token = null;
+
+  login(String username, String password) async {
+    token = (new Uuid().v4()).toString();
+
+    HttpRequest reponse = await HttpRequest.postFormData(
+        'http://localhost:443/auth/login',
+        {'username': username, 'password': password, 'token': token});
+    return reponse.response;
   }
 
   requestPermission() async {

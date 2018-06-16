@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
-import 'package:atlive/src/firebase_service.dart';
+import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/login_component.dart';
 import 'package:atlive/src/routes.dart';
 
@@ -38,13 +38,13 @@ import 'package:angular_router/angular_router.dart';
     const ClassProvider(HeroService),*/
     const ClassProvider(Routes),
     materialProviders,
-    FBService
+    BService
   ],
 )
 class AppComponent implements OnInit {
-  AppComponent(this.routes, FBService this.fbservice);
+  AppComponent(this.routes, BService this.fbservice);
 
-  final FBService fbservice;
+  final BService fbservice;
 
   String imageUrl = 'assets/profile_picture.png';
 
@@ -114,16 +114,15 @@ class AppComponent implements OnInit {
   }
 
   void getImage() async {
-    var url = "http://localhost:8080/api/toy/v1/noop.jpg";
-
     // call the web server asynchronously
-    var request = await HttpRequest.getString(url);
-    print(request);
-    Element el = window.document.querySelector('#ItemPreview');
+    /*   var request = await HttpRequest.getString(url);*/
+
+    /*   print(request);*/
+    /*   Element el = window.document.querySelector('#ItemPreview');
 
     var str = "Hello world";
     var base64 = window.btoa(json.decode(request)['data']);
 
-    el.setAttribute('src', 'data:image/png;base64,' + base64);
+    el.setAttribute('src', 'data:image/png;base64,' + base64);*/
   }
 }

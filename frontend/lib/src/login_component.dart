@@ -4,14 +4,14 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
-import 'package:atlive/src/firebase_service.dart';
+import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/routes.dart';
 
 @Component(
   selector: 'login',
   template: '''
   <div style="padding: 20px">
-    <material-input [(ngModel)]="email" label="E-Mail"></material-input>
+    <material-input [(ngModel)]="username" label="Username"></material-input>
     <material-input [(ngModel)]="password" label="Password" ></material-input>
     
     <div *ngIf="showError" style="color: red;">{{error}}</div>
@@ -19,9 +19,9 @@ import 'package:atlive/src/routes.dart';
    <material-button (trigger)="login()">
     Login
 </material-button>
-<material-button (trigger)="fbservice.signInWithGoogle()">
+<!--<material-button (trigger)="fbservice.signInWithGoogle()">
     Google+
-</material-button>
+</material-button>-->
 
     </div>
 
@@ -36,9 +36,9 @@ import 'package:atlive/src/routes.dart';
   providers: const [materialProviders],
 )
 class LoginComponent implements OnInit, OnDestroy {
-  final FBService fbservice;
+  final BService fbservice;
   @Input()
-  String email = '';
+  String username = '';
   @Input()
   String password = '';
 
@@ -87,8 +87,14 @@ class LoginComponent implements OnInit, OnDestroy {
   }
 
   String error = "";
+  bool loading = false;
 
   void login() async {
+    loading = true;
+    String res = await fbservice.login(username, password);
+
+    print(res);
+    loading = false;
     /* fb.Auth auth = fb.auth();
     try {
       fb.User user = await auth.signInWithEmailAndPassword(email, password);

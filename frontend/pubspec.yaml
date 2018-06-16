@@ -14,6 +14,8 @@ dependencies:
   firebase: '^4.4.0'
   angular_forms: ^2.0.0-alpha
   angular_router: ^2.0.0-alpha
+  dbcrypt: any
+  uuid: "^1.0.0"
   #http: ^0.11.0
   #stream_transform: ^0.0.6
   #pwa: "^0.1.10"
