@@ -17,38 +17,38 @@
 
     <!-- <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
      <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>-->
-    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-storage.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDd0ERAp3BnKC1WzhmLut5Q5zkgtcAwEjk",
-            authDomain: "cylos-school.firebaseapp.com",
-            databaseURL: "https://cylos-school.firebaseio.com",
-            projectId: "cylos-school",
-            storageBucket: "cylos-school.appspot.com",
-            messagingSenderId: "530500442623"
-        };
-        firebase.initializeApp(config);
-        const firestore = firebase.firestore();
-        const settings = {/* your settings... */ timestampsInSnapshots: true};
-        firestore.settings(settings);
+    <!--  <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-firestore.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-storage.js"></script>
+      <script>
+          // Initialize Firebase
+          var config = {
+              apiKey: "AIzaSyDd0ERAp3BnKC1WzhmLut5Q5zkgtcAwEjk",
+              authDomain: "cylos-school.firebaseapp.com",
+              databaseURL: "https://cylos-school.firebaseio.com",
+              projectId: "cylos-school",
+              storageBucket: "cylos-school.appspot.com",
+              messagingSenderId: "530500442623"
+          };
+          firebase.initializeApp(config);
+          const firestore = firebase.firestore();
+          const settings = {/* your settings... */ timestampsInSnapshots: true};
+          firestore.settings(settings);
 
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/sw.js').then(function (registration) {
-                    // Registration was successful
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function (err) {
-                    // registration failed :(
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
-    </script>
+          if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function () {
+                  navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                      // Registration was successful
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                  }, function (err) {
+                      // registration failed :(
+                      console.log('ServiceWorker registration failed: ', err);
+                  });
+              });
+          }
+      </script>-->
     <script defer src="main.dart.js"></script>
 </head>
 <body style="background: url('/assets/water.jpg') no-repeat fixed;">

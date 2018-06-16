@@ -1,0 +1,31 @@
+{
+  "name": "atlive",
+  "short_name": "atlive",
+  "description": "Ein Content-Management-System",
+  "lang": "de-DE",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "gcm_sender_id": "103953800507",
+  "fcm_sender_id": "530500442623",
+  "__mock_values__icons": [
+    {
+      "src": "launcher-icon-1x.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "launcher-icon-2x.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "launcher-icon-4x.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

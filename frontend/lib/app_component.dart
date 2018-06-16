@@ -8,8 +8,6 @@ import 'package:atlive/src/firebase_service.dart';
 import 'package:atlive/src/login_component.dart';
 import 'package:atlive/src/routes.dart';
 
-import 'package:firebase/firebase.dart' as fb;
-import 'package:firebase/firestore.dart' as fs;
 import 'package:angular_router/angular_router.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
@@ -72,7 +70,7 @@ class AppComponent implements OnInit {
 
   void logout() async {
     print('Login Start');
-    await auth.signOut();
+    await fbservice.signOut();
     loggedIn = false;
     showPopup = false;
   }
@@ -84,18 +82,20 @@ class AppComponent implements OnInit {
 */
   }
 
-  fb.Auth auth;
-
   final Routes routes;
 
   void ngOnInit() {
     getImage();
     availableWidth = window.innerWidth;
+/*    print(window.innerWidth);
+    print(window.screen.width);*/
+/*
+    print(window.screen.pix);
+*/
 
     mobile = availableWidth < 750 ? true : false;
 
-    auth = fb.auth();
-    loggedIn = auth.currentUser == null ? false : true;
+    loggedIn = fbservice.user == null ? false : true;
 
     /* fs.Firestore firestore = fb.firestore();
 

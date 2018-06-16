@@ -2,9 +2,6 @@ import 'package:angular/angular.dart';
 import 'package:atlive/app_component.dart';
 import 'package:atlive/app_component.template.dart' as ng;
 
-import 'package:firebase/firebase.dart' as fb;
-import 'package:firebase/firestore.dart' as fs;
-
 import 'package:angular_router/angular_router.dart';
 import 'main.template.dart' as self;
 import 'package:http/browser_client.dart';

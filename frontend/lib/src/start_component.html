@@ -1,0 +1,130 @@
+<h1>Start</h1>
+<!--
+<i class="material-icons" style="font-size: 500px">face</i>
+-->
+
+<!--<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+    <path fill="#000000" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/>
+</svg>
+<svg style="width:1cm;height:1cm" viewBox="0 0 24 24">
+    <path fill="#000000"
+          d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
+</svg>
+&lt;!&ndash; A button with both icon and text &ndash;&gt;
+<material-button raised (trigger)="generate()">
+    <glyph icon="lightbulb_outline"></glyph>
+
+    {{infoText}}
+</material-button>
+
+<div style="background-color: green; width: 3cm; height: 3cm"></div>-->
+
+<!--<source-tile idCode="test">hi</source-tile>-->
+<!--
+<div id="insert-here">insert here</div>
+-->
+<!--<div style="border: 33px solid red;">
+    Hello
+</div>
+Hallo-->
+
+<!--<style type="text/css" scoped *ngIf="edit">
+    .container {
+        border: 3px solid yellow;
+    }
+
+    .row {
+        border: 3px solid red;
+    }
+
+    .column {
+        border: 3px solid blue;
+    }
+
+    .tile {
+        border: 3px solid green;
+    }
+
+</style>-->
+
+<div style="
+    position: fixed;
+    bottom: 8px;
+    right: 16px;">
+    <material-toggle [(checked)]="edit" label="Edit">
+    </material-toggle>
+    <!--
+        Bottom Right
+    -->
+</div>
+
+<table class="container" style="margin: 0px auto;" *ngIf="mainPart != null" cellspacing="0" cellpadding="0">
+
+    <tile [downPart]="mainPart"></tile>
+
+    <!--  <tr *ngFor="let part1 of mainPart.trchildren.values">
+
+      <tr *ngFor="let part2 of part1.trchildren.values">
+
+      </tr>
+      <td *ngFor="let part2 of part1.tdchildren.values">
+
+      </td>
+      <a *ngIf="part1.value!=null">
+          {{part1.value}}
+      </a>
+
+
+      </tr>
+
+
+      <td *ngFor="let part1 of mainPart.tdchildren.values">
+          <tr *ngFor="let part2 of part1.trchildren.values">
+
+          </tr>
+      <td *ngFor="let part2 of part1.tdchildren.values">
+
+      </td>
+      <a *ngIf="part1.value!=null">
+          {{part1.value}}
+      </a>
+
+
+      </td>
+      <a *ngIf="mainPart.value!=null">
+          {{mainPart.value}}
+      </a>-->
+
+</table>
+
+
+<!--
+
+<source-tile idCode="{{xtile}}">hi</source-tile>
+
+<table cellspacing="0" cellpadding="0">
+    <tr>
+        <td style="border: 3px solid yellow;">
+            <embed src="/index.html#sources/test" style="width:200px;height: 300px;">
+        </td>
+        <td style="border: 3px solid green;">
+            <embed src="/index.html#sources/test" style="width:400px; height: 200px;">
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 3px solid red;">
+            <embed src="/index.html#sources/test" style="width:200px; height: 200px;">
+        </td>
+        <td style="border: none;outline: none;margin: 0px;padding: 0px;">
+        <td style="border: 3px solid blue;margin: 0px;outline: none;">
+            <embed src="/index.html#sources/test" style="width:200px; height: 200px;">
+        </td>
+        <td style="border: 3px solid yellow;margin: 0px;outline: none;">
+            <embed src="/index.html#sources/test" style="width:200px; height: 200px;">
+        </td>
+        </td>
+    </tr>
+    &lt;!&ndash; <tr>
+         <source>Loading...</source>
+     </tr>&ndash;&gt;
+</table>-->

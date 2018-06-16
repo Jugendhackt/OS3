@@ -1,35 +1,28 @@
 name: atlive
-description: A school management system for students and teachers
+description: A system
 # version: 1.0.0
 # homepage: https://redsolver.net
 # author: redsolver <info@redsolver.net>
 
 environment:
-  sdk: '>=2.0.0-dev.60.0 <2.0.0'
+  sdk: '>=2.0.0-dev.55.0 <2.0.0'
 
 dependencies:
-  angular: 5.0.0-alpha+12
-  angular_components: 0.9.0-alpha+12
+  angular: ^5.0.0-alpha+13
+  angular_components: ^0.9.0-alpha+13
+
   firebase: '^4.4.0'
   angular_forms: ^2.0.0-alpha
   angular_router: ^2.0.0-alpha
-  http: ^0.11.0
-  stream_transform: ^0.0.6
-  dart_to_js_script_rewriter: "^1.0.3"
-  pwa: "^0.1.10"
-  feedparser: "^0.0.2"
-  service_worker: "^0.2.1"
+  #http: ^0.11.0
+  #stream_transform: ^0.0.6
+  #pwa: "^0.1.10"
+  #feedparser: "^0.0.2"
+  #service_worker: "^0.2.1"
 
 dev_dependencies:
-  angular_test: ^2.0.0-alpha+9
-  build_runner: ^0.8.7
-  build_test: ^0.10.0
+  angular_test: ^2.0.0-alpha+11
+  build_runner: ^0.8.9
+  build_test: ^0.10.2
   build_web_compilers: ^0.4.0
-  test: ^0.12.30
-
-dependency_overrides:
-  # https://github.com/dart-lang/stagehand/issues/506
-  angular_compiler: 0.4.0-alpha+12
-
-transformers:
-- dart_to_js_script_rewriter
+  test: ^0.12.38
