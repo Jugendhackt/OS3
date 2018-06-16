@@ -8,7 +8,7 @@ import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/routes.dart';
 
 @Component(
-  selector: 'login',
+  selector: 'register',
   template: '''
   <div style="padding: 20px">
     <material-input [(ngModel)]="username" label="Username"></material-input>

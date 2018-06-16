@@ -76,8 +76,11 @@
 
 </div>
 <div *ngIf="!mobile">
-    <material-drawer persistent #drawer="drawer">
+    <material-drawer persistent #drawer="drawer" style="background-color: #32cb00">
 
+        <!--
+                <div style="background-color: green">
+        -->
         <div class="header" *ngIf="fbservice.user!=null">
 
             <material-button class="material-drawer-button" icon (trigger)="drawer.toggle()">
@@ -127,15 +130,15 @@
                    Drafts
                </material-list-item>-->
         </div>
-        <div style="position: absolute;
-    bottom: 0;
-    right: 0;">Level 0
-        </div>
-
+        <!-- <div style="position: absolute;
+     bottom: 0;
+     right: 0;">Level 0
+         </div>-->
+        <!--  </div>-->
     </material-drawer>
 
     <div class="material-content">
-        <header class="material-header shadow" style="background-color: #4caf50;">
+        <header class="material-header shadow" style="background-color: #32cb00;">
 
             <div class="material-header-row">
                 <material-button *ngIf="!drawer.visible" class="material-drawer-button" icon
@@ -157,6 +160,23 @@
                   </nav>-->
 
                 <div *ngIf="fbservice.user==null">
+                    <material-button
+                            raised
+                            registerPopupSource
+                            #source="registerPopupSource"
+                            class="trigger"
+                            (trigger)="showRegister = !showRegister"
+                    >
+                        Register
+                    </material-button>
+
+                    <material-popup [(visible)]="showRegister" [enforceSpaceConstraints]="true" [source]="source"
+                                    [preferredPositions]="[registerPopupSource]">
+
+                        <register (loggedInChange)="loginChange($event)"></register>
+                    </material-popup>
+
+
                     <material-button
                             raised
                             popupSource
