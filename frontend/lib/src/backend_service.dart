@@ -1,9 +1,12 @@
 import 'dart:html';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:angular/angular.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/browser_client.dart';
 
 /*
 import 'package:firebase/firestore.dart' as fs;*/
@@ -12,7 +15,10 @@ import 'package:firebase/firestore.dart' as fs;*/
 class BService {
   fb.User user;
 
+  BrowserClient client;
+
   BService() {
+    client = new BrowserClient();
 /*
     fb.messaging().requestPermission();
 */
@@ -42,15 +48,51 @@ class BService {
     _fbTwitterAuthProvider = new fb.TwitterAuthProvider();*/
   }
 
-  String token = null;
+  String _token = null;
+  final String server = 'https://151.216.10.58:443';
 
-  login(String username, String password) async {
-    token = (new Uuid().v4()).toString();
+  Future<String> login(String username, String password) async {
+    _token = (new Uuid().v4()).toString();
+    print(_token);
+    /* var url = server + '/auth/login';
+    var client = new BrowserClient();
 
-    HttpRequest reponse = await HttpRequest.postFormData(
-        'http://localhost:443/auth/login',
-        {'username': username, 'password': password, 'token': token});
-    return reponse.response;
+    var request = new http.Request('POST', Uri.parse(url));
+    var body = {'username': username, 'password': password, 'token': _token};
+//  request.headers[HttpHeaders.CONTENT_TYPE] = 'application/json; charset=utf-8';
+*/ /*
+    request.headers[HttpHeaders.authorizationHeader] = 'Basic 021215421fbe4b0d27f:e74b71bbce';
+*/ /*
+    request.bodyFields = body;
+    String res = '';
+
+    await client
+        .send(request)
+        .then((response) => response.stream
+            .bytesToString()
+            .then((value) => res = value.toString()))
+        .catchError((error) => print(error.toString()));*/
+    var url = server + '/auth/login';
+    var res = await client.post(url,
+        body: {'username': username, 'password': password, 'token': _token});
+    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');
+
+    /*  HttpRequest req = await HttpRequest.postFormData(server + '/auth/login',
+        {'username': username, 'password': password, 'token': _token});
+    print(req.response);*/
+
+    return res.body;
+  }
+
+  /* Future<String> */
+  register(String username, String password) async {
+    _token = (new Uuid().v4()).toString();
+
+    /* HttpRequest reponse = await HttpRequest.postFormData(
+        server + '/auth/register',
+        {'username': username, 'password': password, 'token': _token});
+    return reponse.response;*/
   }
 
   requestPermission() async {

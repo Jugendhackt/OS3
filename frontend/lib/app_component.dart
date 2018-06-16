@@ -66,7 +66,7 @@ class AppComponent implements OnInit {
 
   bool showPopup = false;
 
-  final title = 'atlive';
+  final title = 'OS3';
 
   void logout() async {
     print('Login Start');
