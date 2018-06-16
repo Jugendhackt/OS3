@@ -65,6 +65,7 @@ class AppComponent implements OnInit {
   RelativePosition get popupPosition => RelativePosition.AdjacentBottom;
 
   bool showPopup = false;
+  bool showRegister = false;
 
   final title = 'OS3 Demo';
 

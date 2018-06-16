@@ -162,6 +162,23 @@
                 <div *ngIf="fbservice.user==null">
                     <material-button
                             raised
+                            registerPopupSource
+                            #source="registerPopupSource"
+                            class="trigger"
+                            (trigger)="showRegister = !showRegister"
+                    >
+                        Register
+                    </material-button>
+
+                    <material-popup [(visible)]="showRegister" [enforceSpaceConstraints]="true" [source]="source"
+                                    [preferredPositions]="[registerPopupSource]">
+
+                        <register (loggedInChange)="loginChange($event)"></register>
+                    </material-popup>
+
+
+                    <material-button
+                            raised
                             popupSource
                             #source="popupSource"
                             class="trigger"
