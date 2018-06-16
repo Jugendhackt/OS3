@@ -1,55 +1,35 @@
 package main
 
 import (
-    "log"
     "crypto/tls"
-    "net"
-    "bufio"
+    "log"
+    "net/http"
 )
 
 func main() {
-    log.SetFlags(log.Lshortfile)
-
-    cer, err := tls.LoadX509KeyPair("server.crt", "server.key")
-    if err != nil {
-        log.Println(err)
-        return
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", rootHandler)
+    cfg := &tls.Config{
+        MinVersion:               tls.VersionTLS12,
+        CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+        PreferServerCipherSuites: true,
+        CipherSuites: []uint16{
+            tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+            tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+            tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+            tls.TLS_RSA_WITH_AES_256_CBC_SHA,
+        },
     }
-
-    config := &tls.Config{Certificates: []tls.Certificate{cer}}
-    ln, err := tls.Listen("tcp", ":443", config) 
-    if err != nil {
-        log.Println(err)
-        return
+    srv := &http.Server{
+        Addr:         ":443",
+        Handler:      mux,
+        TLSConfig:    cfg,
+        TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
     }
-    defer ln.Close()
-
-    for {
-        conn, err := ln.Accept()
-        if err != nil {
-            log.Println(err)
-            continue
-        }
-        go handleConnection(conn)
-    }
+    log.Fatal(srv.ListenAndServeTLS("server.rsa.crt", "server.rsa.key"))
 }
 
-func handleConnection(conn net.Conn) {
-    defer conn.Close()
-    r := bufio.NewReader(conn)
-    for {
-        msg, err := r.ReadString('\n')
-        if err != nil {
-            log.Println(err)
-            return
-        }
-
-        println(msg)
-
-        n, err := conn.Write([]byte("world\n"))
-        if err != nil {
-            log.Println(n, err)
-            return
-        }
-    }
+func rootHandler (w http.ResponseWriter, req *http.Request) {
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+	w.Write([]byte("This is a test server.\n"))
 }
