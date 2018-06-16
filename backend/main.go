@@ -3,21 +3,17 @@ package main
 import (
 	"crypto/tls"
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log"
     "net/http"
+    //"encode/json"
 
 	//"golang.org/x/crypto/bcrypt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type login_struct struct {
-	username string
-	password string
-	token    string
-}
+
 
 func main() {
 	db, err := sql.Open("mysql", "root:testdb@tcp(localhost)/OS3?charset=utf8")
@@ -66,15 +62,32 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 func loginHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+	switch req.Method {
+    case ("POST"):
+        fmt.Println("\n\n\n")
+        req.ParseForm()
+        fmt.Printf("%v\n\n\n", req.Form)
 
-	decoder := json.NewDecoder(req.Body)
-	var t login_struct
-	err := decoder.Decode(&t)
-	if err != nil {
-		panic(err)
+        uname := req.Form["username"]
+        pass :=  req.Form["password"]
+        token := req.Form["token"]
+
+        fmt.Println(uname)
+        fmt.Println(pass)
+        fmt.Println(token)
+
+        for _,text := range req.Form{
+            fmt.Println(text)
+        }
+		
+		w.Write([]byte("\n\nLogin successful.\n\n"))
+
+	default:
+		fmt.Printf("\n\n%v\n", req)
+		fmt.Println(req.Form)
+		w.Write([]byte("\nLogging in...\n\n"))
+
 	}
-	defer req.Body.Close()
-	log.Println(t)
 
 	w.Write([]byte("Logging in...\n"))
 }
