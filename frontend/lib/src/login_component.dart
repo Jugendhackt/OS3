@@ -93,7 +93,19 @@ class LoginComponent implements OnInit, OnDestroy {
     loading = true;
     String res = await fbservice.login(username, password);
 
+    if (res.contains('Login unsuccessful.')) {
+      error = res;
+      showError = true;
+    } else if (res.contains('Password wrong.')) {
+      error = res;
+      showError = true;
+    } else {
+      /* error=res;*/
+      showError = false;
+    }
+
     print(res);
+
     loading = false;
     /* fb.Auth auth = fb.auth();
     try {
