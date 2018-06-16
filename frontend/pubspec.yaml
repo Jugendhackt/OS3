@@ -1,15 +1,24 @@
-name: frontend
-description: A web app that uses AngularDart Components
+name: atlive
+description: A school management system for students and teachers
 # version: 1.0.0
-# homepage: https://www.example.com
-# author: redsolver <email@example.com>
+# homepage: https://redsolver.net
+# author: redsolver <info@redsolver.net>
 
 environment:
-  sdk: '>=2.0.0-dev.52.0 <2.0.0'
+  sdk: '>=2.0.0-dev.60.0 <2.0.0'
 
 dependencies:
   angular: 5.0.0-alpha+12
   angular_components: 0.9.0-alpha+12
+  firebase: '^4.4.0'
+  angular_forms: ^2.0.0-alpha
+  angular_router: ^2.0.0-alpha
+  http: ^0.11.0
+  stream_transform: ^0.0.6
+  dart_to_js_script_rewriter: "^1.0.3"
+  pwa: "^0.1.10"
+  feedparser: "^0.0.2"
+  service_worker: "^0.2.1"
 
 dev_dependencies:
   angular_test: ^2.0.0-alpha+9
@@ -21,3 +30,6 @@ dev_dependencies:
 dependency_overrides:
   # https://github.com/dart-lang/stagehand/issues/506
   angular_compiler: 0.4.0-alpha+12
+
+transformers:
+- dart_to_js_script_rewriter

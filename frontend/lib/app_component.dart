@@ -1,16 +1,129 @@
-import 'package:angular/angular.dart';
+import 'dart:convert';
+import 'dart:html';
 
-import 'src/todo_list/todo_list_component.dart';
+import 'package:angular/angular.dart';
+import 'package:angular_components/angular_components.dart';
+import 'package:angular_forms/angular_forms.dart';
+import 'package:atlive/src/firebase_service.dart';
+import 'package:atlive/src/login_component.dart';
+import 'package:atlive/src/routes.dart';
+
+import 'package:firebase/firebase.dart' as fb;
+import 'package:firebase/firestore.dart' as fs;
+import 'package:angular_router/angular_router.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
 // Components info: https://webdev.dartlang.org/components
 
 @Component(
-  selector: 'my-app',
-  styleUrls: ['app_component.css'],
+  selector: 'atlive-shell',
+  styleUrls: [
+    'app_component.css',
+    'package:angular_components/app_layout/layout.scss.css',
+  ],
   templateUrl: 'app_component.html',
-  directives: [TodoListComponent],
+  directives: [
+    routerDirectives,
+    materialDirectives,
+    LoginComponent,
+    formDirectives,
+    NgIf,
+    DeferredContentDirective,
+    MaterialButtonComponent,
+    MaterialIconComponent,
+    MaterialPersistentDrawerDirective,
+    MaterialTemporaryDrawerComponent,
+    MaterialToggleComponent,
+  ],
+  providers: const [
+    /*
+    const ClassProvider(HeroService),*/
+    const ClassProvider(Routes),
+    materialProviders,
+    FBService
+  ],
 )
-class AppComponent {
-  // Nothing here yet. All logic is in TodoListComponent.
+class AppComponent implements OnInit {
+  AppComponent(this.routes, FBService this.fbservice);
+
+  final FBService fbservice;
+
+  String imageUrl = 'assets/profile_picture.png';
+
+  /* bool customWidth = false;
+  bool end = false;
+  bool overlay = false;*/
+
+  void pop() {
+    showPopup = false;
+  }
+
+  int availableWidth;
+
+  bool loggedIn = false;
+
+  bool mobile = false;
+
+  RelativePosition get popupPosition => RelativePosition.AdjacentBottom;
+
+  bool showPopup = false;
+
+  final title = 'atlive';
+
+  void logout() async {
+    print('Login Start');
+    await auth.signOut();
+    loggedIn = false;
+    showPopup = false;
+  }
+
+  void loginChange(bool change) {
+    loggedIn = true;
+/*
+    print(change);
+*/
+  }
+
+  fb.Auth auth;
+
+  final Routes routes;
+
+  void ngOnInit() {
+    getImage();
+    availableWidth = window.innerWidth;
+
+    mobile = availableWidth < 750 ? true : false;
+
+    auth = fb.auth();
+    loggedIn = auth.currentUser == null ? false : true;
+
+    /* fs.Firestore firestore = fb.firestore();
+
+    auth = fb.auth();
+    _login();
+
+    fs.CollectionReference ref = firestore.collection("messages");
+
+    ref.onSnapshot.listen((querySnapshot) {
+      querySnapshot.docChanges.forEach((change) {
+        if (change.type == "added") {
+          print(change.doc.data().toString());
+        }
+      });
+    });*/
+  }
+
+  void getImage() async {
+    var url = "http://localhost:8080/api/toy/v1/noop.jpg";
+
+    // call the web server asynchronously
+    var request = await HttpRequest.getString(url);
+    print(request);
+    Element el = window.document.querySelector('#ItemPreview');
+
+    var str = "Hello world";
+    var base64 = window.btoa(json.decode(request)['data']);
+
+    el.setAttribute('src', 'data:image/png;base64,' + base64);
+  }
 }

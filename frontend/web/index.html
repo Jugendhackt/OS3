@@ -1,14 +1,96 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>frontend</title>
+<html xmlns:background-repeat="http://www.w3.org/1999/xhtml" xmlns:background-attachment="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="manifest" href="manifest.json"/>
+    <meta name="theme-color" content="#ffffff"/>
+    <title>atlive</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
+    <!--  <link rel="stylesheet"
+            type="text/css"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
+
+
+    <!-- <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>-->
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-storage.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDd0ERAp3BnKC1WzhmLut5Q5zkgtcAwEjk",
+            authDomain: "cylos-school.firebaseapp.com",
+            databaseURL: "https://cylos-school.firebaseio.com",
+            projectId: "cylos-school",
+            storageBucket: "cylos-school.appspot.com",
+            messagingSenderId: "530500442623"
+        };
+        firebase.initializeApp(config);
+        const firestore = firebase.firestore();
+        const settings = {/* your settings... */ timestampsInSnapshots: true};
+        firestore.settings(settings);
+
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
     <script defer src="main.dart.js"></script>
-  </head>
-  <body>
-    <my-app>Loading...</my-app>
-  </body>
+</head>
+<body style="background: url('/assets/water.jpg') no-repeat fixed;">
+<!--
+<div style="margin-left: 20px;margin-right: 20px;">
+-->
+<!--
+<img id="ItemPreview" src="http://localhost:8080/api/toy/v1/noop.jpg"/>
+-->
+
+
+<atlive-shell>
+
+    <div style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 -50% 0 0;
+    transform: translate(-50%, -50%)">
+
+
+        <div class="sk-cube-grid">
+            <div class="sk-cube sk-cube1"></div>
+            <div class="sk-cube sk-cube2"></div>
+            <div class="sk-cube sk-cube3"></div>
+            <div class="sk-cube sk-cube4"></div>
+            <div class="sk-cube sk-cube5"></div>
+            <div class="sk-cube sk-cube6"></div>
+            <div class="sk-cube sk-cube7"></div>
+            <div class="sk-cube sk-cube8"></div>
+            <div class="sk-cube sk-cube9"></div>
+        </div>
+
+    </div>
+
+</atlive-shell>
+
+<!--
+</div>
+-->
+<script type="text/javascript" id="cookiebanner"
+        src="https://cdn.jsdelivr.net/gh/dobarkod/cookie-banner@1.2.2/dist/cookiebanner.min.js"
+        data-linkmsg="Mehr Informationen" data-message="Wir benutzen Cookies für eine verbesserte Erfahrung."></script>
+</body>
 </html>
