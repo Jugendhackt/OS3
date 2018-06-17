@@ -35,9 +35,9 @@ func main() {
 	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/auth/login", loginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
-	mux.Handle("/site/", http.StripPrefix("/site/", http.FileServer(http.Dir("./site/"))))
-	mux.Handle("/layout/", http.StripPrefix("/layout/", http.FileServer(http.Dir("./layout/"))))
-	mux.Handle("/data/", http.StripPrefix("/data/", http.FileServer(http.Dir("./data/"))))
+	mux.HandleFunc("/site/", folderHandler)
+	mux.HandleFunc("/layout/",folderHandler)
+	mux.HandleFunc("/data/", folderHandler)
 
 	//Configuring the TLS Transmission
 	cfg := &tls.Config{
@@ -71,6 +71,12 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 	w.Write([]byte("This is a test server.\n"))
+}
+
+func folderHandler(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+	http.ServeFile(w, req, "." + req.URL.Path)
 }
 
 /*
@@ -169,6 +175,8 @@ func checkDataBase(db *sql.DB) {
 //Small function to enable cors
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+    (*w).Header().Set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    (*w).Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, token");
 }
 
 //Small function to find errors and then panic
