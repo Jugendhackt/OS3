@@ -10,14 +10,16 @@ import 'package:atlive/src/routes.dart';
 @Component(
   selector: 'register',
   template: '''
-  <div style="padding: 20px">
-    <material-input [(ngModel)]="username" label="Username"></material-input>
-    <material-input [(ngModel)]="password" label="Password" ></material-input>
+  <div style="padding: 20px;max-width: 400px">
+    <material-input [(ngModel)]="username" label="Username" style="padding-right: 20px"></material-input>
+    <material-input [(ngModel)]="password" label="Password" ></material-input><br>
+    <material-input [(ngModel)]="displayName" label="Displayname" style="padding-right: 20px"></material-input>
+    <material-input [(ngModel)]="email" label="E-Mail" ></material-input><br>
     
     <div *ngIf="showError" style="color: red;">{{error}}</div>
     
-   <material-button (trigger)="login()">
-    Login
+   <material-button (trigger)="register()">
+    Register
 </material-button>
 <!--<material-button (trigger)="fbservice.signInWithGoogle()">
     Google+
@@ -35,12 +37,16 @@ import 'package:atlive/src/routes.dart';
   ],
   providers: const [materialProviders],
 )
-class LoginComponent implements OnInit, OnDestroy {
+class RegisterComponent implements OnInit, OnDestroy {
   final BService fbservice;
   @Input()
   String username = '';
   @Input()
   String password = '';
+  @Input()
+  String displayName = '';
+  @Input()
+  String email = '';
 
   Future<void> ngOnInit() async {
     showError = false;
@@ -58,7 +64,7 @@ class LoginComponent implements OnInit, OnDestroy {
   final Router _router;
   final Routes routes;
 
-  LoginComponent(this.routes, this._router, this.fbservice);
+  RegisterComponent(this.routes, this._router, this.fbservice);
 
   /* @Input()
   bool loggedIn;*/
@@ -68,30 +74,13 @@ class LoginComponent implements OnInit, OnDestroy {
   @Output()
   Stream<bool> get loggedInChange => _loginChange.stream;
 
-  void loginWithGoogle() async {
-    /* fb.Auth auth = fb.auth();
-    try {
-      fb.User user = await auth.(email, password);
-
-      print(user.email);
-
-        auth.currentUser.updateProfile(fb.UserProfile(
-          displayName: 'redsolver',
-          photoURL:
-              'https://yt3.ggpht.com/-4T-7_vJXOG8/AAAAAAAAAAI/AAAAAAAAAAA/K38Aw9bjyxU/s88-c-k-no-mo-rj-c0xffffff/photo.jpg'));
-       _loginChange.add(true);
-      _router.navigateByUrl(_router.current.toUrl(), reload: true);
-    } catch (e) {
-      print(e);
-    }*/
-  }
-
   String error = "";
   bool loading = false;
 
-  void login() async {
+  void register() async {
     loading = true;
-    String res = await fbservice.login(username, password);
+    String res =
+        await fbservice.register(username, password, displayName, email);
 
     if (res.contains('Login unsuccessful.')) {
       error = res;

@@ -169,14 +169,20 @@ class StartComponent implements OnInit {
 
     Navigator.;
   }*/
+
+String siteData='';
   Future<void> ngOnInit() async {
-    Element el = window.document.querySelector('#insert-there');
+    siteData=await fbservice.getSite(1);
+    _interpreter(siteData);
+
+
+  /*  Element el = window.document.querySelector('#insert-there');
 
     var ua = window.navigator.userAgent;
     String template = '''<h1>Hello world.</h1>
 
 Check my bird... <em>it flies</em> !
-<img src="https://www.dartlang.org/logos/dart-bird.svg">''';
+<img src="https://www.dartlang.org/logos/dart-bird.svg">''';*/
 /*
     print(el);
 */

@@ -11,7 +11,7 @@ import 'package:atlive/src/routes.dart';
   selector: 'login',
   template: '''
   <div style="padding: 20px">
-    <material-input [(ngModel)]="username" label="Username"></material-input>
+    <material-input [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input>
     <material-input [(ngModel)]="password" label="Password" ></material-input>
     
     <div *ngIf="showError" style="color: red;">{{error}}</div>

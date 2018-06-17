@@ -51,6 +51,30 @@ class BService {
   String _token = null;
   final String server = 'https://151.216.10.58:443';
 
+  Future<String> getSite(int siteId) async {
+    var url = server + '/site/$siteId';
+    var res = await client.get(url, headers: {'token': _token});
+    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');
+    return res.body;
+  }
+
+  Future<String> getLayout(int layoutId) async {
+    var url = server + '/layout/$layoutId';
+    var res = await client.get(url, headers: {'token': _token});
+    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');
+    return res.body;
+  }
+
+  Future<String> getData(int datadId) async {
+    var url = server + '/datad/$datadId';
+    var res = await client.get(url, headers: {'token': _token});
+    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');
+    return res.body;
+  }
+
   Future<String> login(String username, String password) async {
     _token = (new Uuid().v4()).toString();
     print(_token);
@@ -85,9 +109,21 @@ class BService {
     return res.body;
   }
 
-  /* Future<String> */
-  register(String username, String password) async {
+  Future<String> register(String username, String password, String displayname,
+      String email) async {
     _token = (new Uuid().v4()).toString();
+
+    var url = server + '/auth/register';
+    var res = await client.post(url, body: {
+      'username': username,
+      'password': password,
+      'email': email,
+      'displayname': displayname,
+      'token': _token
+    });
+    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');
+    return res.body;
 
     /* HttpRequest reponse = await HttpRequest.postFormData(
         server + '/auth/register',
