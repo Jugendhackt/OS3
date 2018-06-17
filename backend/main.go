@@ -37,6 +37,9 @@ func main() {
 	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/auth/login", loginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
+	mux.Handle("/site/", http.StripPrefix("/site/", http.FileServer(http.Dir("./site/"))))
+	mux.Handle("/layout/", http.StripPrefix("/layout/", http.FileServer(http.Dir("./layout/"))))
+	mux.Handle("/data/", http.StripPrefix("/data/", http.FileServer(http.Dir("./data/"))))
 
 	//Configuring the TLS Transmission
 	cfg := &tls.Config{
