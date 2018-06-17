@@ -166,7 +166,7 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 //The function for generating the bare minimum of the data base
 func checkDataBase(db *sql.DB) {
 	//Setting up the main user data base
-	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64))")
+	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64),profilePicture MEDIUMBLOB)")
 
 	//Creating a default user
 	createUser("Tester", "geheim", "Beater", "", nil)
