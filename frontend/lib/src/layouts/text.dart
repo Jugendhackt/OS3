@@ -27,32 +27,34 @@ import 'package:firebase/firestore.dart' as fs;*/
   ],
   providers: const [materialProviders],
 )
-class ContentTile /*implements OnInit, OnDestroy*/ {
-  /* String uri = "thisistheuri";
+class ContentTile implements OnInit, OnDestroy {
+   String uri = "thisistheuri";
 
-  */ /*List htmlTable = [
-*/ /* */ /*    ['test'],
+   List htmlTable = [
+       ['test'],
     ['test', 'test'],
-    ['test'],*/ /* */ /*
-  ];*/ /*
-  ContentTile(this.routes, FBService this.fbservice);
+    ['test'],
+  ];
+  ContentTile(this.routes, BService this.fbservice);
 
-  final FBService fbservice;
+  final BService fbservice;
   final Routes routes;
 
   @Input()
   String code;
 
   String layoutTemp = '';
+/*
   fs.DocumentSnapshot sourceSnapTemp;
+*/
+  String sourceData;
+  String layoutData;
 
   void update() async {
     try {
       //CHANNEL
       if (code.split(';')[0].toLowerCase() == 's') {
         String layout = layoutTemp;
-        print(sourceSnapTemp.id);
-        print(sourceSnapTemp.data());
 
         var pieces = layout.split(':::');
         bool beforeList = true;
@@ -113,8 +115,8 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
               print(docs);
 
               docs.sort((a, b) {
-                */ /* print(a.keys);
-                return 0;*/ /*
+                  print(a.keys);
+                return 0;
                 return a
                     .data()[sort]
                     .toString()
@@ -148,7 +150,7 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
           layoutToUse = layoutToUse.replaceAll('###$i###', fillIn);
         }
 
-        */ /*   if (layout.split('***').length == 3) {
+            if (layout.split('***').length == 3) {
           String item = layout.split('#item#')[1].split('#/item#')[0];
           String divider = '';
           if (layout.contains('#divider#')) {
@@ -177,7 +179,7 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
             }
             sIndex++;
           }
-        }*/ /*
+        }
 
         Element el = window.document.querySelector('#' + key);
 
@@ -196,11 +198,11 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
           el.setAttribute('style', style);
         }
 
-        */ /*     Uri url = await fbservice
+              Uri url = await fbservice
             .getStorageUrl('users/xxredsolverxx@gmail.com/fruit.jpg');
-        print('STORAGEURL');*/ /*
+        print('STORAGEURL');
 
-        el.setInnerHtml(layoutToUse */ /*+ '''<img src="$url">'''*/ /*,
+        el.setInnerHtml(layoutToUse  + '''<img src="$url">''' ,
             treeSanitizer: NodeTreeSanitizer.trusted);
       }
 
@@ -215,14 +217,15 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
 
   String key = '';
 
-  Stream<fs.DocumentSnapshot> layoutStream;
-  Stream<fs.DocumentSnapshot> sourceStream;
-  var layoutSub;
-  var sourceSub;
-  fs.DocumentReference layoutRef;
-  fs.DocumentReference sourceRef;
+/*  Stream<fs.DocumentSnapshot> layoutStream;
+  Stream<fs.DocumentSnapshot> sourceStream;*/
+  /*var layoutSub;
+  var sourceSub;*/
+  String layoutRef;
+  String sourceRef;
 
   Future<void> ngOnInit() async {
+    //TODO DATA
     var rng = new Random();
     key = 'a' + rng.nextInt(99999999).toString();
     Element el = window.document.querySelector('#insert-here');
@@ -233,11 +236,10 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
 
     if (code.split(';')[0].toLowerCase() == 's') {
       el.innerHtml = loadingIndicator;
-      fs.Firestore firestore = fbservice.firestore;
 
-      layoutRef = firestore.collection("layouts").doc(code.split(';')[2]);
+      layoutRef = code.split(';')[2];
 
-      sourceRef = firestore.collection("sources").doc(code.split(';')[1]);
+      sourceRef = code.split(';')[1];
 
       print(layoutRef.path);
       layoutStream = layoutRef.onSnapshot;
@@ -263,7 +265,7 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
 
       style += 'min-width: ${meta[1]}px;max-width: ${meta[1]}px;';
 
-      */ /*if (code.split(';').length == 2) {
+       if (code.split(';').length == 2) {
         if (meta2[0].length > 0) {
         }
         if (meta2[1].length > 0) {
@@ -272,15 +274,15 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
 
         print(style);
         el.setAttribute('style', style);
-      }*/ /*
+      }
       el.setAttribute('style', style);
 
-*/ /*
+
       el.setInnerHtml( , treeSanitizer: NodeTreeSanitizer.trusted);
-*/ /*
+
     }
 
-    */ /* fs.Firestore firestore = fb.firestore();
+      fs.Firestore firestore = fb.firestore();
 
     fs.DocumentReference layoutRef =
         firestore.collection("layouts").doc(code.split(';')[2]);
@@ -321,17 +323,17 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
       }
 
       el.setInnerHtml(layout, treeSanitizer: NodeTreeSanitizer.trusted);
-    }*/ /*
+    }
   }
 
   @override
   void ngOnDestroy() {
     print('ONDESTROY');
-*/ /*
-    fs.Firestore firestore = fb.firestore();
-*/ /*
-    */ /*  fs.DocumentReference layoutRef =
-        firestore.collection("layouts").doc(code.split(';')[2]);*/ /*
+
+    /*fs.Firestore firestore = fb.firestore();
+
+       fs.DocumentReference layoutRef =
+        firestore.collection("layouts").doc(code.split(';')[2]); */
 
     try {
       layoutSub.cancel();
@@ -341,18 +343,20 @@ class ContentTile /*implements OnInit, OnDestroy*/ {
     } catch (e) {}
   }
 
-*/ /*
-  String loadingIndicator = '''<div class="spinner"></div>''';
-*/ /*
-  String loadingIndicator = '''<div class="sk-cube-grid">
-  <div class="sk-cube sk-cube1"></div>
-  <div class="sk-cube sk-cube2"></div>
-  <div class="sk-cube sk-cube3"></div>
-  <div class="sk-cube sk-cube4"></div>
-  <div class="sk-cube sk-cube5"></div>
-  <div class="sk-cube sk-cube6"></div>
-  <div class="sk-cube sk-cube7"></div>
-  <div class="sk-cube sk-cube8"></div>
-  <div class="sk-cube sk-cube9"></div>
-  </div>''';*/
+
+
+  String loadingIndicator = '''<div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>''';
 }
