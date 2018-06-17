@@ -113,7 +113,7 @@ class ContentTile implements OnInit, OnDestroy {
 
             List dataListSnap = json.decode(sourceData)[data];
 
-            List<Map> docs;
+            List docs;
 
             String sort = getField(nll, 'sort');
 

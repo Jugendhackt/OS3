@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ef60777-278f-46c6-a8b8-1b8dc13a433f" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/data/2.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/layout/2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/1.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/2.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/layout/1.html" beforeDir="false" afterPath="$PROJECT_DIR$/layout/1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/layout/2.html" beforeDir="false" afterPath="$PROJECT_DIR$/layout/2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/site/1.oll" beforeDir="false" afterPath="$PROJECT_DIR$/site/1.oll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/backend_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/backend_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/lib/src/layouts/text.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/layouts/text.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/start_component.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/start_component.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/start_component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/start_component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/tile_component.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/tile_component.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/web/assets/fruit.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/fruit.jpg" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,8 +34,8 @@
       <file leaf-file-name="1.oll" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/site/1.oll">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="59" selection-start-column="59" selection-end-column="59" />
+            <state relative-caret-position="38">
+              <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -45,8 +43,8 @@
       <file leaf-file-name="1.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/1.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="44" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
+            <state relative-caret-position="38">
+              <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -54,26 +52,26 @@
       <file leaf-file-name="1.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/layout/1.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="6" selection-start-column="6" selection-end-column="6" />
+            <state relative-caret-position="19">
+              <caret line="1" selection-start-line="1" selection-end-line="1" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="2.json" pinned="false" current-in-tab="false">
+      <file leaf-file-name="2.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data/2.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="9" column="14" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="14" />
+            <state relative-caret-position="95">
+              <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="2.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="2.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/layout/2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" column="22" lean-forward="true" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
+            <state relative-caret-position="152">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#!!top" expanded="true" />
               </folding>
@@ -97,12 +95,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/layout/1.html" />
-        <option value="$PROJECT_DIR$/data/1.json" />
         <option value="$PROJECT_DIR$/main.go" />
-        <option value="$PROJECT_DIR$/site/1.oll" />
-        <option value="$PROJECT_DIR$/data/2.json" />
         <option value="$PROJECT_DIR$/layout/2.html" />
+        <option value="$PROJECT_DIR$/site/1.oll" />
+        <option value="$PROJECT_DIR$/data/1.json" />
+        <option value="$PROJECT_DIR$/layout/1.html" />
+        <option value="$PROJECT_DIR$/data/2.json" />
       </list>
     </option>
   </component>
@@ -116,9 +114,9 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="195" />
-    <option name="width" value="1390" />
-    <option name="height" value="999" />
+    <option name="x" value="964" />
+    <option name="width" value="956" />
+    <option name="height" value="1044" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -181,6 +179,7 @@
       <recent name="$PROJECT_DIR$/data" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -265,7 +264,7 @@
       <workItem from="1529142725908" duration="80000" />
       <workItem from="1529143329806" duration="783000" />
       <workItem from="1529145226008" duration="3009000" />
-      <workItem from="1529222965416" duration="6182000" />
+      <workItem from="1529222965416" duration="6739000" />
     </task>
     <task id="LOCAL-00001" summary="Backend Main">
       <created>1529143614175</created>
@@ -295,14 +294,21 @@
       <option name="project" value="LOCAL" />
       <updated>1529230242731</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fixes">
+      <created>1529232894921</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1529232894921</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10054000" />
+    <option name="totallyTimeSpent" value="10611000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1044" extended-state="6" />
+    <frame x="964" y="0" width="956" height="1044" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -318,7 +324,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.29437706" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18589744" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.38325992" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Learn" order="2" weight="0.32959402" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -390,41 +396,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/layout/1.html">
+    <entry file="file://$PROJECT_DIR$/site/1.oll">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="6" selection-start-column="6" selection-end-column="6" />
+        <state relative-caret-position="38">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/1.json">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/layout/1.html">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
-          <caret line="1" column="44" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/site/1.oll">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="59" selection-start-column="59" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/2.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="14" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="14" />
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/layout/2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="22" lean-forward="true" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
+        <state relative-caret-position="152">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
           <folding>
             <element signature="n#style#0;n#div#1;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/fruit.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/2.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
         </state>
       </provider>
     </entry>
