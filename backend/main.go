@@ -79,7 +79,11 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(password)
 		fmt.Println(token)
 
-		uid, err := database.Query("SELECT userid FROM user WHERE username = ?", username[0])
+		uid, err := database.Query("SELECT userid FROM user WHERE username = \"" + username[0] + "\"")
+
+        var usid int
+        if uid != nil{uid.Next()}
+        uid.Scan(&usid)
 
 		if err != nil {
 			w.Write([]byte("\n\nLogin unsuccessful.\n\n"))
@@ -151,7 +155,7 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func checkDataBase(db *sql.DB) {
-	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(32) NOT NULL,displayname VARCHAR(32),email VARCHAR(64))")
+	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64))")
 
     createUser("Tester","geheim","Beater","",nil)
 
@@ -186,24 +190,28 @@ func checkErr(err error) {
 }
 
 func createUser(username,password,displayname,email string, w *http.ResponseWriter){
-    uid, err := database.Query("SELECT userid FROM user WHERE username = ?", username)
+    uid, err := database.Query("SELECT userid FROM user WHERE username = '" + username + "'")
+    fmt.Println("SELECT userid FROM user WHERE username = '" + username + "'")
     var usid int
     fmt.Println(username)
 	fmt.Println(password)
 	fmt.Println(displayname)
-	fmt.Println(email)
+    fmt.Println(email)
+    if uid != nil{uid.Next()}
     uid.Scan(&usid)
+    fmt.Println(usid)
         if usid == 0 && err == nil{
 
             fmt.Println(len(password))
 			hash, errr := hashPassword(password)
+            fmt.Println(hash)
 
             if errr == nil{
-                database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (?,?,?,?)", username,hash,displayname,email)
+                database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
                 displaymsg("\n\nNew User Created.\n\n", w)
             }else{
                 displaymsg("\n\nSomething went wrong.\n\n", w)
-                fmt.Print(err.Error())
+                fmt.Print(errr.Error())
             }
 
         }else if uid != nil && err == nil {
@@ -217,7 +225,7 @@ func createUser(username,password,displayname,email string, w *http.ResponseWrit
 			hash, errr := hashPassword(password)
 
             if errr == nil{
-                database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (?,?,?,?)", username,hash,displayname,email)
+                database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
                 displaymsg("\n\nNew User Created.\n\n", w)
             }else{
                 displaymsg("\n\nSomething went wrong.\n\n", w)
