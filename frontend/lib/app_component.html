@@ -162,8 +162,6 @@
                 <div *ngIf="fbservice.user==null">
                     <material-button
                             raised
-                            registerPopupSource
-                            #source="registerPopupSource"
                             class="trigger"
                             (trigger)="showRegister = !showRegister"
                     >
@@ -171,7 +169,7 @@
                     </material-button>
 
                     <material-popup [(visible)]="showRegister" [enforceSpaceConstraints]="true" [source]="source"
-                                    [preferredPositions]="[registerPopupSource]">
+                                    [preferredPositions]="[popupPosition]">
 
                         <register (loggedInChange)="loginChange($event)"></register>
                     </material-popup>

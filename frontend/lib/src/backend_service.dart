@@ -86,8 +86,21 @@ class BService {
   }
 
   /* Future<String> */
-  register(String username, String password) async {
+  register(String username, String password, String displayname,
+      String email) async {
     _token = (new Uuid().v4()).toString();
+
+    var url = server + '/auth/register';
+    var res = await client.post(url, body: {
+      'username': username,
+      'password': password,
+      'email': email,
+      'displayname': displayname,
+      'token': _token
+    });
+    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');
+    return res.body;
 
     /* HttpRequest reponse = await HttpRequest.postFormData(
         server + '/auth/register',

@@ -6,6 +6,7 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/login_component.dart';
+import 'package:atlive/src/register_component.dart';
 import 'package:atlive/src/routes.dart';
 
 import 'package:angular_router/angular_router.dart';
@@ -24,6 +25,7 @@ import 'package:angular_router/angular_router.dart';
     routerDirectives,
     materialDirectives,
     LoginComponent,
+    RegisterComponent,
     formDirectives,
     NgIf,
     DeferredContentDirective,
@@ -62,7 +64,7 @@ class AppComponent implements OnInit {
 
   bool mobile = false;
 
-  RelativePosition get popupPosition => RelativePosition.AdjacentBottom;
+  RelativePosition get popupPosition => RelativePosition.AdjacentBottomRight;
 
   bool showPopup = false;
   bool showRegister = false;
