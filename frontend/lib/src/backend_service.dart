@@ -1,11 +1,8 @@
-import 'dart:html';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:angular/angular.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/browser_client.dart';
 
 /*
@@ -53,7 +50,7 @@ class BService {
   String _token = null;
 
   Future<String> getSite(int siteId) async {
-    var url = server + '/site/$siteId';
+    var url = server + '/site/$siteId.oll';
     var res = await client.get(url, headers: {'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');
@@ -61,7 +58,7 @@ class BService {
   }
 
   Future<String> getLayout(int layoutId) async {
-    var url = server + '/layout/$layoutId';
+    var url = server + '/layout/$layoutId.html';
     var res = await client.get(url, headers: {'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');
@@ -69,7 +66,7 @@ class BService {
   }
 
   Future<String> getData(int datadId) async {
-    var url = server + '/datad/$datadId';
+    var url = server + '/datad/$datadId.json';
     var res = await client.get(url, headers: {'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');
@@ -140,7 +137,8 @@ class BService {
     messaging.onTokenRefresh.listen((n) {});*/
   }
 
-  Future<Uri> getStorageUrl(String path) async {
+  /*Future<Uri>*/
+  getStorageUrl(String path) async {
     /*   print('STORAGEURLSTART');
     try {
       var ref = storage.ref(path);

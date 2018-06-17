@@ -9,8 +9,6 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/layouts/image.dart';
 import 'package:atlive/src/routes.dart';
-import 'package:atlive/src/site_part.dart';
-import 'package:atlive/src/source_component.dart';
 /*import 'package:firebase/firebase.dart' as fb;
 import 'package:firebase/firestore.dart' as fs;*/
 
@@ -99,7 +97,7 @@ class ContentTile implements OnInit, OnDestroy {
                 ? k.split('#$field#')[1].split('#$field#')[0].trim()
                 : null;
 
-       /* print(
+        /* print(
             getField('#item# <div>{{title}}<br>{{body}}</div>#item#', 'item'));*/
 
         for (int i = 0; i < listIndex; i++) {
@@ -113,8 +111,7 @@ class ContentTile implements OnInit, OnDestroy {
             fs.QuerySnapshot dataSnap = await sourceRef.collection(data).get();
 */
 
-            List dataListSnap=json.decode(sourceData)[data];
-
+            List dataListSnap = json.decode(sourceData)[data];
 
             List<Map> docs;
 
@@ -131,9 +128,7 @@ class ContentTile implements OnInit, OnDestroy {
               docs.sort((a, b) {
                 /* print(a.keys);
                 return 0;*/
-                return a[sort]
-                    .toString()
-                    .compareTo(b[sort].toString());
+                return a[sort].toString().compareTo(b[sort].toString());
               });
               print(docs);
             }

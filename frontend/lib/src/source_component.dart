@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:angular/angular.dart';
-import 'package:angular_components/material_button/material_button.dart';
-import 'package:angular_router/angular_router.dart';
 
-import 'route_paths.dart' as paths;
+/*import 'route_paths.dart' as paths;*/
 import 'package:angular_components/angular_components.dart';
 
 @Component(
