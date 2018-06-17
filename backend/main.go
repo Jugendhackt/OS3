@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	"golang.org/x/crypto/bcrypt"
-	//"encode/json"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -194,11 +193,11 @@ func logUserIn(username, password string, w *http.ResponseWriter) {
 	}
 	uid.Scan(&usid)
 
-    //if there was an error a message iss thrown
+    //if there was an error a message is thrown
 	if err != nil {
         (*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
     
-    //if not it  will
+    //if not it  will continue
 	} else {
 
         //now i ask the server for the userpassword which is stored as hash.
@@ -249,37 +248,47 @@ func createUser(username, password, displayname, email string, w *http.ResponseW
 	if uid != nil {
 		uid.Next()
 	}
-    uid.Scan(&usid)(usid)
+    uid.Scan(&usid)
     
-
+    //if there was no error and no other user a new one will be created
 	if usid == 0 && err == nil {
 
-		fmt.Println(len(password))
+        //It starts by hashing the Password
 		hash, errr := hashPassword(password)
-		fmt.Println(hash)
 
+        //If there is no error the new account will be created
 		if errr == nil {
 			database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
-			displaymsg("\n\nNew User Created.\n\n", w)
+            displaymsg("\n\nNew User Created.\n\n", w)
+            
+          //Otherwise a message is produced
 		} else {
 			displaymsg("\n\nSomething went wrong.\n\n", w)
 			fmt.Print(errr.Error())
 		}
 
+      //If there is a user already a message with his name and userid will be displayed
 	} else if uid != nil && err == nil {
 		displaymsg("\n\nUsername "+username+" with uid "+strconv.Itoa(usid)+" already used.\n\n", w)
-	} else if err != nil {
+    
+      //if there was an error an error message will be sent
+    } else if err != nil {
 		displaymsg("\n\nSomething went wrong.\n\n", w)
-		fmt.Print(err.Error())
+        fmt.Print(err.Error())
+        
+      //The same as the first case.
 	} else {
 
-		fmt.Println(len(password))
+        //It starts by hashing the Password
 		hash, errr := hashPassword(password)
 
+        //If there is no error the new account will be created
 		if errr == nil {
 			database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
 			displaymsg("\n\nNew User Created.\n\n", w)
-		} else {
+        
+          //Otherwise a message is produced
+        } else {
 			displaymsg("\n\nSomething went wrong.\n\n", w)
 			fmt.Print(err.Error())
 		}
