@@ -65,8 +65,8 @@ class BService {
     return res.body;
   }
 
-  Future<String> getData(int datadId) async {
-    var url = server + '/datad/$datadId.json';
+  Future<String> getData(int dataId) async {
+    var url = server + '/data/$dataId.json';
     var res = await client.get(url, headers: {'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');

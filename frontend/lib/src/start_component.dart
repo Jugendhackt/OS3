@@ -57,6 +57,10 @@ class StartComponent implements OnInit {
 
     int secPointer;
 
+    print(input);
+    print(input);
+    print(input);
+
     for (int pointer = 0; pointer < input.length; pointer++) {
       if (input[pointer] == '\\') {
         if (meta) {
@@ -173,6 +177,9 @@ class StartComponent implements OnInit {
   String siteData = '';
 
   Future<void> ngOnInit() async {
+    availableWidth = window.innerWidth;
+
+    
     siteData = await fbservice.getSite(1);
     _interpreter(siteData);
 
@@ -199,7 +206,6 @@ Check my bird... <em>it flies</em> !
     print(ua);
 */
 
-    availableWidth = window.innerWidth;
 
     /*   fs.Firestore firestore = fb.firestore();
     fs.DocumentReference ref =

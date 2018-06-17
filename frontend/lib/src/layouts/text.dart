@@ -233,6 +233,10 @@ class ContentTile implements OnInit, OnDestroy {
   String sourceRef;
 
   Future<void> ngOnInit() async {
+    print('-');
+    print(code);
+    print('-');
+
     var rng = new Random();
     key = 'a' + rng.nextInt(99999999).toString();
     Element el = window.document.querySelector('#insert-here');
@@ -247,7 +251,7 @@ class ContentTile implements OnInit, OnDestroy {
       layoutRef = code.split(';')[2];
 
       sourceRef = code.split(';')[1];
-      layoutData = await fbservice.getData(int.parse(layoutRef));
+      layoutData = await fbservice.getLayout(int.parse(layoutRef));
       sourceData = await fbservice.getData(int.parse(sourceRef));
       update();
 

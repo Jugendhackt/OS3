@@ -17,7 +17,7 @@ import 'package:atlive/src/site_part.dart';
 </td>
     <div *ngIf="downPart.value!=null" class="tile">
     
-     <!-- <content [code]="downPart.value"></content>-->
+      <content [code]="downPart.value"></content>
 
     </div>
   

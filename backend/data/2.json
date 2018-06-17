@@ -1,0 +1,17 @@
+{
+  "title": "Die neusten News",
+  "news": [
+    {
+      "title": "Ein geiler Titel",
+      "content": "Ein geiler Titel"
+    },
+    {
+      "title": "Ein geiler Titel",
+      "content": "Ein geiler Titel"
+    },
+    {
+      "title": "Ein geiler Titel",
+      "content": "Ein geiler Titel"
+    }
+  ]
+}
