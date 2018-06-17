@@ -28,8 +28,6 @@ func main() {
 	//Setting the defaults if theyy don't exist
 	checkDataBase(db)
 
-	db.Close()
-
 	//Defining mux as Handler
 	mux := http.NewServeMux()
 
@@ -193,18 +191,20 @@ func logUserIn(username, password string, w *http.ResponseWriter) {
 	var usid int
 	if uid != nil {
 		uid.Next()
+		uid.Scan(&usid)
 	}
-	uid.Scan(&usid)
+	
 
     //if there was an error a message is thrown
 	if err != nil {
-        (*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
+		(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
+		fmt.Println("point 1" + err.Error())
     
     //if not it  will continue
 	} else {
 
         //now i ask the server for the userpassword which is stored as hash.
-		pass, errr := database.Query("SELECT password FROM user WHERE userid = ?", uid)
+		pass, errr := database.Query("SELECT password FROM user WHERE userid = ?", usid)
 
         //if no error happened everything stays normal
 		if errr == nil {
@@ -229,10 +229,12 @@ func logUserIn(username, password string, w *http.ResponseWriter) {
             //if some error popped up a message is sent.
             }else {
 				(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
+				fmt.Println("Point 2" + errr.Error())
             }
         //if some error popped up a message is sent.
 		} else {
 			(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
+			fmt.Println("Point 3" + errr.Error())
 		}
 
 	}
@@ -250,8 +252,9 @@ func createUser(username, password, displayname, email string, w *http.ResponseW
 	var usid int
 	if uid != nil {
 		uid.Next()
+		uid.Scan(&usid)
 	}
-    uid.Scan(&usid)
+    
     
     //if there was no error and no other user a new one will be created
 	if usid == 0 && err == nil {
