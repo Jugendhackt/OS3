@@ -53,7 +53,7 @@ class BService {
   String _token = null;
 
   Future<String> getSite(int siteId) async {
-    var url = server + '/site/$siteId';
+    var url = server + '/site/$siteId.oll';
     var res = await client.get(url, headers: {'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');
@@ -61,7 +61,7 @@ class BService {
   }
 
   Future<String> getLayout(int layoutId) async {
-    var url = server + '/layout/$layoutId';
+    var url = server + '/layout/$layoutId.html';
     var res = await client.get(url, headers: {'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');
@@ -69,7 +69,7 @@ class BService {
   }
 
   Future<String> getData(int datadId) async {
-    var url = server + '/datad/$datadId';
+    var url = server + '/datad/$datadId.json';
     var res = await client.get(url, headers: {'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');

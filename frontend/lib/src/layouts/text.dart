@@ -99,7 +99,7 @@ class ContentTile implements OnInit, OnDestroy {
                 ? k.split('#$field#')[1].split('#$field#')[0].trim()
                 : null;
 
-       /* print(
+        /* print(
             getField('#item# <div>{{title}}<br>{{body}}</div>#item#', 'item'));*/
 
         for (int i = 0; i < listIndex; i++) {
@@ -113,8 +113,7 @@ class ContentTile implements OnInit, OnDestroy {
             fs.QuerySnapshot dataSnap = await sourceRef.collection(data).get();
 */
 
-            List dataListSnap=json.decode(sourceData)[data];
-
+            List dataListSnap = json.decode(sourceData)[data];
 
             List<Map> docs;
 
@@ -131,9 +130,7 @@ class ContentTile implements OnInit, OnDestroy {
               docs.sort((a, b) {
                 /* print(a.keys);
                 return 0;*/
-                return a[sort]
-                    .toString()
-                    .compareTo(b[sort].toString());
+                return a[sort].toString().compareTo(b[sort].toString());
               });
               print(docs);
             }

@@ -4,7 +4,6 @@
     <list default="true" id="3ef60777-278f-46c6-a8b8-1b8dc13a433f" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/../frontend/lib/src/backend_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/backend_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/lib/src/layouts/text.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/layouts/text.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/start_component.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/start_component.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -185,7 +184,7 @@
       <workItem from="1529142725908" duration="80000" />
       <workItem from="1529143329806" duration="783000" />
       <workItem from="1529145226008" duration="3009000" />
-      <workItem from="1529222965416" duration="1037000" />
+      <workItem from="1529222965416" duration="1287000" />
     </task>
     <task id="LOCAL-00001" summary="Backend Main">
       <created>1529143614175</created>
@@ -205,7 +204,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4909000" />
+    <option name="totallyTimeSpent" value="5159000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1044" extended-state="6" />
