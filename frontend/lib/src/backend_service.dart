@@ -1,11 +1,8 @@
-import 'dart:html';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:angular/angular.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/browser_client.dart';
 
 /*
@@ -140,7 +137,8 @@ class BService {
     messaging.onTokenRefresh.listen((n) {});*/
   }
 
-  Future<Uri> getStorageUrl(String path) async {
+  /*Future<Uri>*/
+  getStorageUrl(String path) async {
     /*   print('STORAGEURLSTART');
     try {
       var ref = storage.ref(path);
