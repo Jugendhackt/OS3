@@ -1,16 +1,15 @@
 package main
 
 import (
+	"strconv"
 	"crypto/tls"
 	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
-
+    "io/ioutil"
 	"golang.org/x/crypto/bcrypt"
 	//"encode/json"
-
-	_ "golang.org/x/crypto/bcrypt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -80,12 +79,12 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(password)
 		fmt.Println(token)
 
-		uid, err := database.Query("SELECT userid FROM users WHERE username = ?", username)
+		uid, err := database.Query("SELECT userid FROM user WHERE username = ?", username[0])
 
 		if err != nil {
 			w.Write([]byte("\n\nLogin unsuccessful.\n\n"))
 		} else {
-			pass, errr := database.Query("SELECT password FROM users WHERE userid = ?", uid)
+			pass, errr := database.Query("SELECT password FROM user WHERE userid = ?", uid)
 
 			if errr == nil {
 
@@ -139,38 +138,22 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(displayname)
 		fmt.Println(email)
 
-		uid, err := database.Query("SELECT userid FROM users WHERE username = ?", username)
-
-		if uid != nil && err == nil {
-			w.Write([]byte("\n\nUsername already used.\n\n"))
-		} else if err != nil {
-			w.Write([]byte("\n\nSomething went wrong.\n\n"))
-		} else {
-
-            fmt.Println(len(password))
-			hash, errr := hashPassword(password[0])
-
-            if errr == nil{
-                database.Exec("INSERT INTO users (username,password,displayname,email) VALUES (?,?,?,?)", username,hash,displayname,email)
-                w.Write([]byte("\n\nNew User Created.\n\n"))
-            }else{
-                w.Write([]byte("\n\nSomething went wrong.\n\n"))
-            }
-
-
-		}
+        createUser(username[0],password[0],displayname[0],email[0], &w)		
 
 	default:
 		fmt.Printf("\n\n%v\n", req)
-		fmt.Println(req.Form)
-		w.Write([]byte("\nRegistering in...\n\n"))
+        fmt.Println(req.Form)
+        body, _ := ioutil.ReadFile("register.html")
+		w.Write(body)
 
 	}
 
 }
 
 func checkDataBase(db *sql.DB) {
-	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(32) NOT NULL,displayname VARCHAR(32),profilePicture MEDIUMBLOB,email VARCHAR(64))")
+	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(32) NOT NULL,displayname VARCHAR(32),email VARCHAR(64))")
+
+    createUser("Tester","geheim","Beater","",nil)
 
 	/*
 			if rows != nil {
@@ -200,6 +183,57 @@ func checkErr(err error) {
 		fmt.Println(err.Error())
 		panic(err)
 	}
+}
+
+func createUser(username,password,displayname,email string, w *http.ResponseWriter){
+    uid, err := database.Query("SELECT userid FROM user WHERE username = ?", username)
+    var usid int
+    fmt.Println(username)
+	fmt.Println(password)
+	fmt.Println(displayname)
+	fmt.Println(email)
+    uid.Scan(&usid)
+        if usid == 0 && err == nil{
+
+            fmt.Println(len(password))
+			hash, errr := hashPassword(password)
+
+            if errr == nil{
+                database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (?,?,?,?)", username,hash,displayname,email)
+                displaymsg("\n\nNew User Created.\n\n", w)
+            }else{
+                displaymsg("\n\nSomething went wrong.\n\n", w)
+                fmt.Print(err.Error())
+            }
+
+        }else if uid != nil && err == nil {
+			displaymsg("\n\nUsername " + username + " with uid " + strconv.Itoa(usid) + " already used.\n\n", w)
+		} else if err != nil {
+            displaymsg("\n\nSomething went wrong.\n\n", w)
+            fmt.Print(err.Error())
+		} else {
+
+            fmt.Println(len(password))
+			hash, errr := hashPassword(password)
+
+            if errr == nil{
+                database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (?,?,?,?)", username,hash,displayname,email)
+                displaymsg("\n\nNew User Created.\n\n", w)
+            }else{
+                displaymsg("\n\nSomething went wrong.\n\n", w)
+                fmt.Print(err.Error())
+            }
+
+        }
+        
+}
+
+func displaymsg(msg string, w *http.ResponseWriter){
+    if w == nil{
+        fmt.Println(msg)
+    }else{
+        (*w).Write([]byte(msg))
+    }
 }
 
 func hashPassword(password string) (string, error) {
