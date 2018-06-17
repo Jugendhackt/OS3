@@ -1,4 +1,4 @@
-var CACHE_NAME = 'my-site-cache-v1';
+var CACHE_NAME = 'site-cache-v1';
 var urlsToCache = [
     './assets/blank.png',
     './assets/budgie.jpg',

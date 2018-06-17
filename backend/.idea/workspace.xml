@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ef60777-278f-46c6-a8b8-1b8dc13a433f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/backend_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/backend_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/layouts/image.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/layouts/image.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/layouts/text.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/layouts/text.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/source_component.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/source_component.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/lib/src/tile_component.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/lib/src/tile_component.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/web/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/web/main.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/layout/1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/site/1.oll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/web/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/web/sw.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,14 +17,38 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="e#14#158#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="133">
+              <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="1.json" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data/1.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="19">
+              <caret line="1" column="43" lean-forward="true" selection-start-line="1" selection-start-column="43" selection-end-line="1" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="1.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/layout/1.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="6" selection-start-column="6" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="1.oll" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/site/1.oll">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="7" selection-start-column="7" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -52,6 +75,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/site/1.oll" />
+        <option value="$PROJECT_DIR$/layout/1.html" />
+        <option value="$PROJECT_DIR$/data/1.json" />
       </list>
     </option>
   </component>
@@ -69,7 +95,9 @@
     <option name="width" value="1390" />
     <option name="height" value="999" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -81,6 +109,21 @@
             <path>
               <item name="backend" type="b2602c69:ProjectViewProjectNode" />
               <item name="backend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="backend" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="backend" type="462c0819:PsiDirectoryNode" />
+              <item name="layout" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="backend" type="462c0819:PsiDirectoryNode" />
+              <item name="site" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -188,7 +231,7 @@
       <workItem from="1529142725908" duration="80000" />
       <workItem from="1529143329806" duration="783000" />
       <workItem from="1529145226008" duration="3009000" />
-      <workItem from="1529222965416" duration="1443000" />
+      <workItem from="1529222965416" duration="1983000" />
     </task>
     <task id="LOCAL-00001" summary="Backend Main">
       <created>1529143614175</created>
@@ -208,10 +251,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5315000" />
+    <option name="totallyTimeSpent" value="5855000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1044" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -223,12 +267,12 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3296582" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.29437706" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.29437706" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18589744" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18589744" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info id="Learn" order="2" />
+      <window_info id="Learn" order="2" weight="0.32959402" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -258,9 +302,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" column="9" lean-forward="true" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
-          <folding>
-            <element signature="e#14#158#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -289,11 +330,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#14#158#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="133">
+          <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/1.oll">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="7" selection-start-column="7" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/layout/1.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="6" selection-start-column="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/1.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="43" lean-forward="true" selection-start-line="1" selection-start-column="43" selection-end-line="1" selection-end-column="43" />
         </state>
       </provider>
     </entry>
