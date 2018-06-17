@@ -13,6 +13,8 @@ import 'package:firebase/firestore.dart' as fs;*/
 
 @Injectable()
 class BService {
+  final String server = 'https://151.216.10.58:443';
+
   fb.User user;
 
   BrowserClient client;
@@ -49,7 +51,6 @@ class BService {
   }
 
   String _token = null;
-  final String server = 'https://151.216.10.58:443';
 
   Future<String> getSite(int siteId) async {
     var url = server + '/site/$siteId';

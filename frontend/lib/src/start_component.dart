@@ -170,13 +170,13 @@ class StartComponent implements OnInit {
     Navigator.;
   }*/
 
-String siteData='';
+  String siteData = '';
+
   Future<void> ngOnInit() async {
-    siteData=await fbservice.getSite(1);
+    siteData = await fbservice.getSite(1);
     _interpreter(siteData);
 
-
-  /*  Element el = window.document.querySelector('#insert-there');
+    /*  Element el = window.document.querySelector('#insert-there');
 
     var ua = window.navigator.userAgent;
     String template = '''<h1>Hello world.</h1>

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html';
 import 'dart:math';
 
@@ -28,13 +29,14 @@ import 'package:firebase/firestore.dart' as fs;*/
   providers: const [materialProviders],
 )
 class ContentTile implements OnInit, OnDestroy {
-   String uri = "thisistheuri";
+  String uri = "thisistheuri";
 
-   List htmlTable = [
-       ['test'],
+  List htmlTable = [
+    ['test'],
     ['test', 'test'],
     ['test'],
   ];
+
   ContentTile(this.routes, BService this.fbservice);
 
   final BService fbservice;
@@ -43,7 +45,10 @@ class ContentTile implements OnInit, OnDestroy {
   @Input()
   String code;
 
+/*
   String layoutTemp = '';
+*/
+
 /*
   fs.DocumentSnapshot sourceSnapTemp;
 */
@@ -54,8 +59,11 @@ class ContentTile implements OnInit, OnDestroy {
     try {
       //CHANNEL
       if (code.split(';')[0].toLowerCase() == 's') {
-        String layout = layoutTemp;
+        String layout = layoutData;
 
+        /*       print(sourceSnapTemp.id);
+        print(sourceSnapTemp.data());
+*/
         var pieces = layout.split(':::');
         bool beforeList = true;
         String layoutToUse = '';
@@ -74,14 +82,15 @@ class ContentTile implements OnInit, OnDestroy {
           }
           beforeList = !beforeList;
         }
+        Map sourceSnapTemp = json.decode(sourceData);
 
-        for (var key in sourceSnapTemp.data().keys) {
+        for (var key in sourceSnapTemp.keys) {
           print(key);
           print(key.runtimeType);
 
-          if (sourceSnapTemp.data()[key] is String) {
+          if (sourceSnapTemp[key] is String) {
             layoutToUse =
-                layoutToUse.replaceAll('{{$key}}', sourceSnapTemp.data()[key]);
+                layoutToUse.replaceAll('{{$key}}', sourceSnapTemp[key]);
           } else {}
         }
 
@@ -90,8 +99,8 @@ class ContentTile implements OnInit, OnDestroy {
                 ? k.split('#$field#')[1].split('#$field#')[0].trim()
                 : null;
 
-        print(
-            getField('#item# <div>{{title}}<br>{{body}}</div>#item#', 'item'));
+       /* print(
+            getField('#item# <div>{{title}}<br>{{body}}</div>#item#', 'item'));*/
 
         for (int i = 0; i < listIndex; i++) {
           String fillIn = '';
@@ -100,27 +109,31 @@ class ContentTile implements OnInit, OnDestroy {
             String data = getField(nll, 'data');
             print(data);
 
+/*
             fs.QuerySnapshot dataSnap = await sourceRef.collection(data).get();
+*/
 
-            List docs;
+            List dataListSnap=json.decode(sourceData)[data];
+
+
+            List<Map> docs;
 
             String sort = getField(nll, 'sort');
 
             if (sort == null) {
-              docs = dataSnap.docs;
+              docs = dataListSnap;
             } else {
               print(sort);
 
-              docs = dataSnap.docs;
+              docs = dataListSnap;
               print(docs);
 
               docs.sort((a, b) {
-                  print(a.keys);
-                return 0;
-                return a
-                    .data()[sort]
+                /* print(a.keys);
+                return 0;*/
+                return a[sort]
                     .toString()
-                    .compareTo(b.data()[sort].toString());
+                    .compareTo(b[sort].toString());
               });
               print(docs);
             }
@@ -129,11 +142,11 @@ class ContentTile implements OnInit, OnDestroy {
             String divider = getField(nll, 'divider');
 
             int sIndex = 0;
-            for (fs.DocumentSnapshot listDoc in docs) {
+            for (Map listDoc in docs) {
               String oneItem = item;
-              for (var key in listDoc.data().keys) {
-                if (listDoc.data()[key] is String) {
-                  oneItem = oneItem.replaceAll('{{$key}}', listDoc.data()[key]);
+              for (var key in listDoc.keys) {
+                if (listDoc[key] is String) {
+                  oneItem = oneItem.replaceAll('{{$key}}', listDoc[key]);
                 } else {}
               }
               fillIn = fillIn + oneItem;
@@ -150,7 +163,7 @@ class ContentTile implements OnInit, OnDestroy {
           layoutToUse = layoutToUse.replaceAll('###$i###', fillIn);
         }
 
-            if (layout.split('***').length == 3) {
+        /*   if (layout.split('***').length == 3) {
           String item = layout.split('#item#')[1].split('#/item#')[0];
           String divider = '';
           if (layout.contains('#divider#')) {
@@ -179,7 +192,7 @@ class ContentTile implements OnInit, OnDestroy {
             }
             sIndex++;
           }
-        }
+        }*/
 
         Element el = window.document.querySelector('#' + key);
 
@@ -198,11 +211,11 @@ class ContentTile implements OnInit, OnDestroy {
           el.setAttribute('style', style);
         }
 
-              Uri url = await fbservice
+        /*     Uri url = await fbservice
             .getStorageUrl('users/xxredsolverxx@gmail.com/fruit.jpg');
-        print('STORAGEURL');
+        print('STORAGEURL');*/
 
-        el.setInnerHtml(layoutToUse  + '''<img src="$url">''' ,
+        el.setInnerHtml(layoutToUse /*+ '''<img src="$url">'''*/,
             treeSanitizer: NodeTreeSanitizer.trusted);
       }
 
@@ -225,7 +238,6 @@ class ContentTile implements OnInit, OnDestroy {
   String sourceRef;
 
   Future<void> ngOnInit() async {
-    //TODO DATA
     var rng = new Random();
     key = 'a' + rng.nextInt(99999999).toString();
     Element el = window.document.querySelector('#insert-here');
@@ -240,8 +252,11 @@ class ContentTile implements OnInit, OnDestroy {
       layoutRef = code.split(';')[2];
 
       sourceRef = code.split(';')[1];
+      layoutData = await fbservice.getData(int.parse(layoutRef));
+      sourceData = await fbservice.getData(int.parse(sourceRef));
+      update();
 
-      print(layoutRef.path);
+      /*print(layoutRef.path);
       layoutStream = layoutRef.onSnapshot;
       layoutSub = layoutStream.listen((querySnapshot) {
         layoutTemp = querySnapshot.get('layout');
@@ -257,7 +272,7 @@ class ContentTile implements OnInit, OnDestroy {
         try {
           update();
         } catch (e) {}
-      });
+      });*/
     } else if (code.split(';')[0].toLowerCase() == 'p') {
       List<String> meta = code.split(';');
 
@@ -265,7 +280,7 @@ class ContentTile implements OnInit, OnDestroy {
 
       style += 'min-width: ${meta[1]}px;max-width: ${meta[1]}px;';
 
-       if (code.split(';').length == 2) {
+      /*if (code.split(';').length == 2) {
         if (meta2[0].length > 0) {
         }
         if (meta2[1].length > 0) {
@@ -274,55 +289,12 @@ class ContentTile implements OnInit, OnDestroy {
 
         print(style);
         el.setAttribute('style', style);
-      }
+      }*/
       el.setAttribute('style', style);
 
-
+/*
       el.setInnerHtml( , treeSanitizer: NodeTreeSanitizer.trusted);
-
-    }
-
-      fs.Firestore firestore = fb.firestore();
-
-    fs.DocumentReference layoutRef =
-        firestore.collection("layouts").doc(code.split(';')[2]);
-
-    if (code.split(';')[0].toLowerCase() == 's') {
-
-
-
-      fs.DocumentSnapshot layoutSnap = await layoutRef.get();
-
-      fs.DocumentReference sourceRef =
-          firestore.collection("sources").doc(code.split(';')[1]);
-      fs.DocumentSnapshot sourceSnap = await sourceRef.get();
-
-      String layout = layoutSnap.get('layout');
-
-      for (String key in sourceSnap.data().keys) {
-        layout = layout.replaceAll('{{$key}}', sourceSnap.data()[key]);
-      }
-
-      Element el = window.document.querySelector('#insert-here');
-
-      el.id = 'hello';
-
-      if (code.split(';').length == 4) {
-        print(code);
-        List<String> meta2 = code.split(';')[3].split('-');
-        String style = '';
-        if (meta2[0].length > 0) {
-          style += 'min-width: ${meta2[0]}px;';
-        }
-        if (meta2[1].length > 0) {
-          style += 'max-width: ${meta2[1]}px;';
-        }
-
-        print(style);
-        el.setAttribute('style', style);
-      }
-
-      el.setInnerHtml(layout, treeSanitizer: NodeTreeSanitizer.trusted);
+*/
     }
   }
 
@@ -335,15 +307,13 @@ class ContentTile implements OnInit, OnDestroy {
        fs.DocumentReference layoutRef =
         firestore.collection("layouts").doc(code.split(';')[2]); */
 
-    try {
+    /* try {
       layoutSub.cancel();
     } catch (e) {}
     try {
       sourceSub.cancel();
-    } catch (e) {}
+    } catch (e) {}*/
   }
-
-
 
   String loadingIndicator = '''<div class="sk-circle">
             <div class="sk-circle1 sk-child"></div>
