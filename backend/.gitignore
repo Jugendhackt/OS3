@@ -1,5 +1,6 @@
 login.json
 .directory
+.rnd
 /.idea
 *.crt
 *.key
