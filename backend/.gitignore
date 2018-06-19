@@ -1,0 +1,6 @@
+login.json
+.directory
+/.idea
+*.crt
+*.key
+*.exe

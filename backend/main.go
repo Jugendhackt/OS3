@@ -4,20 +4,34 @@ import (
 	"crypto/tls"
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 
-	"golang.org/x/crypto/bcrypt"
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var database *sql.DB
 
 func main() {
+	username := "root"
+	passsword := "testdb"
+	address := "localhost"
+	dbname := "OS3"
+	charset := "uft8"
+
+	logindata, err := ioutil.ReadFile("login.json")
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println(logindata)
+	}
+
 	//Openng the Connection to the mysql data base,
 	//checking for errors and setting the data base as global variable
-	db, err := sql.Open("mysql", "root:testdb@tcp(localhost)/OS3?charset=utf8")
+	db, err := sql.Open("mysql", username+":"+passsword+"@tcp("+address+")/"+dbname+"?charset="+charset)
 	if db != nil {
 		fmt.Println(db)
 	}
@@ -36,7 +50,7 @@ func main() {
 	mux.HandleFunc("/auth/login", loginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
 	mux.HandleFunc("/site/", folderHandler)
-	mux.HandleFunc("/layout/",folderHandler)
+	mux.HandleFunc("/layout/", folderHandler)
 	mux.HandleFunc("/data/", folderHandler)
 
 	//Configuring the TLS Transmission
@@ -76,7 +90,7 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 func folderHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-	http.ServeFile(w, req, "." + req.URL.Path)
+	http.ServeFile(w, req, "."+req.URL.Path)
 }
 
 /*
@@ -103,9 +117,9 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 		//in variables to work with them
 		username := req.Form["username"]
 		password := req.Form["password"]
-        token := req.Form["token"]
-        
-        fmt.Println(token)
+		token := req.Form["token"]
+
+		fmt.Println(token)
 
 		//Then the data gets passed into the login-function
 		logUserIn(username[0], password[0], &w)
@@ -148,7 +162,7 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 		displayname := req.Form["displayname"]
 		email := req.Form["email"]
 
-        fmt.Println(token)
+		fmt.Println(token)
 
 		//Then the data gets passed into the createUser-function
 		createUser(username[0], password[0], displayname[0], email[0], &w)
@@ -175,8 +189,8 @@ func checkDataBase(db *sql.DB) {
 //Small function to enable cors
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-    (*w).Header().Set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    (*w).Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, token");
+	(*w).Header().Set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, token")
 }
 
 //Small function to find errors and then panic
@@ -190,56 +204,55 @@ func checkErr(err error) {
 //The login function
 func logUserIn(username, password string, w *http.ResponseWriter) {
 
-    //Now the Program does a query to ask if there is a Person that alreadly
-    //has this username 
+	//Now the Program does a query to ask if there is a Person that alreadly
+	//has this username
 	uid, err := database.Query("SELECT userid FROM user WHERE username = \"" + username + "\"")
 
-    //if it would accur that there are several people with that username
-    //we choose the first one (it wouldn#t matter but cannot be number 0)
+	//if it would accur that there are several people with that username
+	//we choose the first one (it wouldn#t matter but cannot be number 0)
 	var usid int
 	if uid != nil {
 		uid.Next()
 		uid.Scan(&usid)
 	}
-	
 
-    //if there was an error a message is thrown
+	//if there was an error a message is thrown
 	if err != nil {
 		(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
 		fmt.Println("point 1" + err.Error())
-    
-    //if not it  will continue
+
+		//if not it  will continue
 	} else {
 
-        //now i ask the server for the userpassword which is stored as hash.
+		//now i ask the server for the userpassword which is stored as hash.
 		pass, errr := database.Query("SELECT password FROM user WHERE userid = ?", usid)
 
-        //if no error happened everything stays normal
+		//if no error happened everything stays normal
 		if errr == nil {
 
-            //Now a variable is created to store the encrypted password on it
+			//Now a variable is created to store the encrypted password on it
 			var hash string
 
 			for pass.Next() {
 				errr = pass.Scan(&hash)
 			}
 
-            //then a message is sent based on the input
+			//then a message is sent based on the input
 
-            //if the password is right and no error accured the login is successful
+			//if the password is right and no error accured the login is successful
 			if checkPasswordHash(password, hash) && errr == nil {
-                (*w).Write([]byte("\n\nLogin successful.\n\n"))
-            
-            //if no error happened but the password was wrong.
+				(*w).Write([]byte("\n\nLogin successful.\n\n"))
+
+				//if no error happened but the password was wrong.
 			} else if errr == nil {
 				(*w).Write([]byte("\n\nPassword wrong.\n\n"))
-            
-            //if some error popped up a message is sent.
-            }else {
+
+				//if some error popped up a message is sent.
+			} else {
 				(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
 				fmt.Println("Point 2" + errr.Error())
-            }
-        //if some error popped up a message is sent.
+			}
+			//if some error popped up a message is sent.
 		} else {
 			(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
 			fmt.Println("Point 3" + errr.Error())
@@ -251,58 +264,57 @@ func logUserIn(username, password string, w *http.ResponseWriter) {
 
 //The createUser function
 func createUser(username, password, displayname, email string, w *http.ResponseWriter) {
-    //Now the Program does a query to ask if there is a Person that alreadly
-    //has this username 
+	//Now the Program does a query to ask if there is a Person that alreadly
+	//has this username
 	uid, err := database.Query("SELECT userid FROM user WHERE username = '" + username + "'")
-    
-    //if it would accur that there are several people with that username
-    //we choose the first one (it wouldn't matter but cannot be number 0)
+
+	//if it would accur that there are several people with that username
+	//we choose the first one (it wouldn't matter but cannot be number 0)
 	var usid int
 	if uid != nil {
 		uid.Next()
 		uid.Scan(&usid)
 	}
-    
-    
-    //if there was no error and no other user a new one will be created
+
+	//if there was no error and no other user a new one will be created
 	if usid == 0 && err == nil {
 
-        //It starts by hashing the Password
+		//It starts by hashing the Password
 		hash, errr := hashPassword(password)
 
-        //If there is no error the new account will be created
+		//If there is no error the new account will be created
 		if errr == nil {
 			database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
-            displaymsg("\n\nNew User Created.\n\n", w)
-            
-          //Otherwise a message is produced
+			displaymsg("\n\nNew User Created.\n\n", w)
+
+			//Otherwise a message is produced
 		} else {
 			displaymsg("\n\nSomething went wrong.\n\n", w)
 			fmt.Print(errr.Error())
 		}
 
-      //If there is a user already a message with his name and userid will be displayed
+		//If there is a user already a message with his name and userid will be displayed
 	} else if uid != nil && err == nil {
 		displaymsg("\n\nUsername "+username+" with uid "+strconv.Itoa(usid)+" already used.\n\n", w)
-    
-      //if there was an error an error message will be sent
-    } else if err != nil {
+
+		//if there was an error an error message will be sent
+	} else if err != nil {
 		displaymsg("\n\nSomething went wrong.\n\n", w)
-        fmt.Print(err.Error())
-        
-      //The same as the first case.
+		fmt.Print(err.Error())
+
+		//The same as the first case.
 	} else {
 
-        //It starts by hashing the Password
+		//It starts by hashing the Password
 		hash, errr := hashPassword(password)
 
-        //If there is no error the new account will be created
+		//If there is no error the new account will be created
 		if errr == nil {
 			database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
 			displaymsg("\n\nNew User Created.\n\n", w)
-        
-          //Otherwise a message is produced
-        } else {
+
+			//Otherwise a message is produced
+		} else {
 			displaymsg("\n\nSomething went wrong.\n\n", w)
 			fmt.Print(err.Error())
 		}
