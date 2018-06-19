@@ -2,6 +2,7 @@ login.json
 .directory
 .rnd
 /.idea
+/pkg
 *.crt
 *.key
 *.exe
