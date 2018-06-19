@@ -16,30 +16,17 @@ import (
 var database *sql.DB
 
 func main() {
-	
+	username := "root"
+	passsword := "testdb"
+	address := "localhost"
+	dbname := "OS3"
+	charset := "uft8"
 
-	logindata, err := ioutil.ReadFile("./login.json")
-
-	var login struct {
-		username    string    `json:"username"`
-		passsword string `json:"passsword"`
-		address   string `json:"address"`
-		dbname   string `json:"dbname"`
-		charset   string `json:"charset"`
-	}
-
-    json.Unmarshal(raw, &login)
-
+	logindata, err := ioutil.ReadFile("login.json")
 	if err != nil {
-		login.username = "root"
-		login.passsword = "root"
-		login.address = "localhost"
-		login.dbname = "OS3"
-		login.charset = "uft8"
-
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println(login)
+		fmt.Println(logindata)
 	}
 
 	//Openng the Connection to the mysql data base,
