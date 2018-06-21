@@ -1,5 +1,5 @@
 [{
-    "username:": "root",
+    "username": "root",
     "passsword": "root",
     "address": "localhost",
     "dbname": "OS3",
