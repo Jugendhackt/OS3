@@ -1,104 +1,55 @@
 # Introduction
 
-### Write something nice here!
+### Willkommen in der Conribution Guideline File
 
->First off, thank you for considering contributing to Active Admin. It's people like you that make Active Admin such a great tool.
+>Erstamal vielen Dank für das Interesse an einem Beitrag. Auf dieser Seite werden alle wichtigen Informationen zum Beitragen am Projekt genannt.
 
-[source: [Active Admin](https://github.com/activeadmin/activeadmin/blob/master/CONTRIBUTING.md)] **Need more inspiration?** [1] [Read The Docs](http://read-the-docs.readthedocs.org/en/latest/contribute.html) [2] [Mustache.js](https://github.com/janl/mustache.js/#contributing)
+>Wie im [Code of Conduct](https://github.com/Jugendhackt/OS3/blob/master/CODE_OF_CONDUCT.md) beschrieben wollen wir einen freundlichen und gewinnbringenden Umgang miteinander fördern. Zudem möchte keiner undokumentierten und nicht funktionierenden Code. Deswegen wäre es wichtig für jeden, der etwas zum Projekt beitragen möchte die Contribution Guidelines gründlich zu lesen.
 
-### Tell them why they should read your guidelines.
+### Wie kann man zum Projekt beitragen?
 
->Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
+> Im Grunde ist fast jeder Beitrag eine Hilfe für unser kleines Team. Mögliche Beitragsformen sind Verbesserungen der Dokumentation, Bug Tracking & Fixing oder  auch das Schreiben von Tutorials.
 
-[source: [Hoodie](https://github.com/hoodiehq/hoodie/blob/master/CONTRIBUTING.md)]
+### Was für Beiträge sind NICHT gewünscht?
 
-### Explain what kinds of contributions you are looking for.
+> Bevor ihr irgendwelche Proble meldet schaut bitte ob schon andere Personen diese hatten, falls nicht öffnet ein issue damit das Problem gelöst werden kann. Außerdem solltet ihr das [wiki](https://github.com/Jugendhackt/OS3/wiki) durchstöber bevor ihr irgendwelche Fragen oder Probleme bei der Installation oder Konfiguration der Software meldet.
 
-Keep an open mind! Improving documentation, bug triaging, or writing tutorials are all examples of helpful contributions that mean less work for you.
+# Grundregeln
 
-> Elasticsearch is an open source project and we love to receive contributions from our community — you! There are many ways to contribute, from writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests or writing code which can be incorporated into Elasticsearch itself.
+> * Falls mölich sorge für Cross-Platform-Unterstützung
+> * Teste deine Software bevor du sie veröffentlichst und lass nicht andere deine Bugs suchen
+> * Erstelle ein Issue für größere Änderungen, bespreche diese transparent und hol dir Community Feedback.
+> * Füge Code zum Kerncode nur hinzu, falls unbedingt nötig und wenn du welchen hinzufügst dokumentiere deine Erweiterug/Änderung, so dass man weiß was passiert und wer dafür Verantwortlich ist.
+> * Sei freundlich gegenüber allen Leuten auch Neulingen. Siehe für details in den [Code of Conduct](https://github.com/Jugendhackt/OS3/blob/master/CODE_OF_CONDUCT.md).
 
-[source: [Elasticsearch](https://github.com/elastic/elasticsearch/blob/master/CONTRIBUTING.md)] **Need more inspiration?** [1] [Devise](https://github.com/plataformatec/devise/wiki/Contributing) [2] [Geocoder](https://github.com/alexreisner/geocoder#known-issue) (“known issue”)
+# Dein erster Beitrag?
+Um dich mit dem Projekt und den Funktion vertraut zu machen, solltest du erstmal das [wiki](https://github.com/Jugendhackt/OS3/wiki) lesen hier werden sämtliche Funktionen und funktionsweisen des Projektes (einigermaßen) übersichtlich aufgelistet und erlärt.
 
-### Explain contributions you are NOT looking for (if any).
+Falls du das schon getan hast schau mal in die [Issues](https://github.com/Jugendhackt/OS3/issues) dort findet sich sicher etwas wozu du beitragen kannst. Alternativ kannst du ein eigenes öffnen falls du irgendeine Funktion vermisst.
 
-Again, defining this up front means less work for you. If someone ignores your guide and submits something you don’t want, you can simply close it and point to your policy.
+### Neu bei OpenSource Projekten?
+Hier sind ein paar einfache tutorials: http://makeapullrequest.com/ , http://www.firsttimersonly.com/
 
-> Please, don't use the issue tracker for [support questions]. Check whether the #pocoo IRC channel on Freenode can help with your issue. If your problem is not strictly Werkzeug or Flask specific, #python is generally more active. Stack Overflow is also worth considering.
-
-[source: [Flask](https://github.com/pallets/flask/blob/master/CONTRIBUTING.rst)] **Need more inspiration?** [1] [cucumber-ruby](https://github.com/cucumber/cucumber-ruby/blob/master/CONTRIBUTING.md#about-to-create-a-new-github-issue) [2] [Read the Docs](http://read-the-docs.readthedocs.org/en/latest/open-source-philosophy.html#unsupported)
-
-# Ground Rules
-### Set expectations for behavior (yours, and theirs).
-This includes not just how to communicate with others (being respectful, considerate, etc) but also technical responsibilities (importance of testing, project dependencies, etc). Mention and link to your code of conduct, if you have one.
-
-> Responsibilities
-> * Ensure cross-platform compatibility for every change that's accepted. Windows, Mac, Debian & Ubuntu Linux.
-> * Ensure that code that goes into core meets all requirements in this checklist: https://gist.github.com/audreyr/4feef90445b9680475f2
-> * Create issues for any major changes and enhancements that you wish to make. Discuss things transparently and get community feedback.
-> * Don't add any classes to the codebase unless absolutely needed. Err on the side of using functions.
-> * Keep feature versions as small as possible, preferably one new feature per version.
-> * Be welcoming to newcomers and encourage diverse new contributors from all backgrounds. See the [Python Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
-
-[source: [cookiecutter](https://github.com/audreyr/cookiecutter/blob/master/CONTRIBUTING.rst)] **Need more inspiration?** [1] [Celery](https://github.com/celery/celery/blob/master/CONTRIBUTING.rst#community-code-of-conduct) [2] [geocoder](https://github.com/alexreisner/geocoder#contributing)
-
-# Your First Contribution
-Help people who are new to your project understand where they can be most helpful. This is also a good time to let people know if you follow a label convention for flagging beginner issues.
-
-> Unsure where to begin contributing to Atom? You can start by looking through these beginner and help-wanted issues:
-> Beginner issues - issues which should only require a few lines of code, and a test or two.
-> Help wanted issues - issues which should be a bit more involved than beginner issues.
-> Both issue lists are sorted by total number of comments. While not perfect, number of comments is a reasonable proxy for impact a given change will have.
-
-[source: [Atom](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#your-first-code-contribution)] **Need more inspiration?** [1] [Read the Docs](http://docs.readthedocs.org/en/latest/contribute.html#contributing-to-development) [2] [Django](https://docs.djangoproject.com/en/dev/internals/contributing/new-contributors/#first-steps) (scroll down to "Guidelines" as well)
-
-### Bonus points: Add a link to a resource for people who have never contributed to open source before.
-Here are a couple of friendly tutorials you can include: http://makeapullrequest.com/ and http://www.firsttimersonly.com/
-
-> Working on your first Pull Request? You can learn how from this *free* series, [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github).
-
-[source: [React](https://github.com/facebook/react/blob/master/CONTRIBUTING.md#pull-requests)]  
-
-As a side note, it helps to use newcomer-friendly language throughout the rest of your document. Here are a couple of examples from [Active Admin](https://github.com/activeadmin/activeadmin/blob/master/CONTRIBUTING.md):
-
->At this point, you're ready to make your changes! Feel free to ask for help; everyone is a beginner at first :smile_cat:
->
->If a maintainer asks you to "rebase" your PR, they're saying that a lot of code has changed, and that you need to update your branch so it's easier to merge.
+Verzweifelst du an deiner ersten Pull Request? Dann schaue dir [diese](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github) kostenlose Videoreihe an.
 
 # Getting started
-### Give them a quick walkthrough of how to submit a contribution.
-How you write this is up to you, but some things you may want to include:
+### Wie läuft ein Beitrag ab?
 
-* Let them know if they need to sign a CLA, agree to a DCO, or get any other legal stuff out of the way
-* If tests are required for contributions, let them know, and explain how to run the tests
-* If you use anything other than GitHub to manage issues (ex. JIRA or Trac), let them know which tools they’ll need to contribute
+Erstelle am besten ein Issue mit den Änderungen, die du haben möchtest. Auf diesem postest du die Codeänderung und wie sehr du den Code getestet hast (Niemand möchte fehlerhaften Code also tut allen diesen Gefallen).
 
->For something that is bigger than a one or two line fix:
+Bei größeren Änderung erstelle deine eigene Fork und beachte, dass weiterhin die LGPLv3 oder die GPLv3 verwendet werden. Falls dein Projekt jedoch nur mit diesem Project interagiert jedoch nicht auf dessen Quellcode basiert kann auch jede andere Lizenz verwendet werden.
+Wenn du der meinung bist, dass deine Änderung essentiell ist öffne einfach ein Issue und jemand wird sich (hoffentlich in absehbarer Zeit) darum kümmern.
 
->1. Create your own fork of the code
->2. Do the changes in your fork
->3. If you like the change and think the project could use it:
-    * Be sure you have followed the code style for the project.
-    * Sign the Contributor License Agreement, CLA, with the jQuery Foundation.
-    * Note the jQuery Foundation Code of Conduct.
-    * Send a pull request indicating that you have a CLA on file.
+### Was ist mit kleinen Verbesserungen?
 
-[source: [Requirejs](http://requirejs.org/docs/contributing.html)] **Need more inspiration?** [1] [Active Admin](https://github.com/activeadmin/activeadmin/blob/master/CONTRIBUTING.md#1-where-do-i-go-from-here) [2] [Node.js](https://github.com/nodejs/node/blob/master/CONTRIBUTING.md#code-contributions) [3] [Ember.js](https://github.com/emberjs/ember.js/blob/master/CONTRIBUTING.md#pull-requests)
-
-### If you have a different process for small or "obvious" fixes, let them know.
-
-> Small contributions such as fixing spelling errors, where the content is small enough to not be considered intellectual property, can be submitted by a contributor as a patch, without a CLA.
->
->As a rule of thumb, changes are obvious fixes if they do not introduce any new functionality or creative thinking. As long as the change does not affect functionality, some likely examples include the following:
->* Spelling / grammar fixes
->* Typo correction, white space and formatting changes
->* Comment clean up
->* Bug fixes that change default return values or error codes stored in constants
->* Adding logging messages or debugging output
->* Changes to ‘metadata’ files like Gemfile, .gitignore, build scripts, etc.
->* Moving source files from one directory or package to another
-
-[source: [Chef](https://github.com/chef/chef/blob/master/CONTRIBUTING.md#chef-obvious-fix-policy)] **Need more inspiration?** [1] [Puppet](https://github.com/puppetlabs/puppet/blob/master/CONTRIBUTING.md#making-trivial-changes)
+>Änderungen sind offentsichliche Verbesserungen, wenn weder neue Funktionen hinzufügen werden noch Kreatives Denken benötigt wird. Wenn das der Fall ist, ist der Beitrag zu klein um als iterlektueller Besitz bezeichnet zu werden und kann durch einen Contributor einfach als Patch veröfentlicht werden. Jedoch sollte dieser den Namen der Person, die den Hinweis gab, im Commit nennen. Beispiele für die das der Fall ist können folgende sein:
+>* Rechtschreibungs- und Grammatikkorrekturen
+>* Formatierungsänderungen
+>* Aufräumen der Kommentare
+>* Bug Fixes die einen Standartrückgabewert ändern oder Fehler die in Konstanten gespeichert werden
+>* Hinzufügen von Logging Nachrichten oder Debug Ausgaben
+>* Änderungen an metadata dateinen wie .gitignore, build scripts, etc.
+>* Verschieben von Quelldateinen in ein anderes Verzeichnis oder Package
 
 # How to report a bug
 ### Explain security disclosures first!
