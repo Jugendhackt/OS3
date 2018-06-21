@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"encoding/json"
 
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -15,20 +16,22 @@ import (
 
 var database *sql.DB
 
+type s_login struct {
+	username	string	`json:"username"`
+	passsword	string	`json:"passsword"`
+	address		string	`json:"address"`
+	dbname		string	`json:"dbname"`
+	charset   	string	`json:"charset"`
+}
+
 func main() {
 	
 
 	logindata, err := ioutil.ReadFile("./login.json")
 
-	var login struct {
-		username    string    `json:"username"`
-		passsword string `json:"passsword"`
-		address   string `json:"address"`
-		dbname   string `json:"dbname"`
-		charset   string `json:"charset"`
-	}
+	var login = s_login{}
 
-    json.Unmarshal(raw, &login)
+    json.Unmarshal(logindata, &login)
 
 	if err != nil {
 		login.username = "root"
@@ -44,7 +47,7 @@ func main() {
 
 	//Openng the Connection to the mysql data base,
 	//checking for errors and setting the data base as global variable
-	db, err := sql.Open("mysql", username+":"+passsword+"@tcp("+address+")/"+dbname+"?charset="+charset)
+	db, err := sql.Open("mysql", login.username+":"+login.passsword+"@tcp("+login.address+")/"+login.dbname+"?charset="+login.charset)
 	if db != nil {
 		fmt.Println(db)
 	}
