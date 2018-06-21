@@ -3,12 +3,12 @@ package main
 import (
 	"crypto/tls"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
-	"encoding/json"
 
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -16,38 +16,40 @@ import (
 
 var database *sql.DB
 
-type s_login struct {
-	username	string	`json:"username"`
-	passsword	string	`json:"passsword"`
-	address		string	`json:"address"`
-	dbname		string	`json:"dbname"`
-	charset   	string	`json:"charset"`
+/*Struct for storing the userdata*/
+type SLogin struct {
+	Username  string `json:"username"`
+	Passsword string `json:"passsword"`
+	Address   string `json:"address"`
+	Dbname    string `json:"dbname"`
+	Charset   string `json:"charset"`
 }
 
 func main() {
-	
 
 	logindata, err := ioutil.ReadFile("./login.json")
 
-	var login = s_login{}
+	fmt.Println(string(logindata))
 
-    json.Unmarshal(logindata, &login)
+	var login []SLogin
+
+	json.Unmarshal(logindata, &login)
 
 	if err != nil {
-		login.username = "root"
-		login.passsword = "root"
-		login.address = "localhost"
-		login.dbname = "OS3"
-		login.charset = "uft8"
+		login[0].Username = "root"
+		login[0].Passsword = "root"
+		login[0].Address = "localhost"
+		login[0].Dbname = "OS3"
+		login[0].Charset = "uft8"
 
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println(login)
+		fmt.Printf("\n%v\n", login)
 	}
 
 	//Openng the Connection to the mysql data base,
 	//checking for errors and setting the data base as global variable
-	db, err := sql.Open("mysql", login.username+":"+login.passsword+"@tcp("+login.address+")/"+login.dbname+"?charset="+login.charset)
+	db, err := sql.Open("mysql", login[0].Username+":"+login[0].Passsword+"@tcp("+login[0].Address+")/"+login[0].Dbname+"?charset="+login[0].Charset)
 	if db != nil {
 		fmt.Println(db)
 	}
