@@ -3,5 +3,5 @@
     "passsword": "root",
     "address": "localhost",
     "dbname": "OS3",
-    "charset": "uft8"
+    "charset": "utf8mb4"
 }]
