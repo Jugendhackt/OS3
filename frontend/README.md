@@ -1,9 +1,5 @@
-# atlive
+# OS3 Frontend
+Header und Sidebar sind simpel über die app_component Klasse anpassbar. Der Rest lädt vom Server.
 
-A web app that uses [AngularDart](https://webdev.dartlang.org/angular) and
+Diese Web-App verwendet [AngularDart](https://webdev.dartlang.org/angular) und
 [AngularDart Components](https://webdev.dartlang.org/components).
-
-
-
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
