@@ -51,81 +51,38 @@ Wenn du der meinung bist, dass deine Änderung essentiell ist öffne einfach ein
 >* Änderungen an metadata dateinen wie .gitignore, build scripts, etc.
 >* Verschieben von Quelldateinen in ein anderes Verzeichnis oder Package
 
-# How to report a bug
-### Explain security disclosures first!
-At bare minimum, include this sentence:
-> If you find a security vulnerability, do NOT open an issue. Email XXXX instead.
+# Ich hab einen Bug gefunden was soll ich tun?
+### Betrifft dein Bug eine Sicherheitsproblem?
+> All Sicherheitsprobleme sollten an 14131388+noah1510@users.noreply.github.com gemeldet werden bevor die Lücke allen in einem Issue preisgegeben wird.
+> Falls du dir nicht sicher bist ob du mit einem Sicherheitsproblem konfrontiert bist frage dich die folgenen Fragen:
+> * Kann ich auf etwas, dass nicht mir gehört bzw. auf, dass ich keinen Zugriff haben sollte, zugreifen?
+> * Kann ich irgendetwas etwas für andere außer Stand setzen oder blockieren?
+> Falls die Antwort auf eine der Fragen "Ja" ist handelt es sich höchstwahrscheinlich um ein Sicherheitsproblem. Beachte, dass es sich auch um ein Sicherheitproblem handeln kann selbst wenn die Antwort auf beide Fragen "nein" ist. Falls du dir unsicher bist schreibe eine e-mail an 14131388+noah1510@users.noreply.github.com du solltest dann zeitnah weitere Informationen bekommen.
 
-If you don’t want to use your personal contact information, set up a “security@” email address. Larger projects might have more formal processes for disclosing security, including encrypted communication. (Disclosure: I am not a security expert.)
+### Was wenn es sich nicht um ein Sicherheitsproblem handelt.
 
-> Any security issues should be submitted directly to security@travis-ci.org
-> In order to determine whether you are dealing with a security issue, ask yourself these two questions:
-> * Can I access something that's not mine, or something I shouldn't have access to?
-> * Can I disable something for other people?
->
-> If the answer to either of those two questions are "yes", then you're probably dealing with a security issue. Note that even if you answer "no" to both questions, you may still be dealing with a security issue, so if you're unsure, just email us at security@travis-ci.org.
+> Wenn du ein Issue erstellst stelle sicher, dass du die folgenden Sachen beachtest:
+> 1. Hatte jemand anderes schon das gleiche Problem?
+> 2. Welche Version(Commit Nummer) der Software nutzt du?
+> 3. Welches Beriebssystem und Prozessorarchitektur nutzt du?
+> 4. Was hast du getan/versucht zu tun?
+> 5. Was hast du erwartet zu sehen?
+> 6. Was hast du stattdessen gesehen?
 
-[source: [Travis CI](https://github.com/travis-ci/travis-ci/blob/master/CONTRIBUTING.md)] **Need more inspiration?** [1] [Celery](https://github.com/celery/celery/blob/master/CONTRIBUTING.rst#security) [2] [Express.js](https://github.com/expressjs/express/blob/master/Security.md)
+# Wie kann ich eine neue Funktion vorschlagen?
+### Was ist das Ziel des Projektes?
 
-### Tell your contributors how to file a bug report.
-You can even include a template so people can just copy-paste (again, less work for you).
+> OS3 versucht ein System zu schaffen mit dem Schulen oder andere organisatioen möglichst leicht ihre Daten verwalten können. Dazu muss das System flexibel und übersichtlich sein und ganz viele optionale Module anbieten die alle mit dem Hauptprogramm arbeiten. Dabei sind wir auf Vorschläge der Community angewiesen.
 
-> When filing an issue, make sure to answer these five questions:
->
-> 1. What version of Go are you using (go version)?
-> 2. What operating system and processor architecture are you using?
-> 3. What did you do?
-> 4. What did you expect to see?
-> 5. What did you see instead?
-> General questions should go to the golang-nuts mailing list instead of the issue tracker. The gophers there will answer or ask you to file an issue if you've tripped over a bug.
+### Was muss ich bei einem Vorschlag beachten?
 
-[source: [Go](https://github.com/golang/go/blob/master/CONTRIBUTING.md#filing-issues)] **Need more inspiration?** [1] [Celery](https://github.com/celery/celery/blob/master/CONTRIBUTING.rst#other-bugs ) [2] [Atom](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#reporting-bugs) (includes template)
+> Falls du eine neue Funktion willst die bisher in der Software fehlt dann bist du wahrscheinlich nicht allein. Bevor du ein neues Issue erstellst schaue ob nicht eine andere person genau diese Idee hatte. Wenn nicht, erstelle einfach ein Issue in dem du beschreibst was für eine Funktion du sehen möchtest, warum du/man diese braucht und wie sie funktionieren soll. Die Community wird sicher dabei helfen die Funktion umzusetzen.
 
-# How to suggest a feature or enhancement
-### If you have a particular roadmap, goals, or philosophy for development, share it here.
-This information will give contributors context before they make suggestions that may not align with the project’s needs.
+# Was passiert bei einer Pull Request?
 
-> The Express philosophy is to provide small, robust tooling for HTTP servers, making it a great solution for single page applications, web sites, hybrids, or public HTTP APIs.
->
-> Express does not force you to use any specific ORM or template engine. With support for over 14 template engines via Consolidate.js, you can quickly craft your perfect framework.
+> Das Kernteam schaut regelmäßig nach Pull Reqests. Ob eine Pull request angenommen wird, wird gegebenenfalls auf dem [Discord Server](https://discord.gg/7EvAB6f) besprochen und Updates vom Kernteam im update-notes channel veröffentlicht. Leute deren Pull Request angenommen wurde erhalten den Contributor Status auf dem Discord Server.
 
-[source: [Express](https://github.com/expressjs/express#philosophy)] **Need more inspiration?** [Active Admin](https://github.com/activeadmin/activeadmin#goals)
-
-### Explain your desired process for suggesting a feature.
-If there is back-and-forth or signoff required, say so. Ask them to scope the feature, thinking through why it’s needed and how it might work.
-
-> If you find yourself wishing for a feature that doesn't exist in Elasticsearch, you are probably not alone. There are bound to be others out there with similar needs. Many of the features that Elasticsearch has today have been added because our users saw the need. Open an issue on our issues list on GitHub which describes the feature you would like to see, why you need it, and how it should work.
-
-[source: [Elasticsearch](https://github.com/elastic/elasticsearch/blob/master/CONTRIBUTING.md#feature-requests)] **Need more inspiration?** [1] [Hoodie](https://github.com/hoodiehq/hoodie/blob/master/CONTRIBUTING.md#feature-requests) [2] [Ember.js](https://github.com/emberjs/ember.js/blob/master/CONTRIBUTING.md#requesting-a-feature)
-
-# Code review process
-### Explain how a contribution gets accepted after it’s been submitted.
-Who reviews it? Who needs to sign off before it’s accepted? When should a contributor expect to hear from you? How can contributors get commit access, if at all?
-
-> The core team looks at Pull Requests on a regular basis in a weekly triage meeting that we hold in a public Google Hangout. The hangout is announced in the weekly status updates that are sent to the puppet-dev list. Notes are posted to the Puppet Community community-triage repo and include a link to a YouTube recording of the hangout.
-> After feedback has been given we expect responses within two weeks. After two weeks we may close the pull request if it isn't showing any activity.
-
-[source: [Puppet](https://github.com/puppetlabs/puppet/blob/master/CONTRIBUTING.md#submitting-changes)] **Need more inspiration?** [1] [Meteor](https://meteor.hackpad.com/Responding-to-GitHub-Issues-SKE2u3tkSiH ) [2] [Express.js](https://github.com/expressjs/express/blob/master/Contributing.md#becoming-a-committer)
 
 # Community
-If there are other channels you use besides GitHub to discuss contributions, mention them here. You can also list the author, maintainers, and/or contributors here, or set expectations for response time.
 
-> You can chat with the core team on https://gitter.im/cucumber/cucumber. We try to have office hours on Fridays.
-
-[source: [cucumber-ruby](https://github.com/cucumber/cucumber-ruby/blob/master/CONTRIBUTING.md#talking-with-other-devs)] **Need more inspiration?**
- [1] [Chef](https://github.com/chef/chef/blob/master/CONTRIBUTING.md#-developer-office-hours) [2] [Cookiecutter](https://github.com/audreyr/cookiecutter#community)
-
-# BONUS: Code, commit message and labeling conventions
-These sections are not necessary, but can help streamline the contributions you receive.
-
-### Explain your preferred style for code, if you have any.
-
-**Need inspiration?** [1] [Requirejs](http://requirejs.org/docs/contributing.html#codestyle) [2] [Elasticsearch](https://github.com/elastic/elasticsearch/blob/master/CONTRIBUTING.md#contributing-to-the-elasticsearch-codebase)
-
-### Explain if you use any commit message conventions.
-
-**Need inspiration?** [1] [Angular](https://github.com/angular/material/blob/master/.github/CONTRIBUTING.md#submit) [2] [Node.js](https://github.com/nodejs/node/blob/master/CONTRIBUTING.md#step-3-commit)
-
-### Explain if you use any labeling conventions for issues.
-
-**Need inspiration?** [1] [StandardIssueLabels](https://github.com/wagenet/StandardIssueLabels#standardissuelabels) [2] [Atom](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#issue-and-pull-request-labels)
+> Für interessierte Leute besteht die Möglichkeit unserem [Discord Server](https://discord.gg/7EvAB6f) beizutreten um mit dem Kernteam und Beitragenden Kontakt aufnehmen zu können.
