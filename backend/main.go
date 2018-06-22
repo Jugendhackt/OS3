@@ -140,7 +140,7 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(token)
 
 		//Then the data gets passed into the login-function
-		logUserIn(username[0], password[0], &w)
+		displaymsg(logUserIn(username[0], password[0], token[0]), &w)
 
 		//for any other request type the requestor simply gets a message saying access denied.
 	default:
@@ -183,7 +183,7 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(token)
 
 		//Then the data gets passed into the createUser-function
-		createUser(username[0], password[0], displayname[0], email[0], &w)
+		displaymsg(createUser(username[0], password[0], displayname[0], email[0]), &w)
 
 		//for any other request type the requestor simply gets a message saying access denied.
 	default:
@@ -200,8 +200,12 @@ func checkDataBase(db *sql.DB) {
 	//Setting up the main user data base
 	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64),profilePicture MEDIUMBLOB)")
 
+	db.Exec("CREATE TABLE IF NOT EXISTS tokens(tokenid int NOT NULL AUTO_INCREMENT PRIMARY KEY,userid int NOT NULL,token VARCHAR(32) NOT NULL,currentTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (userid) REFERENCES user(userid) )")
+
 	//Creating a default user
-	createUser("Tester", "geheim", "Beater", "", nil)
+	fmt.Println(createUser("Tester", "geheim", "Beater", ""))
+
+	fmt.Println(logUserIn("Tester", "geheim", "fauwhwaduwdawdf"))
 }
 
 //Small function to enable cors
@@ -220,7 +224,7 @@ func checkErr(err error) {
 }
 
 //The login function
-func logUserIn(username, password string, w *http.ResponseWriter) {
+func logUserIn(username, password, token string) string {
 
 	//Now the Program does a query to ask if there is a Person that alreadly
 	//has this username
@@ -236,8 +240,8 @@ func logUserIn(username, password string, w *http.ResponseWriter) {
 
 	//if there was an error a message is thrown
 	if err != nil {
-		(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
 		fmt.Println("point 1" + err.Error())
+		return "\n\nLogin unsuccessful.\n\n"
 
 		//if not it  will continue
 	} else {
@@ -259,29 +263,33 @@ func logUserIn(username, password string, w *http.ResponseWriter) {
 
 			//if the password is right and no error accured the login is successful
 			if checkPasswordHash(password, hash) && errr == nil {
-				(*w).Write([]byte("\n\nLogin successful.\n\n"))
+				//fmt.Println("INSERT INTO tokens (userid,token) VALUES (" + strconv.Itoa(usid) + ",\"" + token + "\")")
+				database.Exec("INSERT INTO tokens (userid,token) VALUES (" + strconv.Itoa(usid) + ",\"" + token + "\")")
+				return "\n\nLogin successful.\n\n"
 
 				//if no error happened but the password was wrong.
 			} else if errr == nil {
-				(*w).Write([]byte("\n\nPassword wrong.\n\n"))
+				return "\n\nPassword wrong.\n\n"
 
 				//if some error popped up a message is sent.
 			} else {
-				(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
 				fmt.Println("Point 2" + errr.Error())
+				return "\n\nLogin unsuccessful.\n\n"
 			}
 			//if some error popped up a message is sent.
 		} else {
-			(*w).Write([]byte("\n\nLogin unsuccessful.\n\n"))
 			fmt.Println("Point 3" + errr.Error())
+			return "\n\nLogin unsuccessful.\n\n"
 		}
 
 	}
 
+	return ""
+
 }
 
 //The createUser function
-func createUser(username, password, displayname, email string, w *http.ResponseWriter) {
+func createUser(username, password, displayname, email string) string {
 	//Now the Program does a query to ask if there is a Person that alreadly
 	//has this username
 	uid, err := database.Query("SELECT userid FROM user WHERE username = '" + username + "'")
@@ -303,21 +311,21 @@ func createUser(username, password, displayname, email string, w *http.ResponseW
 		//If there is no error the new account will be created
 		if errr == nil {
 			database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
-			displaymsg("\n\nNew User Created.\n\n", w)
+			return "\n\nNew User Created.\n\n"
 
 			//Otherwise a message is produced
 		} else {
-			displaymsg("\n\nSomething went wrong.\n\n", w)
+			return "\n\nSomething went wrong.\n\n"
 			fmt.Print(errr.Error())
 		}
 
 		//If there is a user already a message with his name and userid will be displayed
 	} else if uid != nil && err == nil {
-		displaymsg("\n\nUsername "+username+" with uid "+strconv.Itoa(usid)+" already used.\n\n", w)
+		return "\n\nUsername " + username + " with uid " + strconv.Itoa(usid) + " already used.\n\n"
 
 		//if there was an error an error message will be sent
 	} else if err != nil {
-		displaymsg("\n\nSomething went wrong.\n\n", w)
+		return "\n\nSomething went wrong.\n\n"
 		fmt.Print(err.Error())
 
 		//The same as the first case.
@@ -329,16 +337,17 @@ func createUser(username, password, displayname, email string, w *http.ResponseW
 		//If there is no error the new account will be created
 		if errr == nil {
 			database.Exec("INSERT INTO user (username,password,displayname,email) VALUES (\"" + username + "\",\"" + hash + "\",\"" + displayname + "\",\"" + email + "\")")
-			displaymsg("\n\nNew User Created.\n\n", w)
+			return "\n\nNew User Created.\n\n"
 
 			//Otherwise a message is produced
 		} else {
-			displaymsg("\n\nSomething went wrong.\n\n", w)
 			fmt.Print(err.Error())
+			return "\n\nSomething went wrong.\n\n"
 		}
 
 	}
 
+	return ""
 }
 
 //a small function to display a message either per http response or console
