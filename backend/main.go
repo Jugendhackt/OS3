@@ -242,8 +242,23 @@ func tokenLogIn(token string) (username string, action int) {
 	}
 
 	if err == nil {
-		fmt.Println(strconv.Itoa(usid))
-		return "", 1
+		pass, errr := database.Query("SELECT username FROM user WHERE userid = ?", usid)
+		if errr == nil {
+			var uname string
+			for pass.Next() {
+				errr = pass.Scan(&uname)
+			}
+
+			if uname != "" {
+				return uname, 2
+			} else {
+				return "", 1
+			}
+
+		} else {
+			fmt.Println(err.Error())
+			return "", 0
+		}
 	} else {
 		fmt.Println(err.Error())
 		return "", 0
