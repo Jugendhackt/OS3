@@ -206,6 +206,10 @@ func checkDataBase(db *sql.DB) {
 	fmt.Println(createUser("Tester", "geheim", "Beater", ""))
 
 	fmt.Println(logUserIn("Tester", "geheim", "fauwhwaduwdawdf"))
+
+	username, action := tokenLogIn("fauwhwaduwdawdf")
+
+	fmt.Printf("%v, %v\n", username, action)
 }
 
 //Small function to enable cors
@@ -221,6 +225,30 @@ func checkErr(err error) {
 		fmt.Println(err.Error())
 		panic(err)
 	}
+}
+
+//A function to log in with just a valid token
+func tokenLogIn(token string) (username string, action int) {
+	//Now the Program does a query to ask if there is a Person that alreadly
+	//has this token
+	uid, err := database.Query("SELECT userid FROM tokens WHERE token = \"" + token + "\"")
+
+	//if it would accur that there are several people with that username
+	//we choose the first one (it wouldn#t matter but cannot be number 0)
+	var usid int
+	if uid != nil {
+		uid.Next()
+		uid.Scan(&usid)
+	}
+
+	if err == nil {
+		fmt.Println(strconv.Itoa(usid))
+		return "", 1
+	} else {
+		fmt.Println(err.Error())
+		return "", 0
+	}
+
 }
 
 //The login function
@@ -263,7 +291,6 @@ func logUserIn(username, password, token string) string {
 
 			//if the password is right and no error accured the login is successful
 			if checkPasswordHash(password, hash) && errr == nil {
-				//fmt.Println("INSERT INTO tokens (userid,token) VALUES (" + strconv.Itoa(usid) + ",\"" + token + "\")")
 				database.Exec("INSERT INTO tokens (userid,token) VALUES (" + strconv.Itoa(usid) + ",\"" + token + "\")")
 				return "\n\nLogin successful.\n\n"
 
