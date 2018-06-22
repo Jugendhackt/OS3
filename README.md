@@ -10,5 +10,4 @@ Falls ihr weitere Fragen habt oder Probleme findet, sendet diese an 14131388+noa
 
 Für mehr Informationen wie du zum Projekt beitragen kannst lese die [Contribution Guidelines](https://github.com/Jugendhackt/OS3/blob/master/CONTRIBUTING.md)
 
-## Presentation
-https://docs.google.com/presentation/d/1nwEPdhJohRk3xJAv7lCa-ynn_biQALqIXaW1qdIkIxk/edit?usp=sharing
+## [Presentation](https://docs.google.com/presentation/d/1nwEPdhJohRk3xJAv7lCa-ynn_biQALqIXaW1qdIkIxk/edit?usp=sharing)
