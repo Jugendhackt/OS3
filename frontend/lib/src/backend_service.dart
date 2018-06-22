@@ -4,15 +4,18 @@ import 'package:angular/angular.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:uuid/uuid.dart';
 import 'package:http/browser_client.dart';
+import 'package:cookie/cookie.dart' as cookie;
 
 /*
 import 'package:firebase/firestore.dart' as fs;*/
 
 @Injectable()
 class BService {
-  final String server = 'https://151.216.10.58:443';
+  /*
+  final String server = 'https://151.216.10.58:443';*/
+  final String server = 'https://localhost:443';
 
-  fb.User user;
+  User user;
 
   BrowserClient client;
 
@@ -73,9 +76,17 @@ class BService {
     return res.body;
   }
 
-  Future<String> login(String username, String password) async {
+  Future<String> login(String username, String password, bool persist) async {
     _token = (new Uuid().v4()).toString();
     print(_token);
+    if (persist) {
+      cookie.set(
+          'autoLoginToken',
+          (new Uuid().v4()).toString() +
+              (new Uuid().v4()).toString() +
+              (new Uuid().v4()).toString());
+    }
+
     /* var url = server + '/auth/login';
     var client = new BrowserClient();
 
@@ -99,6 +110,9 @@ class BService {
         body: {'username': username, 'password': password, 'token': _token});
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');
+    if (res.body.contains('Login successful.')) {
+      user = new User(username, _token);
+    }
 
     /*  HttpRequest req = await HttpRequest.postFormData(server + '/auth/login',
         {'username': username, 'password': password, 'token': _token});
@@ -193,4 +207,14 @@ class BService {
     _fbAuth.signOut();
 */
   }
+}
+
+class User {
+  String username;
+  String displayName;
+  String token;
+  String photoURL;
+  String email;
+
+  User(this.username, this.token);
 }

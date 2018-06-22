@@ -79,7 +79,8 @@ class AppComponent implements OnInit {
   }
 
   void loginChange(bool change) {
-    loggedIn = true;
+    loggedIn = change;
+    showPopup = false;
 /*
     print(change);
 */

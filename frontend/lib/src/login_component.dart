@@ -10,20 +10,36 @@ import 'package:atlive/src/routes.dart';
 @Component(
   selector: 'login',
   template: '''
-  <div style="padding: 20px">
-    <material-input [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input>
-    <material-input [(ngModel)]="password" label="Password" ></material-input><br>
-    
+  <div style="padding: 20px;">
+  <table>
+  <tr>
+    <td><material-input [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input></td>
+    <td><material-input [(ngModel)]="password" label="Password" ></material-input></td> 
+  </tr>
     <div *ngIf="showError" style="color: red;">{{error}}</div>
+    <div *ngIf="loading"><material-spinner style="border-color: #C5002B"></material-spinner> Logging in...</div>
     
-   <material-button (trigger)="login()">
+
+  <tr>
+    <td> <material-button (trigger)="login()">
     Login
-</material-button>
+</material-button></td>
+    <td> <material-checkbox style="alignment: center;" [(checked)]="stayLoggedIn">
+    Stay logged in
+</material-checkbox></td> 
+  </tr>
+</table>
+    
+    
+    
+  
+
+</div>
 <!--<material-button (trigger)="fbservice.signInWithGoogle()">
     Google+
 </material-button>-->
 
-    </div>
+    
 
   
   ''',
@@ -51,6 +67,12 @@ class LoginComponent implements OnInit, OnDestroy {
   }
 
   bool showError = false;
+  bool stayLoggedIn = false;
+  bool loading = false;
+
+  checkedChange(bool newState) {
+    stayLoggedIn = newState;
+  }
 
 /*  @Event()
   bool visibleVal;*/
@@ -87,11 +109,20 @@ class LoginComponent implements OnInit, OnDestroy {
   }
 
   String error = "";
-  bool loading = false;
+
+  /*
+  bool loading = false;*/
 
   void login() async {
+    print(stayLoggedIn);
+
     loading = true;
-    String res = await fbservice.login(username, password);
+
+/*
+    await Future.delayed(const Duration(seconds: 2), () => "2");
+*/
+
+    String res = await fbservice.login(username, password, stayLoggedIn);
 
     if (res.contains('Login unsuccessful.')) {
       error = res;
@@ -102,6 +133,7 @@ class LoginComponent implements OnInit, OnDestroy {
     } else {
       /* error=res;*/
       showError = false;
+      _loginChange.add(true);
     }
 
     print(res);
