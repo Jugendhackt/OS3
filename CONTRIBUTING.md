@@ -17,9 +17,13 @@
 # Grundregeln
 
 &gt; * Falls möglich sorge für Cross-Platform-Unterstützung
+
 &gt; * Teste deine Software bevor du sie veröffentlichst und lass nicht andere deine Bugs suchen
+
 &gt; * Erstelle ein issue für größere Änderungen, bespreche diese transparent und hol dir Community Feedback.
+
 &gt; * Füge Code zum Kerncode nur hinzu, falls unbedingt nötig und wenn du welchen hinzufügst, dokumentiere deine Erweiterung/Änderung, sodass man weiß was passiert und wer dafür Verantwortlich ist.
+
 &gt; * Sei freundlich gegenüber allen Leuten auch Neulingen. Siehe für Details in den [Code of Conduct](https://github.com/Jugendhackt/OS3/blob/master/CODE_OF_CONDUCT.md).
 
 # Dein erster Beitrag?
@@ -43,30 +47,48 @@ Wenn du der Meinung bist, dass deine Änderung essenziell ist, öffne einfach ei
 ### Was ist mit kleinen Verbesserungen?
 
 &gt; Änderungen sind offensichtliche Verbesserungen, wenn weder neue Funktionen hinzufügen werden noch Kreatives Denken benötigt wird. Wenn das der Fall ist, ist der Beitrag zu klein um als intellektueller Besitz bezeichnet zu werden und kann durch einen Contributor einfach als Patch veröffentlicht werden. Jedoch sollte dieser den Namen der Person, die den Hinweis gab, im Commit nennen. Beispiele für die das der Fall ist können folgende sein:
+
 &gt;* Rechtschreibungs- und Grammatikkorrekturen
+
 &gt;* Formatierungsänderungen
+
 &gt;* Aufräumen der Kommentare
+
 &gt;* Bug Fixes die einen Standartrückgabewert ändern oder Fehler die in Konstanten gespeichert werden
+
 &gt;* Hinzufügen von Logging Nachrichten oder Debug Ausgaben
+
 &gt;* Änderungen an Meta-Dateien wie .gitignore, build scripts, etc.
+
 &gt;* Verschieben von Quelldateien in ein anderes Verzeichnis oder Package
 
 # Ich hab einen Bug gefunden was soll ich tun?
 ### Betrifft dein Bug eine Sicherheitsproblem?
 &gt; All Sicherheitsprobleme sollten an 14131388+noah1510@users.noreply.github.com gemeldet werden bevor die Lücke allen in einem issue preisgegeben wird.
+
 &gt; Falls du dir nicht sicher bist, ob du mit einem Sicherheitsproblem konfrontiert stelle dir die folgenen Fragen:
+
 &gt; * Kann ich auf etwas, dass nicht mir gehört bzw. auf, dass ich keinen Zugriff haben sollte, zugreifen?
+
 &gt; * Kann ich irgendetwas etwas für andere außer Stand setzen oder blockieren?
-&gt; Falls die Antwort auf eine der Fragen "Ja" ist, handelt es sich höchstwahrscheinlich um ein Sicherheitsproblem. Beachte, dass es sich auch um ein Sicherheitsproblem handeln kann, selbst wenn die Antwort auf beide Fragen "nein" ist. Falls du dir unsicher bist, schreibe eine E-Mail an 14131388+noah1510@users.noreply.github.com du solltest dann zeitnah weitere Informationen bekommen.
+
+&gt; Falls die Antwort auf eine der Fragen "Ja" ist, handelt es sich höchstwahrscheinlich um ein Sicherheitsproblem. 
+Beachte, dass es sich auch um ein Sicherheitsproblem handeln kann, selbst wenn die Antwort auf beide Fragen "nein" ist. Falls du dir unsicher bist, schreibe eine E-Mail an 14131388+noah1510@users.noreply.github.com du solltest dann zeitnah weitere Informationen bekommen.
 
 ### Was wenn es sich nicht um ein Sicherheitsproblem handelt.
 
 &gt; Wenn du ein Issue erstellst stelle sicher, dass du die folgenden Sachen beachtest:
+
 &gt; 1. Hatte jemand anderes schon das gleiche Problem?
+
 &gt; 2. Welche Version(Commit Nummer) der Software nutzt du?
+
 &gt; 3. Welches Beriebssystem und Prozessorarchitektur nutzt du?
+
 &gt; 4. Was hast du getan/versucht zu tun?
+
 &gt; 5. Was hast du erwartet zu sehen?
+
 &gt; 6. Was hast du stattdessen gesehen?
 
 # Wie kann ich eine neue Funktion vorschlagen?
