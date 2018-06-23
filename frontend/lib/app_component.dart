@@ -72,8 +72,8 @@ class AppComponent implements OnInit {
   final title = 'OS3 Demo';
 
   void logout() async {
-    print('Login Start');
-    await fbservice.signOut();
+    print('Logout Start');
+    await fbservice.logout();
     loggedIn = false;
     showPopup = false;
   }

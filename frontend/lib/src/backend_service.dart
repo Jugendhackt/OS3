@@ -76,16 +76,20 @@ class BService {
     return res.body;
   }
 
+  logout() async {
+/*
+    await cookie.remove('sessionToken', path: '/');
+*/
+    print('AutoLoginRemove');
+
+    await cookie.remove('autoLoginToken', path: '/');
+    user = null;
+  }
+
   Future<String> login(String username, String password, bool persist) async {
     _token = (new Uuid().v4()).toString();
     print(_token);
-    if (persist) {
-      cookie.set(
-          'autoLoginToken',
-          (new Uuid().v4()).toString() +
-              (new Uuid().v4()).toString() +
-              (new Uuid().v4()).toString());
-    }
+    String autoLoginToken;
 
     /* var url = server + '/auth/login';
     var client = new BrowserClient();
@@ -106,12 +110,32 @@ class BService {
             .then((value) => res = value.toString()))
         .catchError((error) => print(error.toString()));*/
     var url = server + '/auth/login';
-    var res = await client.post(url,
-        body: {'username': username, 'password': password, 'token': _token});
+
+    var body = {'username': username, 'password': password, 'token': _token};
+    if (persist) {
+      autoLoginToken = (new Uuid().v4()).toString() +
+          (new Uuid().v4()).toString() +
+          (new Uuid().v4()).toString();
+
+      body['autoLoginToken'] = autoLoginToken;
+    }
+
+    var res = await client.post(url, body: body);
     print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');
     if (res.body.contains('Login successful.')) {
+/*
+      await cookie.set('sessionToken', _token, path: '/', expires: 0.1);
+*/
       user = new User(username, _token);
+      if (persist) {
+        await cookie.set(
+          'autoLoginToken',
+          autoLoginToken,
+          expires: 30,
+          path: '/',
+        );
+      }
     }
 
     /*  HttpRequest req = await HttpRequest.postFormData(server + '/auth/login',
