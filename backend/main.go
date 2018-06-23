@@ -66,6 +66,7 @@ func main() {
 	//Choosing the appropiate Handlers for the right sub-directories
 	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/auth/login", loginHandler)
+	//mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
 	mux.HandleFunc("/site/", folderHandler)
 	mux.HandleFunc("/layout/", folderHandler)
@@ -124,7 +125,7 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 
 	//In case of a post request the program continues the login
-	case ("POST"):
+	case "POST":
 
 		//The request form gets parsed and then for the
 		//sake of debugging printed into the console
@@ -200,7 +201,7 @@ func checkDataBase(db *sql.DB) {
 	//Setting up the main user data base
 	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64),profilePicture MEDIUMBLOB)")
 
-	db.Exec("CREATE TABLE IF NOT EXISTS tokens(tokenid int NOT NULL AUTO_INCREMENT PRIMARY KEY,userid int NOT NULL,token VARCHAR(32) NOT NULL,currentTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (userid) REFERENCES user(userid) )")
+	db.Exec("CREATE TABLE IF NOT EXISTS tokens(tokenid int NOT NULL AUTO_INCREMENT PRIMARY KEY,userid int NOT NULL,token VARCHAR(36) NOT NULL,currentTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (userid) REFERENCES user(userid) )")
 
 	//Creating a default user
 	fmt.Println(createUser("Tester", "geheim", "Beater", ""))
