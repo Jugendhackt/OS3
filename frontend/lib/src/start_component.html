@@ -27,31 +27,14 @@
     Hello
 </div>
 Hallo-->
-<!--
-<style type="text/css">
-    .container {
-        border: 3px solid yellow;
-    }
+<div id="siteId"></div>
 
-    .row {
-        border: 3px solid red;
-    }
-
-    .column {
-        border: 3px solid blue;
-    }
-
-    .tile {
-        border: 3px solid green;
-    }
-
-</style>-->
 
 <div style="
     position: fixed;
     bottom: 8px;
     right: 16px;">
-    <material-toggle [(checked)]="edit" label="Edit">
+    <material-toggle (checkedChange)="toggleEdit($event)" label="Edit">
     </material-toggle>
     <!--
         Bottom Right

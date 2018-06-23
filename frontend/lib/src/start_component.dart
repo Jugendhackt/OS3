@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
+import 'dart:math';
 
-import 'package:angular_router/angular_router.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
@@ -21,7 +21,8 @@ import 'package:atlive/src/tile_component.dart';
     NgIf,
     formDirectives,
     SourceComponent,
-    TileComponent
+    TileComponent,
+    MaterialToggleComponent
   ],
   providers: const [materialProviders],
 )
@@ -41,6 +42,35 @@ class StartComponent implements OnInit {
   SitePart mainPart;
 
   String test = 'test';
+
+  void toggleEdit(bool value) {
+    edit = value;
+    print(edit);
+
+    Element el = window.document.querySelector('#siteId' /*'#' + key*/);
+    el.setInnerHtml(
+        edit
+            ? '''<style type="text/css">
+        .container {
+    border: 3px solid yellow;
+    }
+
+            .row {
+        border: 3px solid red;
+        }
+
+            .column {
+        border: 3px solid blue;
+        }
+
+            .tile {
+        border: 3px solid green;
+        }
+
+        </style>'''
+            : '',
+        treeSanitizer: NodeTreeSanitizer.trusted);
+  }
 
 /*  String heroUrl(int id) =>
       paths.hero.toUrl(parameters: {paths.idParam: id.toString()});*/
@@ -176,10 +206,21 @@ class StartComponent implements OnInit {
 
   String siteData = '';
 
+/*
+  String key;
+*/
+
   Future<void> ngOnInit() async {
+    /* var rng = new Random();
+    key = 's' + rng.nextInt(99999999).toString();
+    Element el = window.document.querySelector('#siteId');
+
+    print(key);
+
+    el.id = key;*/
+
     availableWidth = window.innerWidth;
 
-    
     siteData = await fbservice.getSite(1);
     _interpreter(siteData);
 
@@ -205,7 +246,6 @@ Check my bird... <em>it flies</em> !
 /*
     print(ua);
 */
-
 
     /*   fs.Firestore firestore = fb.firestore();
     fs.DocumentReference ref =

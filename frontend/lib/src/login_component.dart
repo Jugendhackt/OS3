@@ -13,15 +13,16 @@ import 'package:atlive/src/routes.dart';
   <div style="padding: 20px;">
   <table>
   <tr>
-    <td><material-input [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input></td>
-    <td><material-input [(ngModel)]="password" label="Password" ></material-input></td> 
+    <td><material-input name="username" id="username" autoFocus type="text" required requiredErrorMsg="Please enter a username" [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input></td>
+    <td><material-input type="password" name="password" id="password" [(ngModel)]="password" label="Password" ></material-input></td> 
   </tr>
     <div *ngIf="showError" style="color: red;">{{error}}</div>
-    <div *ngIf="loading"><material-spinner style="border-color: #C5002B"></material-spinner> Logging in...</div>
+    <div *ngIf="loading">
+    <material-spinner style="border-color: #C5002B; margin: 20px;"></material-spinner> Logging in...</div>
     
 
   <tr>
-    <td> <material-button (trigger)="login()">
+    <td> <material-button type="submit" (trigger)="login()">
     Login
 </material-button></td>
     <td> <material-checkbox style="alignment: center;" [(checked)]="stayLoggedIn">
@@ -128,7 +129,7 @@ class LoginComponent implements OnInit, OnDestroy {
       error = res;
       showError = true;
     } else if (res.contains('Password wrong.')) {
-      error = res;
+      error = 'Invalid username or password.';
       showError = true;
     } else {
       /* error=res;*/
