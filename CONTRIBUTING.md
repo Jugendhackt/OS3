@@ -2,9 +2,9 @@
 
 ### Willkommen in der Conribution Guideline File
 
-&gt;Erstmal vielen Dank für das Interesse an einem Beitrag. Auf dieser Seite werden alle wichtigen Informationen zum Beitragen am Projekt genannt.
+&gt; Erstmal vielen Dank für das Interesse an einem Beitrag. Auf dieser Seite werden alle wichtigen Informationen zum Beitragen am Projekt genannt.
 
-&gt;Wie im [Code of Conduct](https://github.com/Jugendhackt/OS3/blob/master/CODE_OF_CONDUCT.md) beschrieben wollen wir einen freundlichen und gewinnbringenden Umgang miteinander fördern. Zudem möchte keiner undokumentierten und nicht funktionierenden Code. Deswegen wäre es wichtig für jeden, der etwas zum Projekt beitragen möchte die Contribution Guidelines gründlich zu lesen.
+&gt; Wie im [Code of Conduct](https://github.com/Jugendhackt/OS3/blob/master/CODE_OF_CONDUCT.md) beschrieben wollen wir einen freundlichen und gewinnbringenden Umgang miteinander fördern. Zudem möchte keiner undokumentierten und nicht funktionierenden Code. Deswegen wäre es wichtig für jeden, der etwas zum Projekt beitragen möchte die Contribution Guidelines gründlich zu lesen.
 
 ### Wie kann man zum Projekt beitragen?
 
@@ -42,7 +42,7 @@ Wenn du der Meinung bist, dass deine Änderung essenziell ist, öffne einfach ei
 
 ### Was ist mit kleinen Verbesserungen?
 
-&gt;Änderungen sind offensichtliche Verbesserungen, wenn weder neue Funktionen hinzufügen werden noch Kreatives Denken benötigt wird. Wenn das der Fall ist, ist der Beitrag zu klein um als intellektueller Besitz bezeichnet zu werden und kann durch einen Contributor einfach als Patch veröffentlicht werden. Jedoch sollte dieser den Namen der Person, die den Hinweis gab, im Commit nennen. Beispiele für die das der Fall ist können folgende sein:
+&gt; Änderungen sind offensichtliche Verbesserungen, wenn weder neue Funktionen hinzufügen werden noch Kreatives Denken benötigt wird. Wenn das der Fall ist, ist der Beitrag zu klein um als intellektueller Besitz bezeichnet zu werden und kann durch einen Contributor einfach als Patch veröffentlicht werden. Jedoch sollte dieser den Namen der Person, die den Hinweis gab, im Commit nennen. Beispiele für die das der Fall ist können folgende sein:
 &gt;* Rechtschreibungs- und Grammatikkorrekturen
 &gt;* Formatierungsänderungen
 &gt;* Aufräumen der Kommentare
