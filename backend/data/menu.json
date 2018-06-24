@@ -1,0 +1,12 @@
+[
+  {
+    "link": "/site/home",
+    "icon": "home",
+    "name": "Home"
+  },
+  {
+    "link": "/site/vertretung",
+    "icon": "dashboard",
+    "name": "Vertretungen"
+  }
+]

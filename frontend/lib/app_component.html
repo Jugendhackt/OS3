@@ -104,18 +104,24 @@
         </div>
 
         <div group>
-            <material-list-item [routerLink]="routes.start.toUrl()" routerLinkActive="active">
-                <material-icon icon="start"></material-icon>
-                Start
-            </material-list-item>
-            <material-list-item [routerLink]="routes.home.toUrl()" routerLinkActive="active">
-                <material-icon icon="home"></material-icon>
-                Home
-            </material-list-item>
-            <material-list-item [routerLink]="'/site/vertretung'" routerLinkActive="active">
-                <material-icon icon="dashboard"></material-icon>
-                Vertretungen
-            </material-list-item>
+            <div *ngFor="let item of menuItems">
+                <material-list-item [routerLink]="item['link']" routerLinkActive="active">
+                    <material-icon [icon]="item['icon']"></material-icon>
+                    {{item['name']}}
+                </material-list-item>
+            </div>
+            <!-- <material-list-item [routerLink]="routes.start.toUrl()" routerLinkActive="active">
+                 <material-icon icon="start"></material-icon>
+                 Start
+             </material-list-item>
+             <material-list-item [routerLink]="routes.home.toUrl()" routerLinkActive="active">
+                 <material-icon icon="home"></material-icon>
+                 Home
+             </material-list-item>
+             <material-list-item [routerLink]="'/site/vertretung'" routerLinkActive="active">
+                 <material-icon [icon]="dashboard"></material-icon>
+                 Vertretungen
+             </material-list-item>-->
 
 
             <!-- <nav class="material-navigation">

@@ -29,6 +29,7 @@ import 'package:atlive/src/site_component.dart';
     RegisterComponent,
     formDirectives,
     NgIf,
+    NgFor,
     DeferredContentDirective,
     MaterialButtonComponent,
     MaterialIconComponent,
@@ -49,6 +50,8 @@ class AppComponent implements OnInit {
   AppComponent(this.routes, BService this.fbservice);
 
   final BService fbservice;
+
+  List menuItems = new List();
 
   String imageUrl = 'assets/profile_picture.png';
 
@@ -90,12 +93,14 @@ class AppComponent implements OnInit {
 
   final Routes routes;
 
-  void ngOnInit() {
+  void ngOnInit() async {
 /*
     print(routes.site.toUrl());
 */
 
+/*
     getImage();
+*/
     availableWidth = window.innerWidth;
 /*    print(window.innerWidth);
     print(window.screen.width);*/
@@ -121,6 +126,7 @@ class AppComponent implements OnInit {
         }
       });
     });*/
+    menuItems = json.decode(await fbservice.getData('menu'));
   }
 
   void getImage() async {
@@ -135,4 +141,12 @@ class AppComponent implements OnInit {
 
     el.setAttribute('src', 'data:image/png;base64,' + base64);*/
   }
+}
+
+class MenuItem {
+  String link;
+  String label;
+  String icon;
+
+  MenuItem(this.label, this.icon, this.link);
 }
