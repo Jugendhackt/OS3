@@ -60,7 +60,7 @@ class BService {
     return res.body;
   }
 
-  Future<String> getLayout(int layoutId) async {
+  Future<String> getLayout(String layoutId) async {
     var url = server + '/layout/$layoutId.html';
     var res = await client.get(url, headers: {'token': _token});
     /*  print('Response status: ${res.statusCode}');
@@ -68,7 +68,7 @@ class BService {
     return res.body;
   }
 
-  Future<String> getData(int dataId) async {
+  Future<String> getData(String dataId) async {
     var url = server + '/data/$dataId.json';
     var res = await client.get(url, headers: {'token': _token});
     /* print('Response status: ${res.statusCode}');

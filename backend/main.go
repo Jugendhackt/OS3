@@ -9,9 +9,12 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-
+	"regexp"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
+	"strings"
+	"os"
+	"path/filepath"
 )
 
 var database *sql.DB
@@ -116,9 +119,31 @@ func siteHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 
-	fmt.Println(req.URL.Path)
+	s:=strings.Split(strings.Split(req.URL.Path,"/")[2],".")[0]
+	fmt.Println(s)
 
-	http.ServeFile(w, req, "."+req.URL.Path)
+	match, _ := regexp.MatchString("^[0-9]*$",s)
+
+	fmt.Println(match)
+
+	if match {
+		s="/site/"+s+".oll"
+		fmt.Println(s)
+		dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+
+		if _, err := os.Stat(dir+s); err == nil {
+			fmt.Println("EXIST")
+		}else{
+
+			fmt.Println("NOTEXIST")
+			s="/site/error_404.oll"
+		}
+	}else{
+		s="/site/"+getSiteTroughAlias(s)+".oll"
+		fmt.Println(s)
+
+	}
+	http.ServeFile(w, req, "."+s)
 }
 
 /*
@@ -274,6 +299,36 @@ func tokenLogIn(token string) (username string, action int) {
 	} else {
 		fmt.Println(err.Error())
 		return "", 0
+	}
+
+}
+
+func getSiteTroughAlias(alias string) string{
+	fmt.Println("START")
+	fmt.Println(alias)
+	//Now the Program does a query to ask if there is a Person that alreadly
+	//has this username
+	uid, err := database.Query("SELECT siteId FROM siteAliases WHERE alias = \"" + alias + "\"")
+
+	//if it would accur that there are several people with that username
+	//we choose the first one (it wouldn#t matter but cannot be number 0)
+	var sid int
+	if uid != nil {
+		uid.Next()
+		uid.Scan(&sid)
+	}
+	fmt.Println(sid)
+
+	//if there was an error a message is thrown
+	if err != nil {
+		fmt.Println("point 1" + err.Error())
+		return "error_500"
+
+		//if not it  will continue
+	} else if sid==0{
+		return "error_404"
+	} else {
+		return strconv.Itoa(sid)
 	}
 
 }

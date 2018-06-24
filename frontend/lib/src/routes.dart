@@ -58,7 +58,7 @@ class Routes {
   RouteDefinition get hero => _hero;*/
 
   final List<RouteDefinition> all = [
-    new RouteDefinition.redirect(path: '', redirectTo: paths.start.toUrl()),
+    new RouteDefinition.redirect(path: '', redirectTo: '/site/home'),
     _start,
     _home,
     _source,
