@@ -52,27 +52,27 @@ class BService {
 
   String _token = null;
 
-  Future<String> getSite(int siteId) async {
+  Future<String> getSite(String siteId) async {
     var url = server + '/site/$siteId.oll';
     var res = await client.get(url, headers: {'token': _token});
-    print('Response status: ${res.statusCode}');
-    print('Response body: ${res.body}');
+    /* print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');*/
     return res.body;
   }
 
   Future<String> getLayout(int layoutId) async {
     var url = server + '/layout/$layoutId.html';
     var res = await client.get(url, headers: {'token': _token});
-    print('Response status: ${res.statusCode}');
-    print('Response body: ${res.body}');
+    /*  print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');*/
     return res.body;
   }
 
   Future<String> getData(int dataId) async {
     var url = server + '/data/$dataId.json';
     var res = await client.get(url, headers: {'token': _token});
-    print('Response status: ${res.statusCode}');
-    print('Response body: ${res.body}');
+    /* print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');*/
     return res.body;
   }
 
@@ -121,8 +121,8 @@ class BService {
     }
 
     var res = await client.post(url, body: body);
-    print('Response status: ${res.statusCode}');
-    print('Response body: ${res.body}');
+/*    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');*/
     if (res.body.contains('Login successful.')) {
 /*
       await cookie.set('sessionToken', _token, path: '/', expires: 0.1);
@@ -157,8 +157,8 @@ class BService {
       'displayname': displayname,
       'token': _token
     });
-    print('Response status: ${res.statusCode}');
-    print('Response body: ${res.body}');
+/*    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');*/
     return res.body;
 
     /* HttpRequest reponse = await HttpRequest.postFormData(

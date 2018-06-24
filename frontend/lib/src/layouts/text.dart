@@ -105,7 +105,9 @@ class ContentTile implements OnInit, OnDestroy {
           try {
             String nll = lists[i];
             String data = getField(nll, 'data');
+/*
             print(data);
+*/
 
 /*
             fs.QuerySnapshot dataSnap = await sourceRef.collection(data).get();
@@ -120,17 +122,13 @@ class ContentTile implements OnInit, OnDestroy {
             if (sort == null) {
               docs = dataListSnap;
             } else {
-              print(sort);
-
               docs = dataListSnap;
-              print(docs);
 
               docs.sort((a, b) {
                 /* print(a.keys);
                 return 0;*/
                 return a[sort].toString().compareTo(b[sort].toString());
               });
-              print(docs);
             }
 
             String item = getField(nll, 'item');
@@ -153,7 +151,9 @@ class ContentTile implements OnInit, OnDestroy {
           } catch (e, st) {
             fillIn = e.toString() + ' - ' + st.toString();
           }
+/*
           print('[[$i]] $fillIn');
+*/
 
           layoutToUse = layoutToUse.replaceAll('###$i###', fillIn);
         }
@@ -192,7 +192,9 @@ class ContentTile implements OnInit, OnDestroy {
         Element el = window.document.querySelector('#' + key);
 
         if (code.split(';').length == 4) {
+/*
           print(code);
+*/
           List<String> meta2 = code.split(';')[3].split('-');
           String style = '';
           if (meta2[0].length > 0) {
@@ -233,15 +235,15 @@ class ContentTile implements OnInit, OnDestroy {
   String sourceRef;
 
   Future<void> ngOnInit() async {
-    print('-');
+    /*   print('-');
     print(code);
-    print('-');
+    print('-');*/
 
     var rng = new Random();
     key = 'a' + rng.nextInt(99999999).toString();
     Element el = window.document.querySelector('#insert-here');
 
-    print(key);
+    /*  print(key);*/
 
     el.id = key;
 

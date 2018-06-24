@@ -221,7 +221,7 @@ class StartComponent implements OnInit {
 
     availableWidth = window.innerWidth;
 
-    siteData = await fbservice.getSite(1);
+    siteData = await fbservice.getSite('1');
     _interpreter(siteData);
 
     /*  Element el = window.document.querySelector('#insert-there');

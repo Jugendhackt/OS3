@@ -12,6 +12,8 @@ import 'home_component.template.dart' as home_ct;
 import 'source_component.template.dart' as source_ct;
 import 'sources_component.template.dart' as sources_ct;
 
+import 'site_component.template.dart' as site_ct;
+
 @Injectable()
 class Routes {
   static final _start = new RouteDefinition(
@@ -31,15 +33,15 @@ class Routes {
     component: source_ct.SourceComponentNgFactory,
   );
 
-  /* static final _dashboard = new RouteDefinition(
+/*   static final _dashboard = new RouteDefinition(
     routePath: paths.dashboard,
     component: dct.DashboardComponentNgFactory,
-  );
-
-  static final _hero = new RouteDefinition(
-    routePath: paths.hero,
-    component: hct.HeroComponentNgFactory,
   );*/
+
+  static final _site = new RouteDefinition(
+    routePath: paths.site,
+    component: site_ct.SiteComponentNgFactory,
+  );
 
   RouteDefinition get start => _start;
 
@@ -48,6 +50,8 @@ class Routes {
   RouteDefinition get source => _source;
 
   RouteDefinition get sources => _sources;
+
+  RouteDefinition get site => _site;
 
   /* RouteDefinition get dashboard => _dashboard;
 
@@ -59,6 +63,7 @@ class Routes {
     _home,
     _source,
     _sources,
+    _site
 
     /*  _hero,
     _heroes,*/

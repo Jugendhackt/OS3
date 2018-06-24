@@ -14,7 +14,7 @@ import 'package:atlive/src/routes.dart';
   <table>
   <tr>
     <td><material-input name="username" id="username" autoFocus type="text" required requiredErrorMsg="Please enter a username" [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input></td>
-    <td><material-input type="password" name="password" id="password" [(ngModel)]="password" label="Password" ></material-input></td> 
+    <td><material-input type="password" name="password" id="password" required requiredErrorMsg="Please enter a password" [(ngModel)]="password" label="Password" ></material-input></td> 
   </tr>
     <div *ngIf="showError" style="color: red;">{{error}}</div>
     <div *ngIf="loading">

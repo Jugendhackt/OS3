@@ -10,6 +10,7 @@ import 'package:atlive/src/register_component.dart';
 import 'package:atlive/src/routes.dart';
 
 import 'package:angular_router/angular_router.dart';
+import 'package:atlive/src/site_component.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
 // Components info: https://webdev.dartlang.org/components
@@ -34,6 +35,7 @@ import 'package:angular_router/angular_router.dart';
     MaterialPersistentDrawerDirective,
     MaterialTemporaryDrawerComponent,
     MaterialToggleComponent,
+    SiteComponent
   ],
   providers: const [
     /*
@@ -89,6 +91,10 @@ class AppComponent implements OnInit {
   final Routes routes;
 
   void ngOnInit() {
+/*
+    print(routes.site.toUrl());
+*/
+
     getImage();
     availableWidth = window.innerWidth;
 /*    print(window.innerWidth);

@@ -76,7 +76,7 @@
 
 </div>
 <div *ngIf="!mobile">
-    <material-drawer persistent #drawer="drawer" style="background-color: #32cb00">
+    <material-drawer persistent #drawer="drawer" style="background-color: rgba(0, 0, 255, 0.3);">
 
         <!--
                 <div style="background-color: green">
@@ -112,6 +112,10 @@
                 <material-icon icon="home"></material-icon>
                 Home
             </material-list-item>
+            <material-list-item [routerLink]="'/site/vertretung'" routerLinkActive="active">
+                <material-icon icon="dashboard"></material-icon>
+                Vertretungen
+            </material-list-item>
 
 
             <!-- <nav class="material-navigation">
@@ -139,7 +143,7 @@
     </material-drawer>
 
     <div class="material-content">
-        <header class="material-header shadow" style="background-color: #32cb00;">
+        <header class="material-header shadow" style="background-color: rgba(0, 0, 255, 0.3);">
 
             <div class="material-header-row">
                 <material-button *ngIf="!drawer.visible" class="material-drawer-button" icon
@@ -245,6 +249,9 @@
 
         <div style="margin-left: 20px;margin-right: 20px;">
 
+            <!--
+                        <site [siteId]="1"></site>
+            -->
             <router-outlet [routes]="routes.all"></router-outlet>
         </div>
     </div>
