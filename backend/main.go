@@ -68,7 +68,7 @@ func main() {
 	mux.HandleFunc("/auth/login", loginHandler)
 	//mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
-	mux.HandleFunc("/site/", folderHandler)
+	mux.HandleFunc("/site/", siteHandler)
 	mux.HandleFunc("/layout/", folderHandler)
 	mux.HandleFunc("/data/", folderHandler)
 
@@ -109,6 +109,15 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 func folderHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+	http.ServeFile(w, req, "."+req.URL.Path)
+}
+
+func siteHandler(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+
+	fmt.Println(req.URL.Path)
+
 	http.ServeFile(w, req, "."+req.URL.Path)
 }
 
@@ -202,6 +211,8 @@ func checkDataBase(db *sql.DB) {
 	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64),profilePicture MEDIUMBLOB)")
 
 	db.Exec("CREATE TABLE IF NOT EXISTS tokens(tokenid int NOT NULL AUTO_INCREMENT PRIMARY KEY,userid int NOT NULL,token VARCHAR(36) NOT NULL,currentTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (userid) REFERENCES user(userid) )")
+
+	db.Exec("CREATE TABLE IF NOT EXISTS siteAliases(siteAliasId int NOT NULL AUTO_INCREMENT PRIMARY KEY,alias VARCHAR(32) NOT NULL,siteId int NOT NULL)")
 
 	//Creating a default user
 	fmt.Println(createUser("Tester", "geheim", "Beater", ""))
