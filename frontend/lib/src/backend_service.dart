@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:angular/angular.dart';
 import 'package:firebase/firebase.dart' as fb;
@@ -11,6 +12,8 @@ import 'package:firebase/firestore.dart' as fs;*/
 
 @Injectable()
 class BService {
+  /*String pageTitle = 'OS3 Demo';*/
+
   /*
   final String server = 'https://151.216.10.58:443';*/
   final String server = 'https://localhost:443';
@@ -21,6 +24,7 @@ class BService {
 
   BService() {
     client = new BrowserClient();
+    checkAutoLogin();
 /*
     fb.messaging().requestPermission();
 */
@@ -53,10 +57,17 @@ class BService {
   String _token = null;
 
   Future<String> getSite(String siteId) async {
+    document.title = 'Loading...';
+/*
+    pageTitle = siteId;
+*/
+
     var url = server + '/site/$siteId.oll';
     var res = await client.get(url, headers: {'token': _token});
     /* print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');*/
+    print(res.request.headers);
+    print(res.headers);
     return res.body;
   }
 
@@ -82,6 +93,7 @@ class BService {
 */
     print('AutoLoginRemove');
 
+    _token = null;
     await cookie.remove('autoLoginToken', path: '/');
     user = null;
   }
@@ -127,7 +139,7 @@ class BService {
 /*
       await cookie.set('sessionToken', _token, path: '/', expires: 0.1);
 */
-      user = new User(username, _token);
+      user = new User(username);
       if (persist) {
         await cookie.set(
           'autoLoginToken',
@@ -198,47 +210,29 @@ class BService {
     }*/
   }
 
-  /* void _authChanged(fb.User fbUser) {
-    user = fbUser;
-  }*/
+  void checkAutoLogin() async {
+    String autoLoginToken = await cookie.get('autoLoginToken');
+    if (autoLoginToken != null) {
+      print('TRY AUTO LOGIN');
+      String token = (new Uuid().v4()).toString();
+      var url = server + '/auth/tokenLogin';
 
-  Future signInWithGoogle() async {
-    /* try {
-      await _fbAuth.signInWithPopup(_fbGoogleAuthProvider);
-    } catch (error) {
-      print("$runtimeType::login() -- $error");
-    }*/
-  }
-
-/*  Future signInWithGithub() async {
-    try {
-      await _fbAuth.signInWithPopup(_fbGithubAuthProvider);
-    } catch (error) {
-      print("$runtimeType::login() -- $error");
+      var body = {'autoLoginToken': autoLoginToken, 'token': token};
+      var res = await client.post(url, body: body);
+      print(res.body);
+      if (res.body.startsWith('SUCCESS_')) {
+        _token = token;
+        user = new User(res.body.substring(8));
+      } else {}
     }
-  }
-
-  Future signInWithTwitter() async {
-    try {
-      await _fbAuth.signInWithPopup(_fbTwitterAuthProvider);
-    } catch (error) {
-      print("$runtimeType::login() -- $error");
-    }
-  }*/
-
-  void signOut() {
-/*
-    _fbAuth.signOut();
-*/
   }
 }
 
 class User {
   String username;
   String displayName;
-  String token;
   String photoURL;
   String email;
 
-  User(this.username, this.token);
+  User(this.username);
 }

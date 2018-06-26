@@ -106,7 +106,7 @@
         <div group>
             <div *ngFor="let item of menuItems">
                 <material-list-item [routerLink]="item['link']" routerLinkActive="active">
-                    <material-icon [icon]="item['icon']"></material-icon>
+                    <material-icon [icon]="item['icon']" style="margin-right: 10px"></material-icon>
                     {{item['name']}}
                 </material-list-item>
             </div>

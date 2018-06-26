@@ -11,25 +11,30 @@ import 'package:atlive/src/routes.dart';
   selector: 'login',
   template: '''
   <div style="padding: 20px;">
+  <form>
   <table>
   <tr>
-    <td><material-input name="username" id="username" autoFocus type="text" required requiredErrorMsg="Please enter a username" [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input></td>
-    <td><material-input type="password" name="password" id="password" required requiredErrorMsg="Please enter a password" [(ngModel)]="password" label="Password" ></material-input></td> 
+    <material-input name="username" id="username" autoFocus type="text" required requiredErrorMsg="Please enter a username" [(ngModel)]="username" label="Username" style=" padding-right: 20px"></material-input>
+    <material-input type="password" name="password" id="password" required requiredErrorMsg="Please enter a password" [(ngModel)]="password" label="Password" ></material-input>
+  
   </tr>
     <div *ngIf="showError" style="color: red;">{{error}}</div>
     <div *ngIf="loading">
     <material-spinner style="border-color: #C5002B; margin: 20px;"></material-spinner> Logging in...</div>
     
 
-  <tr>
-    <td> <material-button type="submit" (trigger)="login()">
-    Login
-</material-button></td>
-    <td> <material-checkbox style="alignment: center;" [(checked)]="stayLoggedIn">
+   <material-checkbox style="alignment: center;" [(checked)]="stayLoggedIn">
     Stay logged in
-</material-checkbox></td> 
-  </tr>
+</material-checkbox>
+<br>
+
+     <material-button type="submit" (trigger)="login()">
+    Login
+</material-button>
+ 
+ 
 </table>
+</form>
     
     
     
@@ -135,6 +140,7 @@ class LoginComponent implements OnInit, OnDestroy {
       /* error=res;*/
       showError = false;
       _loginChange.add(true);
+      _router.navigate('/site/home');
     }
 
     print(res);

@@ -8,5 +8,20 @@
     "link": "/site/vertretung",
     "icon": "dashboard",
     "name": "Vertretungen"
+  },
+  {
+    "link": "/files",
+    "icon": "folder",
+    "name": "Dateien"
+  },
+  {
+    "link": "/messages",
+    "icon": "forum",
+    "name": "Nachrichten"
+  },
+  {
+    "link": "/groups",
+    "icon": "group",
+    "name": "Gruppen"
   }
 ]

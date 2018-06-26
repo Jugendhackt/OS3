@@ -2,7 +2,11 @@ import 'package:angular_router/angular_router.dart';
 
 final start = new RoutePath(path: '/start');
 final home = new RoutePath(path: '/home');
+final files = new RoutePath(path: '/files');
+final messages = new RoutePath(path: '/messages');
+
 final sources = new RoutePath(path: '/sources');
+
 final sites = new RoutePath(path: '/site');
 
 const sourceParam = 'sourceId';

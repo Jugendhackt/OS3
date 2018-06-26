@@ -24,6 +24,14 @@ class Routes {
     routePath: paths.home,
     component: home_ct.HomeComponentNgFactory,
   );
+  static final _files = new RouteDefinition(
+    routePath: paths.files,
+    component: home_ct.HomeComponentNgFactory,
+  );
+  static final _messages = new RouteDefinition(
+    routePath: paths.messages,
+    component: home_ct.HomeComponentNgFactory,
+  );
   static final _sources = new RouteDefinition(
     routePath: paths.sources,
     component: sources_ct.SourcesComponentNgFactory,
@@ -47,6 +55,10 @@ class Routes {
 
   RouteDefinition get home => _home;
 
+  RouteDefinition get files => _files;
+
+  RouteDefinition get messages => _messages;
+
   RouteDefinition get source => _source;
 
   RouteDefinition get sources => _sources;
@@ -61,6 +73,8 @@ class Routes {
     new RouteDefinition.redirect(path: '', redirectTo: '/site/home'),
     _start,
     _home,
+    _files,
+    _messages,
     _source,
     _sources,
     _site

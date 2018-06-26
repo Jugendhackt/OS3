@@ -69,7 +69,7 @@ func main() {
 	//Choosing the appropiate Handlers for the right sub-directories
 	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/auth/login", loginHandler)
-	//mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
+	mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
 	mux.HandleFunc("/site/", siteHandler)
 	mux.HandleFunc("/layout/", folderHandler)
@@ -104,45 +104,51 @@ The root handler simply allows cors for the frontend, adds the STS Header(HTTPS 
 and Prints a String to the Screen
 */
 func rootHandler(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 	w.Write([]byte("This is a test server.\n"))
 }
 
 func folderHandler(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 	http.ServeFile(w, req, "."+req.URL.Path)
 }
 
 func siteHandler(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 
-	s:=strings.Split(strings.Split(req.URL.Path,"/")[2],".")[0]
+	s := strings.Split(strings.Split(req.URL.Path, "/")[2], ".")[0]
 	fmt.Println(s)
 
-	match, _ := regexp.MatchString("^[0-9]*$",s)
+	match, _ := regexp.MatchString("^[0-9]*$", s)
 
 	fmt.Println(match)
+	fmt.Println(req.Header.Get("token"))
 
 	if match {
-		s="/site/"+s+".oll"
+		w.Header().Add("title", s)
+		s = "/site/" + s + ".oll"
 		fmt.Println(s)
 		dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 
-		if _, err := os.Stat(dir+s); err == nil {
+		if _, err := os.Stat(dir + s); err == nil {
 			fmt.Println("EXIST")
-		}else{
+		} else {
 
 			fmt.Println("NOTEXIST")
-			s="/site/error_404.oll"
+			s = "/site/error_404.oll"
 		}
-	}else{
-		s="/site/"+getSiteTroughAlias(s)+".oll"
+	} else {
+		site, title := getSiteTroughAlias(s);
+		s = "/site/" + site + ".oll"
 		fmt.Println(s)
+		fmt.Println(title)
+		w.Header().Set("title", title)
 
 	}
+	w.Header().Set("test", "value")
 	http.ServeFile(w, req, "."+s)
 }
 
@@ -152,7 +158,7 @@ and delivers specific messages depending on the access type
 */
 func loginHandler(w http.ResponseWriter, req *http.Request) {
 	//First we have to enable cors and STS
-	enableCors(&w)
+	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 
 	//the action is chosen based on the request method
@@ -171,11 +177,52 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 		username := req.Form["username"]
 		password := req.Form["password"]
 		token := req.Form["token"]
+		autoLoginTokenArray := req.Form["autoLoginToken"]
+		autoLoginToken := ""
+		if len(autoLoginTokenArray) != 0 {
+			autoLoginToken = autoLoginTokenArray[0]
+		}
+		fmt.Println(token)
+		fmt.Println(autoLoginToken)
+
+		//Then the data gets passed into the login-function
+		displaymsg(logUserIn(username[0], password[0], token[0], autoLoginToken), &w)
+
+		//for any other request type the requestor simply gets a message saying access denied.
+	default:
+		fmt.Printf("\n\n%v\n", req)
+		fmt.Println(req.Form)
+		w.Write([]byte("\nAccess denied!\n\n"))
+
+	}
+
+}
+
+func tokenLoginHandler(w http.ResponseWriter, req *http.Request) {
+	//First we have to enable cors and STS
+	enableCors(&w, req)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+
+	//the action is chosen based on the request method
+	switch req.Method {
+
+	//In case of a post request the program continues the login
+	case "POST":
+
+		//The request form gets parsed and then for the
+		//sake of debugging printed into the console
+		req.ParseForm()
+		fmt.Printf("\n\n%v\n", req.Form)
+
+		//Then the data the user sent is fetched and stored
+		//in variables to work with them
+		token := req.Form["token"]
+		autoLoginToken := req.Form["autoLoginToken"]
 
 		fmt.Println(token)
 
 		//Then the data gets passed into the login-function
-		displaymsg(logUserIn(username[0], password[0], token[0]), &w)
+		displaymsg(logUserInWithToken(autoLoginToken[0], token[0]), &w)
 
 		//for any other request type the requestor simply gets a message saying access denied.
 	default:
@@ -193,7 +240,7 @@ and delivers specific messages depending on the access type
 */
 func registerHandler(w http.ResponseWriter, req *http.Request) {
 	//First we have to enable cors and STS
-	enableCors(&w)
+	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 
 	//the action is chosen based on the request method
@@ -237,12 +284,14 @@ func checkDataBase(db *sql.DB) {
 
 	db.Exec("CREATE TABLE IF NOT EXISTS tokens(tokenid int NOT NULL AUTO_INCREMENT PRIMARY KEY,userid int NOT NULL,token VARCHAR(36) NOT NULL,currentTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (userid) REFERENCES user(userid) )")
 
+	db.Exec("CREATE TABLE IF NOT EXISTS autoLoginTokens(tokenid int NOT NULL AUTO_INCREMENT PRIMARY KEY,userid int NOT NULL,token VARCHAR(108) NOT NULL,currentTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (userid) REFERENCES user(userid) )")
+
 	db.Exec("CREATE TABLE IF NOT EXISTS siteAliases(siteAliasId int NOT NULL AUTO_INCREMENT PRIMARY KEY,alias VARCHAR(32) NOT NULL,siteId int NOT NULL)")
 
 	//Creating a default user
 	fmt.Println(createUser("Tester", "geheim", "Beater", ""))
 
-	fmt.Println(logUserIn("Tester", "geheim", "fauwhwaduwdawdf"))
+	fmt.Println(logUserIn("Tester", "geheim", "fauwhwaduwdawdf", ""))
 
 	username, action := tokenLogIn("fauwhwaduwdawdf")
 
@@ -250,11 +299,18 @@ func checkDataBase(db *sql.DB) {
 }
 
 //Small function to enable cors
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, token")
-}
+func enableCors(w *http.ResponseWriter, r *http.Request) {
+	if origin := r.Header.Get("Origin"); origin != "" {
+		(*w).Header().Set("Access-Control-Allow-Origin", origin)
+	}
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, token, title")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+
+	/*	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+		(*w).Header().Set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT")
+		(*w).Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, token, title")
+	*/}
 
 //Small function to find errors and then panic
 func checkErr(err error) {
@@ -303,15 +359,12 @@ func tokenLogIn(token string) (username string, action int) {
 
 }
 
-func getSiteTroughAlias(alias string) string{
+func getSiteTroughAlias(alias string) (site string, title string) {
 	fmt.Println("START")
 	fmt.Println(alias)
-	//Now the Program does a query to ask if there is a Person that alreadly
-	//has this username
+
 	uid, err := database.Query("SELECT siteId FROM siteAliases WHERE alias = \"" + alias + "\"")
 
-	//if it would accur that there are several people with that username
-	//we choose the first one (it wouldn#t matter but cannot be number 0)
 	var sid int
 	if uid != nil {
 		uid.Next()
@@ -319,22 +372,21 @@ func getSiteTroughAlias(alias string) string{
 	}
 	fmt.Println(sid)
 
-	//if there was an error a message is thrown
 	if err != nil {
 		fmt.Println("point 1" + err.Error())
-		return "error_500"
+		return "error_500", "Error 500"
 
 		//if not it  will continue
-	} else if sid==0{
-		return "error_404"
+	} else if sid == 0 {
+		return "error_404", "Error 404"
 	} else {
-		return strconv.Itoa(sid)
+		return strconv.Itoa(sid), title
 	}
 
 }
 
 //The login function
-func logUserIn(username, password, token string) string {
+func logUserIn(username, password, token string, autoLoginToken string) string {
 
 	//Now the Program does a query to ask if there is a Person that alreadly
 	//has this username
@@ -374,6 +426,10 @@ func logUserIn(username, password, token string) string {
 			//if the password is right and no error accured the login is successful
 			if checkPasswordHash(password, hash) && errr == nil {
 				database.Exec("INSERT INTO tokens (userid,token) VALUES (" + strconv.Itoa(usid) + ",\"" + token + "\")")
+				if autoLoginToken != "" {
+
+					database.Exec("INSERT INTO autoLoginTokens (userid,token) VALUES (" + strconv.Itoa(usid) + ",\"" + autoLoginToken + "\")")
+				}
 				return "\n\nLogin successful.\n\n"
 
 				//if no error happened but the password was wrong.
@@ -394,6 +450,50 @@ func logUserIn(username, password, token string) string {
 	}
 
 	return ""
+
+}
+
+//The login function
+func logUserInWithToken(autoLoginToken string, token string, ) string {
+
+	uid, err := database.Query("SELECT userid FROM autoLoginTokens WHERE token = \"" + autoLoginToken + "\"")
+	var usid int
+	if uid != nil {
+		uid.Next()
+		uid.Scan(&usid)
+	}
+	fmt.Println(usid)
+
+	if err != nil {
+		fmt.Println("point 1" + err.Error())
+		return "FAILED_500"
+
+		//if not it  will continue
+	} else if usid == 0 {
+		return "FAILED_INVALID"
+	} else {
+		uid, err := database.Query("SELECT username FROM user WHERE userid = \"" + strconv.Itoa(usid) + "\"")
+		var username string
+		if uid != nil {
+			uid.Next()
+			uid.Scan(&username)
+		}
+		fmt.Println(username)
+
+		if err != nil {
+			fmt.Println("point 1" + err.Error())
+			return "FAILED_500"
+
+			//if not it  will continue
+		} else if username == "" {
+			return "FAILED_USERREMOVED"
+		} else {
+
+			database.Exec("INSERT INTO tokens (userid,token) VALUES (" + strconv.Itoa(usid) + ",\"" + token + "\")")
+			return "SUCCESS_" + username
+
+		}
+	}
 
 }
 

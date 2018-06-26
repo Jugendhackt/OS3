@@ -40,6 +40,9 @@ class SiteComponent implements OnInit, OnActivate {
     availableWidth = window.innerWidth;
 
     siteData = await fbservice.getSite(siteId);
+
+    document.title = siteData.split('\\')[0].trim();
+
     _interpreter(siteData);
     /* availableWidth = window.innerWidth;
 

@@ -42,12 +42,14 @@ import 'package:atlive/src/site_component.dart';
     /*
     const ClassProvider(HeroService),*/
     const ClassProvider(Routes),
+    const ClassProvider(BService),
     materialProviders,
-    BService
   ],
 )
 class AppComponent implements OnInit {
-  AppComponent(this.routes, BService this.fbservice);
+  final Router _router;
+
+  AppComponent(this.routes, BService this.fbservice, this._router);
 
   final BService fbservice;
 
@@ -61,6 +63,9 @@ class AppComponent implements OnInit {
 
   void pop() {
     showPopup = false;
+/*
+    router.navigate('/dashboard');
+*/
   }
 
   int availableWidth;
@@ -81,6 +86,7 @@ class AppComponent implements OnInit {
     await fbservice.logout();
     loggedIn = false;
     showPopup = false;
+    _router.navigate('/site/home');
   }
 
   void loginChange(bool change) {
