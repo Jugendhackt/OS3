@@ -32,6 +32,10 @@ class Routes {
     routePath: paths.messages,
     component: home_ct.HomeComponentNgFactory,
   );
+  static final _groups = new RouteDefinition(
+    routePath: paths.groups,
+    component: home_ct.HomeComponentNgFactory,
+  );
   static final _sources = new RouteDefinition(
     routePath: paths.sources,
     component: sources_ct.SourcesComponentNgFactory,
@@ -59,6 +63,8 @@ class Routes {
 
   RouteDefinition get messages => _messages;
 
+  RouteDefinition get groups => _groups;
+
   RouteDefinition get source => _source;
 
   RouteDefinition get sources => _sources;
@@ -75,6 +81,7 @@ class Routes {
     _home,
     _files,
     _messages,
+    _groups,
     _source,
     _sources,
     _site

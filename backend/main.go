@@ -71,6 +71,7 @@ func main() {
 	mux.HandleFunc("/auth/login", loginHandler)
 	mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
+	//mux.HandleFunc("/user/meta", userMetaHandler)
 	mux.HandleFunc("/site/", siteHandler)
 	mux.HandleFunc("/layout/", folderHandler)
 	mux.HandleFunc("/data/", folderHandler)
@@ -288,11 +289,24 @@ func checkDataBase(db *sql.DB) {
 
 	db.Exec("CREATE TABLE IF NOT EXISTS siteAliases(siteAliasId int NOT NULL AUTO_INCREMENT PRIMARY KEY,alias VARCHAR(32) NOT NULL,siteId int NOT NULL)")
 
+	//Permissions and groups
+	db.Exec("CREATE TABLE IF NOT EXISTS perms(permId int NOT NULL AUTO_INCREMENT PRIMARY KEY,userOrGroupId int NOT NULL,isUser bit NOT NULL DEFAULT 0,permission int NOT NULL)")
+
+	db.Exec("CREATE TABLE IF NOT EXISTS permNames(permNameId int NOT NULL AUTO_INCREMENT PRIMARY KEY,permId int NOT NULL, permName VARCHAR(32) NOT NULL)")
+
+	db.Exec("CREATE TABLE IF NOT EXISTS groups(groupId int NOT NULL AUTO_INCREMENT PRIMARY KEY,groupName VARCHAR(32) NOT NULL,groupVisible bit NOT NULL default 0)")
+
+	db.Exec("CREATE TABLE IF NOT EXISTS userGroups(userGroupId int NOT NULL AUTO_INCREMENT PRIMARY KEY,userId int NOT NULL,groupId int NOT NULL)")
+
+	db.Exec("CREATE TABLE IF NOT EXISTS groupPerms(groupPermId int NOT NULL AUTO_INCREMENT PRIMARY KEY,userId int NOT NULL,permId int NOT NULL)")
+
 	//Creating a default user
 	fmt.Println(createUser("Tester", "geheim", "Beater", ""))
-
-	fmt.Println(logUserIn("Tester", "geheim", "fauwhwaduwdawdf", ""))
-
+	fmt.Println(createGroup("Admin", true))
+	fmt.Println(logUserIn("Tester", "geheim", "fauwhwaduwdawdf", "saddfsdfsdf"))
+	/*for i := 0; i < 10000; i++ {
+		createGroup(strconv.Itoa(rand.Int()), true)
+	}*/
 	username, action := tokenLogIn("fauwhwaduwdawdf")
 
 	fmt.Printf("%v, %v\n", username, action)
@@ -553,6 +567,40 @@ func createUser(username, password, displayname, email string) string {
 			fmt.Print(err.Error())
 			return "\n\nSomething went wrong.\n\n"
 		}
+
+	}
+
+	return ""
+}
+
+//The createUser function
+func createGroup(groupname string, visible bool) string {
+	uid, err := database.Query("SELECT groupId FROM groups WHERE groupName = '" + groupname + "'")
+	var gid int
+	if uid != nil {
+		uid.Next()
+		uid.Scan(&gid)
+	}
+
+	if gid == 0 && err == nil {
+
+		if err == nil {
+			database.Exec("INSERT INTO groups (groupName,groupVisible) VALUES (\"" + groupname + "\"," + strconv.FormatBool(visible) + ")")
+			return "\n\nNew Group Created.\n\n"
+
+			//Otherwise a message is produced
+		} else {
+			return "\n\nSomething went wrong.\n\n"
+			fmt.Print(err.Error())
+		}
+
+	} else if uid != nil && err == nil {
+		return "GroupName " + groupname + " already used."
+
+	} else if err != nil {
+		return "Something went wrong."
+		fmt.Print(err.Error())
+	} else {
 
 	}
 

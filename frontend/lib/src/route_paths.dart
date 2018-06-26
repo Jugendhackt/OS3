@@ -4,6 +4,7 @@ final start = new RoutePath(path: '/start');
 final home = new RoutePath(path: '/home');
 final files = new RoutePath(path: '/files');
 final messages = new RoutePath(path: '/messages');
+final groups = new RoutePath(path: '/groups');
 
 final sources = new RoutePath(path: '/sources');
 
