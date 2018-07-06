@@ -65,6 +65,8 @@ func main() {
 
 	//Defining mux as Handler
 	mux := http.NewServeMux()
+	
+	//TODO Check incoming requests for SQL-Code
 
 	//Choosing the appropiate Handlers for the right sub-directories
 	mux.HandleFunc("/", rootHandler)
