@@ -65,7 +65,7 @@ func main() {
 
 	//Defining mux as Handler
 	mux := http.NewServeMux()
-	
+
 	//TODO Check incoming requests for SQL-Code
 
 	//Choosing the appropiate Handlers for the right sub-directories
@@ -303,9 +303,26 @@ func checkDataBase(db *sql.DB) {
 	db.Exec("CREATE TABLE IF NOT EXISTS groupPerms(groupPermId int NOT NULL AUTO_INCREMENT PRIMARY KEY,userId int NOT NULL,permId int NOT NULL)")
 
 	//Creating a default user
-	fmt.Println(createUser("Tester", "geheim", "Beater", ""))
+	fmt.Println(createUser("root", "geheim", "The Root", ""))
 	fmt.Println(createGroup("Admin", true))
-	fmt.Println(logUserIn("Tester", "geheim", "fauwhwaduwdawdf", "saddfsdfsdf"))
+	fmt.Println(addUserToGroup(1, 1))
+	fmt.Println(addPerm( /*userOrGroupId*/ 1, /*isUser*/ 0, /*permissions*/ []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
+	fmt.Println(checkPerm( /*userId*/ 1, /*permission*/ 1))
+
+	/*
+	perms	create_user		1
+	perms	delete_user		2
+	perms	list_users		3
+	perms	edit_user		4
+	perms	create_group	5
+	perms	delete_group	6
+	perms	list_groups		7
+	perms	edit_group		8
+	perms	edit_perms		9
+	perms	change_perms	10
+	*/
+
+	fmt.Println(logUserIn("root", "geheim", "fauwhwaduwdawdf", "saddfsdfsdf"))
 	/*for i := 0; i < 10000; i++ {
 		createGroup(strconv.Itoa(rand.Int()), true)
 	}*/
@@ -575,7 +592,40 @@ func createUser(username, password, displayname, email string) string {
 	return ""
 }
 
-//The createUser function
+//The createGroup function
+func addUserToGroup(userId int64, groupId int64) string {
+	uid, err := database.Query("SELECT userId FROM userGroups WHERE userId = '" + strconv.FormatInt(userId, 16) + "' AND groupId = '" + strconv.FormatInt(groupId, 16) + "'")
+	var gid int
+	if uid != nil {
+		uid.Next()
+		uid.Scan(&gid)
+	}
+
+	if gid == 0 && err == nil {
+
+		if err == nil {
+			database.Exec("INSERT INTO userGroups (userId,groupId) VALUES (" + strconv.FormatInt(userId, 16) + "," + strconv.FormatInt(groupId, 16) + ")")
+			return "\n\nUser added to group.\n\n"
+
+			//Otherwise a message is produced
+		} else {
+			return "\n\nSomething went wrong.\n\n"
+			fmt.Print(err.Error())
+		}
+
+	} else if uid != nil && err == nil {
+		return "User with id " + strconv.FormatInt(userId, 16) + " already in group " + strconv.FormatInt(groupId, 16) + "."
+
+	} else if err != nil {
+		return "Something went wrong."
+		fmt.Print(err.Error())
+	} else {
+
+	}
+
+	return ""
+}
+
 func createGroup(groupname string, visible bool) string {
 	uid, err := database.Query("SELECT groupId FROM groups WHERE groupName = '" + groupname + "'")
 	var gid int
