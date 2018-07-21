@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html';
 
 import 'package:angular/angular.dart';
@@ -226,6 +227,14 @@ class BService {
       } else {}
     }
   }
+
+  Future<List<User>> listUsers() async {
+    var url = server + '/user/listUsers';
+    var res = await client.get(url, headers: {'token': _token});
+    /*  print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');*/
+    return json.decode(res.body);
+  }
 }
 
 class User {
@@ -235,4 +244,17 @@ class User {
   String email;
 
   User(this.username);
+
+  User.fromJson(Map<String, dynamic> json)
+      : username = json['username'],
+        displayName = json['displayName'],
+        photoURL = json['photoURL'],
+        email = json['email'];
+
+  Map<String, dynamic> toJson() => {
+        'username': username,
+        'displayName': displayName,
+        'photoURL': photoURL,
+        'email': email
+      };
 }

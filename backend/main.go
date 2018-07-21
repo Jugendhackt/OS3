@@ -73,6 +73,7 @@ func main() {
 	mux.HandleFunc("/auth/login", loginHandler)
 	mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
+	mux.HandleFunc("/user/listUsers", listUsersHandler)
 	//mux.HandleFunc("/user/meta", userMetaHandler)
 	mux.HandleFunc("/site/", siteHandler)
 	mux.HandleFunc("/layout/", folderHandler)
@@ -200,6 +201,113 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 }
+func listUsersHandler(w http.ResponseWriter, req *http.Request) {
+	//First we have to enable cors and STS
+	enableCors(&w, req)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+
+	//the action is chosen based on the request method
+	switch req.Method {
+
+	//In case of a post request the program continues the login
+	case "GET":
+
+		//The request form gets parsed and then for the
+		//sake of debugging printed into the console
+		/*		req.ParseForm()
+		*/fmt.Printf("\n\n%v\n", req.Form)
+
+		s := req.Header.Get("token")
+
+		uid := getUserAuth(s)
+
+		if uid == 0 {
+			displaymsg("Access denied!", &w)
+			return
+
+		} else {
+
+			rows, err := database.Query("SELECT username,email,displayname FROM user")
+
+			if err != nil {
+				displaymsg("Error", &w)
+				return
+			}
+			defer rows.Close()
+			columns, err := rows.Columns()
+			if err != nil {
+				displaymsg("Error", &w)
+				return
+			}
+			count := len(columns)
+			tableData := make([]map[string]interface{}, 0)
+			values := make([]interface{}, count)
+			valuePtrs := make([]interface{}, count)
+			for rows.Next() {
+				for i := 0; i < count; i++ {
+					valuePtrs[i] = &values[i]
+				}
+				rows.Scan(valuePtrs...)
+				entry := make(map[string]interface{})
+				for i, col := range columns {
+					var v interface{}
+					val := values[i]
+					b, ok := val.([]byte)
+					if ok {
+						v = string(b)
+					} else {
+						v = val
+					}
+					entry[col] = v
+				}
+				tableData = append(tableData, entry)
+			}
+			jsonData, err := json.Marshal(tableData)
+			if err != nil {
+				displaymsg("Error", &w)
+				return
+			}
+			fmt.Println(string(jsonData))
+			displaymsg(string(jsonData), &w)
+			return
+		}
+		//Then the data the user sent is fetched and stored
+		//in variables to work with them
+
+		//Then the data gets passed into the login-function
+
+		//for any other request type the requestor simply gets a message saying access denied.
+	default:
+		fmt.Printf("\n\n%v\n", req)
+		fmt.Println(req.Form)
+		w.Write([]byte("\nAccess denied!\n\n"))
+
+	}
+
+}
+func getUserAuth(s string) int64 {
+	uid, err := database.Query("SELECT userId FROM tokens WHERE token = \"" + s + "\"")
+
+	//if it would accur that there are several people with that username
+	//we choose the first one (it wouldn#t matter but cannot be number 0)
+	var usid int64
+	if uid != nil {
+		uid.Next()
+		uid.Scan(&usid)
+	}
+
+	//if there was an error a message is thrown
+	if err != nil {
+		fmt.Println("point 1" + err.Error())
+		return 0
+
+		//if not it  will continue
+	} else if usid == 0 {
+		return 0
+	} else {
+		return usid
+	}
+}
 
 func tokenLoginHandler(w http.ResponseWriter, req *http.Request) {
 	//First we have to enable cors and STS
@@ -306,29 +414,191 @@ func checkDataBase(db *sql.DB) {
 	fmt.Println(createUser("root", "geheim", "The Root", ""))
 	fmt.Println(createGroup("Admin", true))
 	fmt.Println(addUserToGroup(1, 1))
-	fmt.Println(addPerm( /*userOrGroupId*/ 1, /*isUser*/ 0, /*permissions*/ []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
-	fmt.Println(checkPerm( /*userId*/ 1, /*permission*/ 1))
+	fmt.Println(addPerm( /*userOrGroupId*/ 1, /*isUser*/ 0, /*permissions*/ []int64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
+	fmt.Println(hasPerm( /*userId*/ 1, /*permission*/ 10))
+	fmt.Println(getPerms( /*userId*/ 1))
 
 	/*
-	perms	create_user		1
-	perms	delete_user		2
-	perms	list_users		3
-	perms	edit_user		4
-	perms	create_group	5
-	perms	delete_group	6
-	perms	list_groups		7
-	perms	edit_group		8
-	perms	edit_perms		9
-	perms	change_perms	10
+		perms	create_user		1	Create a new user
+		perms	delete_user		2	Delete any user
+		perms	list_users		3	List all users
+		perms	edit_user		4	Edit any user
+		perms	create_group	5	Create a new group
+		perms	delete_group	6	Delete any group
+		perms	list_groups		7	List all groups
+		perms	edit_group		8	Edit any group
+		perms	edit_perms		9	Edit the name and description of perms
+		perms	change_perms	10	Change the global perms for users and groups
 	*/
 
-	fmt.Println(logUserIn("root", "geheim", "fauwhwaduwdawdf", "saddfsdfsdf"))
+	/*	fmt.Println(logUserIn("root", "geheim", "fauwhwaduwdawdf", "saddfsdfsdf"))
+	*/
+
 	/*for i := 0; i < 10000; i++ {
-		createGroup(strconv.Itoa(rand.Int()), true)
-	}*/
+			createGroup(strconv.Itoa(rand.Int()), true)
+		}*/
 	username, action := tokenLogIn("fauwhwaduwdawdf")
 
 	fmt.Printf("%v, %v\n", username, action)
+}
+
+func getPerms(userId int64) []int64 {
+	rows, err := database.Query("SELECT permission FROM perms WHERE userOrGroupId = " + strconv.FormatInt(userId, 10) + " AND isUser = 1")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var pids []int64
+	for rows.Next() {
+		var pid int64
+		if err := rows.Scan(&pid); err != nil {
+			log.Fatal(err)
+		}
+		pids = append(pids, pid)
+	}
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	rows, err = database.Query("SELECT groupId FROM userGroups WHERE userId = " + strconv.FormatInt(userId, 10))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var gid int64
+		if err := rows.Scan(&gid); err != nil {
+			log.Fatal(err)
+		}
+		rows, err := database.Query("SELECT permission FROM perms WHERE userOrGroupId = " + strconv.FormatInt(gid, 10) + " AND isUser = 0")
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for rows.Next() {
+			var pid int64
+			if err := rows.Scan(&pid); err != nil {
+				log.Fatal(err)
+			}
+			pids = append(pids, pid)
+		}
+		if err := rows.Err(); err != nil {
+			log.Fatal(err)
+		}
+		rows.Close()
+
+	}
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return pids
+}
+func addPerm(userOrGroupId int64, isUser int64, permissions []int64) string {
+	for _, element := range permissions {
+		/*		fmt.Println(element)
+		*/
+		uid, err := database.Query("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(userOrGroupId, 10) + " AND isUser = " + strconv.FormatInt(isUser, 10) + " AND permission = " + strconv.FormatInt(element, 10))
+		/*	fmt.Println(element)
+
+			fmt.Println("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(userOrGroupId, 10) + " AND isUser = " + strconv.FormatInt(isUser, 10) + " AND permission = " + strconv.FormatInt(element, 10))
+			*/
+
+		var gid int
+		if uid != nil {
+			uid.Next()
+			uid.Scan(&gid)
+		}
+
+		if gid == 0 && err == nil {
+
+			if err == nil {
+				fmt.Println(element)
+				database.Exec("INSERT INTO perms (userOrGroupId,isUser,permission) VALUES (" + strconv.FormatInt(userOrGroupId, 10) + "," + strconv.FormatInt(isUser, 10) + "," + strconv.FormatInt(element, 10) + ")")
+				/*				return "\n\nUser added to group.\n\n"
+				*/
+				//Otherwise a message is produced
+			} else {
+				fmt.Print(err.Error())
+				return "\n\nSomething went wrong.\n\n"
+			}
+
+		} else if uid != nil && err == nil {
+			/*			return "User with id " + strconv.FormatInt(userId, 10) + " already in group " + strconv.FormatInt(groupId, 10) + "."
+			*/
+		} else if err != nil {
+			fmt.Println(err.Error())
+			return "Something went wrong."
+		} else {
+
+		}
+
+	}
+	return ""
+
+}
+func hasPerm(userId int64, permission int64) bool {
+	/*		fmt.Println(element)
+	*/
+	uid, err := database.Query("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(userId, 10) + " AND isUser = 1 AND permission = " + strconv.FormatInt(permission, 10))
+	/*	fmt.Println(element)
+
+		fmt.Println("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(userOrGroupId, 10) + " AND isUser = " + strconv.FormatInt(isUser, 10) + " AND permission = " + strconv.FormatInt(element, 10))
+		*/
+
+	var gid int
+	if uid != nil {
+		uid.Next()
+		uid.Scan(&gid)
+	}
+
+	if gid == 0 && err == nil {
+
+		rows, err := database.Query("SELECT groupId FROM userGroups WHERE userId = " + strconv.FormatInt(userId, 10))
+		if err != nil {
+			log.Fatal(err)
+			return false
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var groupId int64
+			if err := rows.Scan(&groupId); err != nil {
+				log.Fatal(err)
+				return false
+			}
+
+			uid, err = database.Query("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(groupId, 10) + " AND isUser = 0 AND permission = " + strconv.FormatInt(permission, 10))
+			var gid int
+			if uid != nil {
+				uid.Next()
+				uid.Scan(&gid)
+			}
+			if gid != 0 {
+				return true
+			}
+			fmt.Println(groupId)
+		}
+		if err := rows.Err(); err != nil {
+			log.Fatal(err)
+			return false
+		}
+
+	} else if uid != nil && err == nil {
+		/*			return "User with id " + strconv.FormatInt(userId, 10) + " already in group " + strconv.FormatInt(groupId, 10) + "."
+		*/
+		return true
+	} else if err != nil {
+		fmt.Println(err.Error())
+		return false
+	} else {
+	}
+	return false
+
 }
 
 //Small function to enable cors
@@ -594,7 +864,7 @@ func createUser(username, password, displayname, email string) string {
 
 //The createGroup function
 func addUserToGroup(userId int64, groupId int64) string {
-	uid, err := database.Query("SELECT userId FROM userGroups WHERE userId = '" + strconv.FormatInt(userId, 16) + "' AND groupId = '" + strconv.FormatInt(groupId, 16) + "'")
+	uid, err := database.Query("SELECT userId FROM userGroups WHERE userId = '" + strconv.FormatInt(userId, 10) + "' AND groupId = '" + strconv.FormatInt(groupId, 10) + "'")
 	var gid int
 	if uid != nil {
 		uid.Next()
@@ -604,7 +874,7 @@ func addUserToGroup(userId int64, groupId int64) string {
 	if gid == 0 && err == nil {
 
 		if err == nil {
-			database.Exec("INSERT INTO userGroups (userId,groupId) VALUES (" + strconv.FormatInt(userId, 16) + "," + strconv.FormatInt(groupId, 16) + ")")
+			database.Exec("INSERT INTO userGroups (userId,groupId) VALUES (" + strconv.FormatInt(userId, 10) + "," + strconv.FormatInt(groupId, 10) + ")")
 			return "\n\nUser added to group.\n\n"
 
 			//Otherwise a message is produced
@@ -614,7 +884,7 @@ func addUserToGroup(userId int64, groupId int64) string {
 		}
 
 	} else if uid != nil && err == nil {
-		return "User with id " + strconv.FormatInt(userId, 16) + " already in group " + strconv.FormatInt(groupId, 16) + "."
+		return "User with id " + strconv.FormatInt(userId, 10) + " already in group " + strconv.FormatInt(groupId, 10) + "."
 
 	} else if err != nil {
 		return "Something went wrong."

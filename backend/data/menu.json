@@ -23,5 +23,10 @@
     "link": "/groups",
     "icon": "group",
     "name": "Gruppen"
+  },
+  {
+    "link": "/users",
+    "icon": "person",
+    "name": "Personen"
   }
 ]
