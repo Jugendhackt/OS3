@@ -13,6 +13,7 @@ import 'source_component.template.dart' as source_ct;
 import 'sources_component.template.dart' as sources_ct;
 
 import 'site_component.template.dart' as site_ct;
+import 'users_component.template.dart' as users_ct;
 
 @Injectable()
 class Routes {
@@ -35,6 +36,10 @@ class Routes {
   static final _groups = new RouteDefinition(
     routePath: paths.groups,
     component: home_ct.HomeComponentNgFactory,
+  );
+  static final _users = new RouteDefinition(
+    routePath: paths.users,
+    component: users_ct.UsersComponentNgFactory,
   );
   static final _sources = new RouteDefinition(
     routePath: paths.sources,
@@ -65,6 +70,8 @@ class Routes {
 
   RouteDefinition get groups => _groups;
 
+  RouteDefinition get users => _users;
+
   RouteDefinition get source => _source;
 
   RouteDefinition get sources => _sources;
@@ -84,7 +91,8 @@ class Routes {
     _groups,
     _source,
     _sources,
-    _site
+    _site,
+    _users
 
     /*  _hero,
     _heroes,*/

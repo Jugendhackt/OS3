@@ -25,7 +25,6 @@ class BService {
 
   BService() {
     client = new BrowserClient();
-    checkAutoLogin();
 /*
     fb.messaging().requestPermission();
 */
@@ -123,7 +122,6 @@ class BService {
             .then((value) => res = value.toString()))
         .catchError((error) => print(error.toString()));*/
     var url = server + '/auth/login';
-
     var body = {'username': username, 'password': password, 'token': _token};
     if (persist) {
       autoLoginToken = (new Uuid().v4()).toString() +
@@ -211,7 +209,7 @@ class BService {
     }*/
   }
 
-  void checkAutoLogin() async {
+  Future<bool> checkAutoLogin() async {
     String autoLoginToken = await cookie.get('autoLoginToken');
     if (autoLoginToken != null) {
       print('TRY AUTO LOGIN');
@@ -224,8 +222,12 @@ class BService {
       if (res.body.startsWith('SUCCESS_')) {
         _token = token;
         user = new User(res.body.substring(8));
-      } else {}
+        return true;
+      } else {
+        return false;
+      }
     }
+    return false;
   }
 
   Future<List<User>> listUsers() async {
@@ -233,8 +235,19 @@ class BService {
     var res = await client.get(url, headers: {'token': _token});
     /*  print('Response status: ${res.statusCode}');
     print('Response body: ${res.body}');*/
-    return json.decode(res.body);
+    print(res.body);
+
+    List usrs2 = (json.decode(res.body) as List);
+    List usrs = usrs2.map((s) => new User.fromJson(s)).toList();
+
+    print(usrs.runtimeType);
+    /*   print((json.decode(res.body) as List)
+      ..map((s) => new User.fromJson(s)).runtimeType);*/
+
+    return usrs;
   }
+
+  bool checkPermString(String permString) {}
 }
 
 class User {
@@ -246,10 +259,10 @@ class User {
   User(this.username);
 
   User.fromJson(Map<String, dynamic> json)
-      : username = json['username'],
-        displayName = json['displayName'],
-        photoURL = json['photoURL'],
-        email = json['email'];
+      : username = json['username'] ?? 'null',
+        displayName = json['displayName'] ?? 'null',
+        photoURL = json['photoURL'] ?? 'null',
+        email = json['email'] ?? 'null';
 
   Map<String, dynamic> toJson() => {
         'username': username,

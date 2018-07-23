@@ -86,7 +86,12 @@ class AppComponent implements OnInit {
     await fbservice.logout();
     loggedIn = false;
     showPopup = false;
+
     _router.navigate('/site/home');
+
+/*
+    _router.navigate(_router.current.path);
+*/
   }
 
   void loginChange(bool change) {
@@ -100,6 +105,11 @@ class AppComponent implements OnInit {
   final Routes routes;
 
   void ngOnInit() async {
+    if (await fbservice.checkAutoLogin()) {
+      _router.navigate('/site/home');
+
+      _router.navigate(_router.current.path);
+    }
 /*
     print(routes.site.toUrl());
 */

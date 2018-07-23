@@ -136,11 +136,16 @@ class LoginComponent implements OnInit, OnDestroy {
     } else if (res.contains('Password wrong.')) {
       error = 'Invalid username or password.';
       showError = true;
-    } else {
+    } else if (res.contains('Login successful.')) {
       /* error=res;*/
-      showError = false;
       _loginChange.add(true);
+
       _router.navigate('/site/home');
+
+      _router.navigate(_router.current.path);
+    } else {
+      error = res;
+      showError = true;
     }
 
     print(res);

@@ -5,7 +5,7 @@ import 'package:angular/angular.dart';
 @Component(
   selector: 'home',
   template: '''
-  <h1>Home</h1>
+  <h1>This is a placeholder</h1>
   
   ''',
   directives: [coreDirectives],

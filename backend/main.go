@@ -73,11 +73,12 @@ func main() {
 	mux.HandleFunc("/auth/login", loginHandler)
 	mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
-	mux.HandleFunc("/user/listUsers", listUsersHandler)
+	/*	mux.HandleFunc("/perm/ownPerms", ownPermsHandler)
+	*//*mux.HandleFunc("/user/listUsers", listUsersHandler)*/
 	//mux.HandleFunc("/user/meta", userMetaHandler)
 	mux.HandleFunc("/site/", siteHandler)
 	mux.HandleFunc("/layout/", folderHandler)
-	mux.HandleFunc("/data/", folderHandler)
+	mux.HandleFunc("/data/", dataHandler)
 
 	//Configuring the TLS Transmission
 	cfg := &tls.Config{
@@ -123,6 +124,13 @@ func siteHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 
+	st := req.Header.Get("token")
+	fmt.Println(string(st))
+
+	/*	uid := getUserAuth(st)
+	*//*
+		displaymsg(strconv.FormatInt(uid, 10), &w)*/
+
 	s := strings.Split(strings.Split(req.URL.Path, "/")[2], ".")[0]
 	fmt.Println(s)
 
@@ -132,8 +140,8 @@ func siteHandler(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(req.Header.Get("token"))
 
 	if match {
-		w.Header().Add("title", s)
-		s = "/site/" + s + ".oll"
+		/*		w.Header().Add("title", s)
+		*/s = "/site/" + s + ".oll"
 		fmt.Println(s)
 		dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 
@@ -145,15 +153,77 @@ func siteHandler(w http.ResponseWriter, req *http.Request) {
 			s = "/site/error_404.oll"
 		}
 	} else {
-		site, title := getSiteTroughAlias(s);
+		site := getSiteTroughAlias(s);
 		s = "/site/" + site + ".oll"
 		fmt.Println(s)
-		fmt.Println(title)
-		w.Header().Set("title", title)
-
+		/*		w.Header().Set("title", title)
+		*/
 	}
-	w.Header().Set("test", "value")
+	/*	w.Header().Set("test", "value")
+	*/
 	http.ServeFile(w, req, "."+s)
+}
+
+func dataHandler(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w, req)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+
+	token := req.Header.Get("token")
+	fmt.Println(string(token))
+
+	uid := getUserAuth(token)
+
+	/*	if uid == 0 {
+	acdeny(&w)
+
+			return
+
+		} else {*/
+	/*		displaymsg(strconv.FormatInt(uid, 10), &w)
+	*/
+
+	fmt.Println(req.URL.Path)
+	switch req.URL.Path {
+	case "/data/users.json":
+		if hasPerm(uid, 3) {
+			displaymsg(listUsers(), &w)
+			return
+		}
+	default:
+		/*s := strings.Split(strings.Split(req.URL.Path, "/")[2], ".")[0]
+		fmt.Println(s)
+
+		match, _ := regexp.MatchString("^[0-9]*$", s)
+
+		fmt.Println(match)
+		fmt.Println(req.Header.Get("token"))
+
+		if match {
+			s = "/site/" + s + ".oll"
+			fmt.Println(s)
+			dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+
+			if _, err := os.Stat(dir + s); err == nil {
+				fmt.Println("EXIST")
+			} else {
+
+				fmt.Println("NOTEXIST")
+				s = "/site/error_404.oll"
+			}
+		} else {
+			site := getSiteTroughAlias(s);
+			s = "/site/" + site + ".oll"
+			fmt.Println(s)
+
+		}*/
+
+		http.ServeFile(w, req, /* "."+s*/ "."+req.URL.Path)
+	}
+
+	/*	uid := getUserAuth(st)
+	*//*
+		displaymsg(strconv.FormatInt(uid, 10), &w)*/
+
 }
 
 /*
@@ -161,10 +231,11 @@ The Login Handler handles the user login (pretty obvious)
 and delivers specific messages depending on the access type
 */
 func loginHandler(w http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
+
 	//First we have to enable cors and STS
 	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-
 	//the action is chosen based on the request method
 	switch req.Method {
 
@@ -181,6 +252,12 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 		username := req.Form["username"]
 		password := req.Form["password"]
 		token := req.Form["token"]
+
+		if string(token[0]) == "null" {
+			acdeny(&w)
+			return
+		}
+
 		autoLoginTokenArray := req.Form["autoLoginToken"]
 		autoLoginToken := ""
 		if len(autoLoginTokenArray) != 0 {
@@ -196,93 +273,100 @@ func loginHandler(w http.ResponseWriter, req *http.Request) {
 	default:
 		fmt.Printf("\n\n%v\n", req)
 		fmt.Println(req.Form)
-		w.Write([]byte("\nAccess denied!\n\n"))
+		acdeny(&w)
 
 	}
 
 }
-func listUsersHandler(w http.ResponseWriter, req *http.Request) {
+
+func listUsers( /*w http.ResponseWriter, req *http.Request*/) string {
 	//First we have to enable cors and STS
-	enableCors(&w, req)
-	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+	/*enableCors(&w, req)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")*/
 
 	//the action is chosen based on the request method
-	switch req.Method {
+	/*	switch req.Method {
 
-	//In case of a post request the program continues the login
-	case "GET":
+		//In case of a post request the program continues the login
+		case "GET":*/
 
-		//The request form gets parsed and then for the
-		//sake of debugging printed into the console
-		/*		req.ParseForm()
-		*/fmt.Printf("\n\n%v\n", req.Form)
+	//The request form gets parsed and then for the
+	//sake of debugging printed into the console
+	/*		req.ParseForm()
+	*//*fmt.Printf("\n\n%v\n", req.Form)*/
 
-		s := req.Header.Get("token")
+	/*	s := req.Header.Get("token")
+		fmt.Println(string(s))
 
-		uid := getUserAuth(s)
+		uid := getUserAuth(s)*/
 
-		if uid == 0 {
-			displaymsg("Access denied!", &w)
+	/*	if uid == 0 {
+	acdeny(&w)
+
 			return
 
-		} else {
+		} else {*/
+	/*		displaymsg(strconv.FormatInt(uid, 10), &w)
+	*/
+	/*		if hasPerm(uid, 3) {
+	*/rows, err := database.Query("SELECT username,email,displayname FROM user")
 
-			rows, err := database.Query("SELECT username,email,displayname FROM user")
-
-			if err != nil {
-				displaymsg("Error", &w)
-				return
-			}
-			defer rows.Close()
-			columns, err := rows.Columns()
-			if err != nil {
-				displaymsg("Error", &w)
-				return
-			}
-			count := len(columns)
-			tableData := make([]map[string]interface{}, 0)
-			values := make([]interface{}, count)
-			valuePtrs := make([]interface{}, count)
-			for rows.Next() {
-				for i := 0; i < count; i++ {
-					valuePtrs[i] = &values[i]
-				}
-				rows.Scan(valuePtrs...)
-				entry := make(map[string]interface{})
-				for i, col := range columns {
-					var v interface{}
-					val := values[i]
-					b, ok := val.([]byte)
-					if ok {
-						v = string(b)
-					} else {
-						v = val
-					}
-					entry[col] = v
-				}
-				tableData = append(tableData, entry)
-			}
-			jsonData, err := json.Marshal(tableData)
-			if err != nil {
-				displaymsg("Error", &w)
-				return
-			}
-			fmt.Println(string(jsonData))
-			displaymsg(string(jsonData), &w)
-			return
+	if err != nil {
+		/*displaymsg("Error", &w)
+		return*/
+	}
+	defer rows.Close()
+	columns, err := rows.Columns()
+	if err != nil {
+		/*displaymsg("Error", &w)
+		return*/
+	}
+	count := len(columns)
+	tableData := make([]map[string]interface{}, 0)
+	values := make([]interface{}, count)
+	valuePtrs := make([]interface{}, count)
+	for rows.Next() {
+		for i := 0; i < count; i++ {
+			valuePtrs[i] = &values[i]
 		}
-		//Then the data the user sent is fetched and stored
-		//in variables to work with them
+		rows.Scan(valuePtrs...)
+		entry := make(map[string]interface{})
+		for i, col := range columns {
+			var v interface{}
+			val := values[i]
+			b, ok := val.([]byte)
+			if ok {
+				v = string(b)
+			} else {
+				v = val
+			}
+			entry[col] = v
+		}
+		tableData = append(tableData, entry)
+	}
+	jsonData, err := json.Marshal(tableData)
+	if err != nil {
+		/*fmt.Println(err.Error())
+		return*/
+	}
+	fmt.Println(string(jsonData))
+	return string(jsonData)
+	/*		return
+		} else {
+			acdeny(&w)
+		}*/
+	//Then the data the user sent is fetched and stored
+	//in variables to work with them
 
-		//Then the data gets passed into the login-function
+	//Then the data gets passed into the login-function
 
-		//for any other request type the requestor simply gets a message saying access denied.
-	default:
+	//for any other request type the requestor simply gets a message saying access denied.
+	/*default:
 		fmt.Printf("\n\n%v\n", req)
 		fmt.Println(req.Form)
-		w.Write([]byte("\nAccess denied!\n\n"))
+		acdeny(&w)
 
-	}
+	}*/
 
 }
 func getUserAuth(s string) int64 {
@@ -330,6 +414,11 @@ func tokenLoginHandler(w http.ResponseWriter, req *http.Request) {
 		token := req.Form["token"]
 		autoLoginToken := req.Form["autoLoginToken"]
 
+		if string(token[0]) == "null" {
+			acdeny(&w)
+			return
+		}
+
 		fmt.Println(token)
 
 		//Then the data gets passed into the login-function
@@ -339,7 +428,7 @@ func tokenLoginHandler(w http.ResponseWriter, req *http.Request) {
 	default:
 		fmt.Printf("\n\n%v\n", req)
 		fmt.Println(req.Form)
-		w.Write([]byte("\nAccess denied!\n\n"))
+		acdeny(&w)
 
 	}
 
@@ -382,7 +471,7 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 	default:
 		fmt.Printf("\n\n%v\n", req)
 		fmt.Println(req.Form)
-		w.Write([]byte("Access denied!"))
+		acdeny(&w)
 
 	}
 
@@ -603,6 +692,7 @@ func hasPerm(userId int64, permission int64) bool {
 
 //Small function to enable cors
 func enableCors(w *http.ResponseWriter, r *http.Request) {
+
 	if origin := r.Header.Get("Origin"); origin != "" {
 		(*w).Header().Set("Access-Control-Allow-Origin", origin)
 	}
@@ -662,9 +752,14 @@ func tokenLogIn(token string) (username string, action int) {
 
 }
 
-func getSiteTroughAlias(alias string) (site string, title string) {
+func getSiteTroughAlias(alias string) (site string) {
 	fmt.Println("START")
 	fmt.Println(alias)
+
+	switch alias {
+	case "users":
+		return "users"
+	}
 
 	uid, err := database.Query("SELECT siteId FROM siteAliases WHERE alias = \"" + alias + "\"")
 
@@ -677,13 +772,13 @@ func getSiteTroughAlias(alias string) (site string, title string) {
 
 	if err != nil {
 		fmt.Println("point 1" + err.Error())
-		return "error_500", "Error 500"
+		return "error_500"
 
 		//if not it  will continue
 	} else if sid == 0 {
-		return "error_404", "Error 404"
+		return "error_404"
 	} else {
-		return strconv.Itoa(sid), title
+		return strconv.Itoa(sid)
 	}
 
 }
@@ -935,6 +1030,13 @@ func displaymsg(msg string, w *http.ResponseWriter) {
 		fmt.Println(msg)
 	} else {
 		(*w).Write([]byte(msg))
+	}
+}
+
+func acdeny(w *http.ResponseWriter) {
+	if w == nil {
+	} else {
+		(*w).Write([]byte("Access denied"))
 	}
 }
 

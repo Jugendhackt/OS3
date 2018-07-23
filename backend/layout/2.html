@@ -1,23 +1,26 @@
 {{title}}
 
+{{news.0.title}}
+
 <div class="grid-container" style="grid-auto-flow: row;display: grid;
   grid-template-columns: auto auto auto;
   grid-gap: 10px;
   padding: 0px;">
-:::
-#data#
-news
-#data#
+    :::
+    #data#
+    news
+    #data#
 
-#sort#
-title
-#sort#
-#item#
-<div class="md-card" style="/*max-width: 50px;*/background-color: rgba(255, 255, 255, 0.5);"><b>{{title}}</b><br>{{content}}</div>
-#item#
+    #sort#
+    title
+    #sort#
+    #item#
+    <div class="md-card" style="/*max-width: 50px;*/background-color: rgba(255, 255, 255, 0.5);">
+        <b>{{title}}</b><br>{{content}}</div>
+    #item#
 
-#/divider#
-<div style="padding-top: 5px;"></div>
-#/divider#
-:::
+    #/divider#
+    <div style="padding-top: 5px;"></div>
+    #/divider#
+    :::
 </div>

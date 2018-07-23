@@ -55,6 +55,152 @@ class ContentTile implements OnInit, OnDestroy {
   String sourceData;
   String layoutData;
 
+  String getPath(var map, String key) {
+    var valueTemp = map;
+
+    for (String keyX in key.split('.')) {
+      int z = int.tryParse(keyX);
+      if (z == null) {
+        valueTemp = valueTemp[keyX];
+      } else {
+        valueTemp = valueTemp[z];
+      }
+    }
+    return valueTemp.toString();
+  }
+
+  String replace(
+    var data,
+    String ltoUse,
+  ) {
+    var pieces = ltoUse.split(':::');
+    bool beforeList = true;
+    String layoutToUse = '';
+    Map lists = {};
+
+    int listIndex = 0;
+
+    for (String p in pieces) {
+      if (beforeList) {
+        layoutToUse += p;
+      } else {
+        layoutToUse += '###$listIndex###';
+        lists[listIndex] = p;
+
+        listIndex++;
+      }
+      beforeList = !beforeList;
+    }
+/*
+    var sourceSnapTemp = json.decode(sourceData);
+*/
+    List<String> keys = new List();
+    for (String x in layoutToUse.split('{{')..removeAt(0)) {
+      keys.add(x.split('}}')[0]);
+    }
+    print(keys);
+
+    for (var key in keys) {
+      print(key);
+      print(key.runtimeType);
+
+      String val = '';
+
+      var valueTemp = data;
+
+      for (String keyX in key.split('.')) {
+        int z = int.tryParse(keyX);
+        if (z == null) {
+          valueTemp = valueTemp[keyX];
+        } else {
+          valueTemp = valueTemp[z];
+        }
+      }
+      print('{{$key}}');
+      print(valueTemp);
+
+      layoutToUse = layoutToUse.replaceAll('{{$key}}', valueTemp);
+    }
+
+    //LISTHANDLER
+
+    String getField(String k, String field) => k.split('#$field#').length == 3
+        ? k.split('#$field#')[1].split('#$field#')[0].trim()
+        : null;
+
+    for (int i = 0; i < listIndex; i++) {
+      String fillIn = '';
+      try {
+        String nll = lists[i];
+        String dataPath = getField(nll, 'data');
+/*
+            print(data);
+*/
+
+/*
+            fs.QuerySnapshot dataSnap = await sourceRef.collection(data).get();
+*/
+
+/*
+        List dataListSnap = json.decode(sourceData)[data];
+*/
+        var valueTemp = data;
+
+        for (String keyX in dataPath.split('.')) {
+          int z = int.tryParse(keyX);
+          if (z == null) {
+            valueTemp = valueTemp[keyX];
+          } else {
+            valueTemp = valueTemp[z];
+          }
+        }
+        List dataListSnap = valueTemp;
+
+        List docs;
+
+        String sort = getField(nll, 'sort');
+
+        if (sort == null) {
+          docs = dataListSnap;
+        } else {
+          docs = dataListSnap;
+
+          docs.sort((a, b) {
+            /* print(a.keys);
+                return 0;*/
+            return getPath(a, sort)
+                .toString()
+                .compareTo(getPath(b, sort).toString());
+          });
+        }
+
+        String item = getField(nll, 'item');
+        String divider = getField(nll, 'divider');
+
+        int sIndex = 0;
+        for (var listDoc in docs) {
+          String oneItem = replace(listDoc, item);
+          /*  for (var key in listDoc.keys) {
+            if (listDoc[key] is String) {
+              oneItem = oneItem.replaceAll('{{$key}}', listDoc[key]);
+            } else {}
+          }*/
+          fillIn = fillIn + oneItem;
+          if (sIndex < docs.length - 1 && divider != null) {
+            fillIn = fillIn + divider;
+          }
+          sIndex++;
+        }
+      } catch (e, st) {
+        fillIn = e.toString() + ' - ' + st.toString();
+      }
+
+      layoutToUse = layoutToUse.replaceAll('###$i###', fillIn);
+    }
+
+    return layoutToUse;
+  }
+
   void update() async {
     try {
       //CHANNEL
@@ -64,132 +210,9 @@ class ContentTile implements OnInit, OnDestroy {
         /*       print(sourceSnapTemp.id);
         print(sourceSnapTemp.data());
 */
-        var pieces = layout.split(':::');
-        bool beforeList = true;
-        String layoutToUse = '';
-        Map lists = {};
+        layout = replace(json.decode(sourceData), layoutData);
 
-        int listIndex = 0;
-
-        for (String p in pieces) {
-          if (beforeList) {
-            layoutToUse += p;
-          } else {
-            layoutToUse += '###$listIndex###';
-            lists[listIndex] = p;
-
-            listIndex++;
-          }
-          beforeList = !beforeList;
-        }
-        Map sourceSnapTemp = json.decode(sourceData);
-
-        for (var key in sourceSnapTemp.keys) {
-          print(key);
-          print(key.runtimeType);
-
-          if (sourceSnapTemp[key] is String) {
-            layoutToUse =
-                layoutToUse.replaceAll('{{$key}}', sourceSnapTemp[key]);
-          } else {}
-        }
-
-        String getField(String k, String field) =>
-            k.split('#$field#').length == 3
-                ? k.split('#$field#')[1].split('#$field#')[0].trim()
-                : null;
-
-        /* print(
-            getField('#item# <div>{{title}}<br>{{body}}</div>#item#', 'item'));*/
-
-        for (int i = 0; i < listIndex; i++) {
-          String fillIn = '';
-          try {
-            String nll = lists[i];
-            String data = getField(nll, 'data');
-/*
-            print(data);
-*/
-
-/*
-            fs.QuerySnapshot dataSnap = await sourceRef.collection(data).get();
-*/
-
-            List dataListSnap = json.decode(sourceData)[data];
-
-            List docs;
-
-            String sort = getField(nll, 'sort');
-
-            if (sort == null) {
-              docs = dataListSnap;
-            } else {
-              docs = dataListSnap;
-
-              docs.sort((a, b) {
-                /* print(a.keys);
-                return 0;*/
-                return a[sort].toString().compareTo(b[sort].toString());
-              });
-            }
-
-            String item = getField(nll, 'item');
-            String divider = getField(nll, 'divider');
-
-            int sIndex = 0;
-            for (Map listDoc in docs) {
-              String oneItem = item;
-              for (var key in listDoc.keys) {
-                if (listDoc[key] is String) {
-                  oneItem = oneItem.replaceAll('{{$key}}', listDoc[key]);
-                } else {}
-              }
-              fillIn = fillIn + oneItem;
-              if (sIndex < docs.length - 1 && divider != null) {
-                fillIn = fillIn + divider;
-              }
-              sIndex++;
-            }
-          } catch (e, st) {
-            fillIn = e.toString() + ' - ' + st.toString();
-          }
-/*
-          print('[[$i]] $fillIn');
-*/
-
-          layoutToUse = layoutToUse.replaceAll('###$i###', fillIn);
-        }
-
-        /*   if (layout.split('***').length == 3) {
-          String item = layout.split('#item#')[1].split('#/item#')[0];
-          String divider = '';
-          if (layout.contains('#divider#')) {
-            divider = layout.split('#divider#')[1].split('#/divider#')[0];
-          }
-
-          print('---');
-          print(layout.split('***')[0].replaceAll('*', ''));
-
-          fs.QuerySnapshot list = await sourceRef
-              .collection(layout.split('***')[0].replaceAll('*', ''))
-              .get();
-          layout = '';
-
-          int sIndex = 0;
-          for (fs.DocumentSnapshot listDoc in list.docs) {
-            String oneItem = item;
-            for (var key in listDoc.data().keys) {
-              if (listDoc.data()[key] is String) {
-                oneItem = oneItem.replaceAll('{{$key}}', listDoc.data()[key]);
-              } else {}
-            }
-            layout = layout + oneItem;
-            if (sIndex < list.docs.length - 1) {
-              layout = layout + divider;
-            }
-            sIndex++;
-          }
-        }*/
+        // SETTING THE CONTENT
 
         Element el = window.document.querySelector('#' + key);
 
@@ -214,7 +237,7 @@ class ContentTile implements OnInit, OnDestroy {
             .getStorageUrl('users/xxredsolverxx@gmail.com/fruit.jpg');
         print('STORAGEURL');*/
 
-        el.setInnerHtml(layoutToUse /*+ '''<img src="$url">'''*/,
+        el.setInnerHtml(layout /*+ '''<img src="$url">'''*/,
             treeSanitizer: NodeTreeSanitizer.trusted);
       }
 

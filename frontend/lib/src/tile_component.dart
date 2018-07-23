@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
-import 'package:atlive/src/layouts/text.dart';
+import 'package:atlive/src/layouts/content.dart';
 import 'package:atlive/src/site_part.dart';
 
 @Component(
