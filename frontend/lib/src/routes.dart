@@ -14,6 +14,7 @@ import 'sources_component.template.dart' as sources_ct;
 
 import 'site_component.template.dart' as site_ct;
 import 'users_component.template.dart' as users_ct;
+import 'state_change_component.template.dart' as state_change_ct;
 
 @Injectable()
 class Routes {
@@ -40,6 +41,10 @@ class Routes {
   static final _users = new RouteDefinition(
     routePath: paths.users,
     component: users_ct.UsersComponentNgFactory,
+  );
+  static final _stateChange = new RouteDefinition(
+    routePath: paths.stateChange,
+    component: state_change_ct.StateChangeComponentNgFactory,
   );
   static final _sources = new RouteDefinition(
     routePath: paths.sources,
@@ -72,6 +77,8 @@ class Routes {
 
   RouteDefinition get users => _users;
 
+  RouteDefinition get stateChange => _stateChange;
+
   RouteDefinition get source => _source;
 
   RouteDefinition get sources => _sources;
@@ -92,7 +99,8 @@ class Routes {
     _source,
     _sources,
     _site,
-    _users
+    _users,
+    _stateChange
 
     /*  _hero,
     _heroes,*/

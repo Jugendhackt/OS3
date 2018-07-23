@@ -54,6 +54,7 @@ class AppComponent implements OnInit {
   final BService fbservice;
 
   List menuItems = new List();
+  List menuItemsBef = new List();
 
   String imageUrl = 'assets/profile_picture.png';
 
@@ -87,7 +88,9 @@ class AppComponent implements OnInit {
     loggedIn = false;
     showPopup = false;
 
+    _router.navigate('/stateChange');
     _router.navigate('/site/home');
+    parse();
 
 /*
     _router.navigate(_router.current.path);
@@ -97,6 +100,7 @@ class AppComponent implements OnInit {
   void loginChange(bool change) {
     loggedIn = change;
     showPopup = false;
+    parse();
 /*
     print(change);
 */
@@ -106,8 +110,7 @@ class AppComponent implements OnInit {
 
   void ngOnInit() async {
     if (await fbservice.checkAutoLogin()) {
-      _router.navigate('/site/home');
-
+      _router.navigate('/stateChange');
       _router.navigate(_router.current.path);
     }
 /*
@@ -142,7 +145,21 @@ class AppComponent implements OnInit {
         }
       });
     });*/
-    menuItems = json.decode(await fbservice.getData('menu'));
+    menuItemsBef = json.decode(await fbservice.getData('menu'));
+    parse();
+  }
+
+  void parse() async {
+    menuItems.clear();
+    for (Map x in menuItemsBef) {
+      if (x.containsKey('if')) {
+        if (await fbservice.checkPermString(x['if'])) {
+          menuItems.add(x);
+        }
+      } else {
+        menuItems.add(x);
+      }
+    }
   }
 
   void getImage() async {
@@ -158,11 +175,11 @@ class AppComponent implements OnInit {
     el.setAttribute('src', 'data:image/png;base64,' + base64);*/
   }
 }
-
+/*
 class MenuItem {
   String link;
   String label;
   String icon;
 
   MenuItem(this.label, this.icon, this.link);
-}
+}*/

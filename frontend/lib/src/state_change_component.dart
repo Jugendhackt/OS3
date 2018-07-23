@@ -5,23 +5,24 @@ import 'package:atlive/src/backend_service.dart';
 import 'package:atlive/src/routes.dart';
 
 @Component(
-  selector: 'users',
+  selector: 'state-change',
   template: '''
-  <h1>Users</h1>
-
+  <h1>The authentication state is changeing...</h1>
+  This site shouldn't be visible :)
+  If it is visible, then your connection isn't good enough for using this system
   
   ''',
   directives: [coreDirectives],
 )
-class UsersComponent implements OnInit {
-  UsersComponent(this.routes, BService this.fbservice);
+class StateChangeComponent {
+  StateChangeComponent(this.routes, BService this.fbservice);
 
   final BService fbservice;
   final Routes routes;
 
-  List<User> users;
+/* List<User> users;
 
   Future<void> ngOnInit() async {
     users = await fbservice.listUsers();
-  }
+  }*/
 }

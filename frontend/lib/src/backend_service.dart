@@ -17,7 +17,11 @@ class BService {
 
   /*
   final String server = 'https://151.216.10.58:443';*/
+/*
   final String server = 'https://localhost:443';
+*/
+
+  final String server = 'https://localhost:8357';
 
   User user;
 
@@ -247,7 +251,33 @@ class BService {
     return usrs;
   }
 
-  bool checkPermString(String permString) {}
+  Future<bool> checkPermString(String permString) async {
+    String details = permString.substring(permString.indexOf('.') + 1);
+    print(details);
+
+    var url = server + '/perm/checkCondition';
+    var res = await client
+        .post(url, headers: {'token': _token}, body: {'cond': permString});
+    return res.body == 'true' ? true : false;
+
+    /*switch (permString.split('.')[0]) {
+      case 'perm':
+      */ /* case 'PENDING':
+        executePending();
+        break;
+      case 'APPROVED':
+        executeApproved();
+        break;
+      case 'DENIED':
+        executeDenied();
+        break;
+      case 'OPEN':
+        executeOpen();
+        break;*/ /*
+      default:
+        return false;
+    }*/
+  }
 }
 
 class User {

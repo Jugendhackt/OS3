@@ -1,20 +1,86 @@
-{{title}}
+<style>
+    #userdiv {
+        display: inline-block;
+
+    }
+
+    tr.odd {
+        background: #fad3a6;
+    }
+
+    tr.even {
+        background: #fdecd9;
+    }
+
+    table.mon_list {
+        color: #000000;
+        width: 100%;
+        font-size: 100%;
+        border-collapse: collapse;
+    }
+
+    table.mon_list th, td {
+        padding: 8px 4px;
+    }
 
 
-:::
-#data#
+</style>
+<table class="mon_list">
+    <tr class='list'>
+        <th class="list" align="center">UserID</th>
+        <th class="list" align="center">Profilbild</th>
+        <th class="list" align="center">Username</th>
+        <th class="list" align="center">Anzeigename</th>
+        <th class="list" align="center">Email</th>
+    </tr>
 
-#data#
+    :::
+    #data#
 
-#sort#
-title
-#sort#
-#item#
-<div class="md-card" style="/*max-width: 50px;*/background-color: rgba(255, 255, 255, 0.5);">
-    <b>{{username}}</b><br>{{displayname}}</div>
-#item#
+    #data#
 
-#/divider#
-<div style="padding-top: 5px;"></div>
-#/divider#
-:::
+    #sort#
+    title
+    #sort#
+    #itemodd#
+
+    <tr class='list odd'>
+        <td class="list" align="center">{{userid}}</td>
+        <td class="list" align="center">[[s.{{userid}}/userData/profile_picture.png;64;s.profile_picture.png]]</td>
+        <td class="list" align="center">{{username}}</td>
+        <td class="list" align="center">{{displayname}}</td>
+        <td class="list" align="center">{{email}}</td>
+        -+-
+        [perm.2]
+        <td class="list" align="center">Löschen</td>
+        -+-
+    </tr>
+
+
+    #itemodd#
+
+    #itemeven#
+    <tr class='list even'>
+        <td class="list" align="center">{{userid}}</td>
+        <td class="list" align="center">[[s.{{userid}}/userData/profile_picture.png;]]</td>
+        <td class="list" align="center">{{username}}</td>
+        <td class="list" align="center">{{displayname}}</td>
+        <td class="list" align="center">{{email}}</td>
+        -+-
+        [perm.2]
+        <td class="list" align="center">Löschen</td>
+        -+-
+    </tr>
+
+    #itemeven#
+
+    #divider
+    <div style="padding-top: 5px;"></div>
+    #divider
+    :::
+</table>
+-+-
+[perm.2]
+Just show if it has perm 2
+
+-+-

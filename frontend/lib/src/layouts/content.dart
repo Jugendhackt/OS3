@@ -69,10 +69,23 @@ class ContentTile implements OnInit, OnDestroy {
     return valueTemp.toString();
   }
 
-  String replace(
-    var data,
-    String ltoUse,
-  ) {
+  Future<String> replace(var data, String ltoUseBef) async {
+    String ltoUse = '';
+    for (String ps in ltoUseBef.split('-+-')) {
+      print('* ' + ps);
+      if (ps.trim().startsWith('[')) {
+        print('YES');
+        String condition = ps.split(']')[0].split('[')[1].trim();
+        print(condition);
+
+        if (await fbservice.checkPermString(condition)) {
+          ltoUse += ps.substring(ps.indexOf(']') + 1);
+        }
+      } else {
+        ltoUse += ps;
+      }
+    }
+
     var pieces = ltoUse.split(':::');
     bool beforeList = true;
     String layoutToUse = '';
@@ -122,7 +135,64 @@ class ContentTile implements OnInit, OnDestroy {
       layoutToUse = layoutToUse.replaceAll('{{$key}}', valueTemp);
     }
 
+    List<String> mediaKeys = new List();
+    for (String x in layoutToUse.split('[[')..removeAt(0)) {
+      mediaKeys.add(x.split(']]')[0]);
+    }
+    print(mediaKeys);
+
+    for (var rawKey in mediaKeys) {
+      /*   print(key);
+      print(key.runtimeType);*/
+
+      String key = rawKey.split(';')[0];
+
+      switch (key.split('.')[0]) {
+        case 's':
+          if (key.endsWith('.jpg') ||
+              key.endsWith('.jpeg') ||
+              key.endsWith('.png')) {
+            //TODO Custom DATA Parameters
+            //TODO Buttons and Inputs
+
+         /*   querySelectorAll("button.update-something").forEach((ButtonElement b) {
+              b.onClick.listen((e) {
+                // Do Stuff
+              });
+            }*/
+            layoutToUse = layoutToUse.replaceAll(
+                '[[$rawKey]]',
+                "<img src='${fbservice.server}/storage/${key
+                    .substring(2)}?size=64'>");
+          } else {
+            layoutToUse = layoutToUse.replaceAll(
+                '[[$rawKey]]', "Mediaformat Not Supported");
+          }
+          break;
+
+        default:
+          layoutToUse =
+              layoutToUse.replaceAll('[[$rawKey]]', "Rootpath Not Supported");
+      }
+
+      /*   var valueTemp = data;
+
+      for (String keyX in key.split('.')) {
+        int z = int.tryParse(keyX);
+        if (z == null) {
+          valueTemp = valueTemp[keyX];
+        } else {
+          valueTemp = valueTemp[z];
+        }
+      }
+      print('{{$key}}');
+      print(valueTemp);*/
+    }
+
     //LISTHANDLER
+/*
+    print('LISTHANDLER');
+*/
 
     String getField(String k, String field) => k.split('#$field#').length == 3
         ? k.split('#$field#')[1].split('#$field#')[0].trim()
@@ -145,15 +215,20 @@ class ContentTile implements OnInit, OnDestroy {
         List dataListSnap = json.decode(sourceData)[data];
 */
         var valueTemp = data;
+        print('dataPath');
+        print(dataPath);
 
-        for (String keyX in dataPath.split('.')) {
-          int z = int.tryParse(keyX);
-          if (z == null) {
-            valueTemp = valueTemp[keyX];
-          } else {
-            valueTemp = valueTemp[z];
+        if (dataPath.length > 0) {
+          for (String keyX in dataPath.split('.')) {
+            int z = int.tryParse(keyX);
+            if (z == null) {
+              valueTemp = valueTemp[keyX];
+            } else {
+              valueTemp = valueTemp[z];
+            }
           }
         }
+
         List dataListSnap = valueTemp;
 
         List docs;
@@ -178,18 +253,37 @@ class ContentTile implements OnInit, OnDestroy {
         String divider = getField(nll, 'divider');
 
         int sIndex = 0;
-        for (var listDoc in docs) {
-          String oneItem = replace(listDoc, item);
-          /*  for (var key in listDoc.keys) {
+        if (item != null) {
+          for (var listDoc in docs) {
+            String oneItem = await replace(listDoc, item);
+            /*  for (var key in listDoc.keys) {
             if (listDoc[key] is String) {
               oneItem = oneItem.replaceAll('{{$key}}', listDoc[key]);
             } else {}
           }*/
-          fillIn = fillIn + oneItem;
-          if (sIndex < docs.length - 1 && divider != null) {
-            fillIn = fillIn + divider;
+            fillIn = fillIn + oneItem;
+            if (sIndex < docs.length - 1 && divider != null) {
+              fillIn = fillIn + divider;
+            }
+            sIndex++;
           }
-          sIndex++;
+        } else {
+          String itemodd = getField(nll, 'itemodd');
+          String itemeven = getField(nll, 'itemeven');
+          for (var listDoc in docs) {
+            String oneItem =
+                await replace(listDoc, sIndex.isOdd ? itemeven : itemodd);
+            /*  for (var key in listDoc.keys) {
+            if (listDoc[key] is String) {
+              oneItem = oneItem.replaceAll('{{$key}}', listDoc[key]);
+            } else {}
+          }*/
+            fillIn = fillIn + oneItem;
+            if (sIndex < docs.length - 1 && divider != null) {
+              fillIn = fillIn + divider;
+            }
+            sIndex++;
+          }
         }
       } catch (e, st) {
         fillIn = e.toString() + ' - ' + st.toString();
@@ -210,7 +304,7 @@ class ContentTile implements OnInit, OnDestroy {
         /*       print(sourceSnapTemp.id);
         print(sourceSnapTemp.data());
 */
-        layout = replace(json.decode(sourceData), layoutData);
+        layout = await replace(json.decode(sourceData), layoutData);
 
         // SETTING THE CONTENT
 
@@ -280,7 +374,12 @@ class ContentTile implements OnInit, OnDestroy {
       sourceRef = code.split(';')[1];
       layoutData = await fbservice.getLayout(layoutRef);
       sourceData = await fbservice.getData(sourceRef);
-      update();
+      print('###');
+      print(layoutData);
+      print('###');
+      print(sourceData);
+      print('###');
+      await update();
 
       /*print(layoutRef.path);
       layoutStream = layoutRef.onSnapshot;

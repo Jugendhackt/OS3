@@ -53,6 +53,9 @@ func main() {
 	//Openng the Connection to the mysql data base,
 	//checking for errors and setting the data base as global variable
 	db, err := sql.Open("mysql", login[0].Username+":"+login[0].Passsword+"@tcp("+login[0].Address+")/"+login[0].Dbname+"?charset="+login[0].Charset)
+
+	defer db.Close()
+
 	if db != nil {
 		fmt.Println(db)
 	}
@@ -73,12 +76,14 @@ func main() {
 	mux.HandleFunc("/auth/login", loginHandler)
 	mux.HandleFunc("/auth/tokenLogin", tokenLoginHandler)
 	mux.HandleFunc("/auth/register", registerHandler)
-	/*	mux.HandleFunc("/perm/ownPerms", ownPermsHandler)
-	*//*mux.HandleFunc("/user/listUsers", listUsersHandler)*/
+
+	mux.HandleFunc("/perm/checkCondition", checkConditionHandler)
+	/*mux.HandleFunc("/user/listUsers", listUsersHandler)*/
 	//mux.HandleFunc("/user/meta", userMetaHandler)
 	mux.HandleFunc("/site/", siteHandler)
-	mux.HandleFunc("/layout/", folderHandler)
+	mux.HandleFunc("/layout/", layoutHandler)
 	mux.HandleFunc("/data/", dataHandler)
+	mux.HandleFunc("/storage/", storageHandler)
 
 	//Configuring the TLS Transmission
 	cfg := &tls.Config{
@@ -95,7 +100,7 @@ func main() {
 
 	//Starting the Server
 	srv := &http.Server{
-		Addr:         ":443",
+		Addr:         ":8357",
 		Handler:      mux,
 		TLSConfig:    cfg,
 		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
@@ -114,11 +119,55 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write([]byte("This is a test server.\n"))
 }
 
-func folderHandler(w http.ResponseWriter, req *http.Request) {
+func layoutHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-	http.ServeFile(w, req, "."+req.URL.Path)
-}
+
+	token := req.Header.Get("token")
+	fmt.Println(string(token))
+
+	uid := getUserAuth(token)
+	/*	fmt.Println("###")
+		fmt.Println(uid)*/
+
+	ltoUseBef2, _ := ioutil.ReadFile("." + req.URL.Path)
+	/*	fmt.Println(string(ltoUseBef2))
+	*/
+	/*	fmt.Println("---")
+	*//*	fmt.Println(string(ltoUseBef))
+	*/ltoUseBef := string(ltoUseBef2)
+
+	ltoUse := ""
+	for _, ps := range strings.Split(ltoUseBef, "-+-") {
+		/*	fmt.Println(strings.TrimSpace(ps))
+			fmt.Println(strings.Index(strings.TrimSpace(ps), "["))*/
+		if strings.Index(strings.TrimSpace(ps), "[") == 0 {
+			/*			fmt.Println("IndexSTART")
+			*/
+			condition := strings.Split(strings.Split(ps, "]")[0], "[")[1]
+			/*fmt.Println(condition)
+			fmt.Println(checkPermString(condition, uid))
+			fmt.Println(checkPermString(condition, uid))
+			fmt.Println(checkPermString(condition, uid))*/
+			bl, _ := strconv.ParseBool(checkPermString(condition, uid))
+			/*		fmt.Println(bl)
+					fmt.Println(ps[strings.Index(ps, "]")+1:])*/
+			if bl {
+				ltoUse = ltoUse + ps[strings.Index(ps, "]")+1:]
+			}
+			/*			fmt.Println("IndexDONE")
+			*/} else {
+			ltoUse = ltoUse + ps
+
+		}
+	}
+	/*fmt.Println("---")
+
+	fmt.Println(string(ltoUse), )*/
+	displaymsg(string(ltoUse), &w)
+	/*	fmt.Println("###")
+	*//*	http.ServeFile(w, req, "."+req.URL.Path)
+	*/}
 
 func siteHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w, req)
@@ -162,6 +211,27 @@ func siteHandler(w http.ResponseWriter, req *http.Request) {
 	/*	w.Header().Set("test", "value")
 	*/
 	http.ServeFile(w, req, "."+s)
+}
+
+func storageHandler(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w, req)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+
+	sizeKey := ""
+
+	sizeKeys, _ := req.URL.Query()["size"]
+	if len(sizeKeys) != 0 {
+		sizeKey = sizeKeys[0]
+	}
+	fmt.Println(sizeKey)
+
+	token := req.Header.Get("token")
+	fmt.Println(string(token))
+
+	uid := getUserAuth(token)
+	fmt.Println(uid)
+
+	http.ServeFile(w, req, "."+req.URL.Path)
 }
 
 func dataHandler(w http.ResponseWriter, req *http.Request) {
@@ -223,6 +293,62 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 	/*	uid := getUserAuth(st)
 	*//*
 		displaymsg(strconv.FormatInt(uid, 10), &w)*/
+
+}
+
+func checkConditionHandler(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w, req)
+	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+
+	token := req.Header.Get("token")
+	fmt.Println(string(token))
+
+	uid := getUserAuth(token)
+
+	/*	if uid == 0 {
+	acdeny(&w)
+
+			return
+
+		} else {*/
+	/*		displaymsg(strconv.FormatInt(uid, 10), &w)
+	*/
+
+	switch req.Method {
+
+	//In case of a post request the program continues the login
+	case "POST":
+
+		//The request form gets parsed and then for the
+		//sake of debugging printed into the console
+		req.ParseForm()
+		fmt.Printf("\n\n%v\n", req.Form)
+
+		//Then the data the user sent is fetched and stored
+		//in variables to work with them
+		cond := req.Form["cond"]
+
+		//Then the data gets passed into the login-function
+		displaymsg(checkPermString(cond[0], uid), &w)
+
+		//for any other request type the requestor simply gets a message saying access denied.
+	default:
+		fmt.Printf("\n\n%v\n", req)
+		fmt.Println(req.Form)
+		acdeny(&w)
+
+	}
+
+}
+func checkPermString(cond string, uid int64) string {
+	rootCond := strings.Split(cond, ".")[0]
+	switch rootCond {
+	case "perm":
+		var perm, _ = strconv.Atoi(strings.Split(cond, ".")[1])
+		return strconv.FormatBool(hasPerm(uid, int64(perm)))
+	default:
+		return "false"
+	}
 
 }
 
@@ -309,7 +435,7 @@ func listUsers( /*w http.ResponseWriter, req *http.Request*/) string {
 	/*		displaymsg(strconv.FormatInt(uid, 10), &w)
 	*/
 	/*		if hasPerm(uid, 3) {
-	*/rows, err := database.Query("SELECT username,email,displayname FROM user")
+	*/rows, err := database.Query("SELECT userid,username,displayname,email FROM user")
 
 	if err != nil {
 		/*displaymsg("Error", &w)
@@ -371,6 +497,7 @@ func listUsers( /*w http.ResponseWriter, req *http.Request*/) string {
 }
 func getUserAuth(s string) int64 {
 	uid, err := database.Query("SELECT userId FROM tokens WHERE token = \"" + s + "\"")
+	defer uid.Close()
 
 	//if it would accur that there are several people with that username
 	//we choose the first one (it wouldn#t matter but cannot be number 0)
@@ -480,7 +607,7 @@ func registerHandler(w http.ResponseWriter, req *http.Request) {
 //The function for generating the bare minimum of the data base
 func checkDataBase(db *sql.DB) {
 	//Setting up the main user data base
-	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64),profilePicture MEDIUMBLOB)")
+	db.Exec("CREATE TABLE IF NOT EXISTS user(userid int NOT NULL AUTO_INCREMENT PRIMARY KEY,username VARCHAR(32) NOT NULL,password CHAR(64) NOT NULL,displayname VARCHAR(32),email VARCHAR(64))")
 
 	db.Exec("CREATE TABLE IF NOT EXISTS tokens(tokenid int NOT NULL AUTO_INCREMENT PRIMARY KEY,userid int NOT NULL,token VARCHAR(36) NOT NULL,currentTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (userid) REFERENCES user(userid) )")
 
@@ -497,27 +624,53 @@ func checkDataBase(db *sql.DB) {
 
 	db.Exec("CREATE TABLE IF NOT EXISTS userGroups(userGroupId int NOT NULL AUTO_INCREMENT PRIMARY KEY,userId int NOT NULL,groupId int NOT NULL)")
 
-	db.Exec("CREATE TABLE IF NOT EXISTS groupPerms(groupPermId int NOT NULL AUTO_INCREMENT PRIMARY KEY,userId int NOT NULL,permId int NOT NULL)")
+	db.Exec("CREATE TABLE IF NOT EXISTS groupPerms(groupPermId  int NOT NULL AUTO_INCREMENT PRIMARY KEY,userId int NOT NULL,permId int NOT NULL)")
 
 	//Creating a default user
 	fmt.Println(createUser("root", "geheim", "The Root", ""))
+	fmt.Println(createUser("testuser1", "abc", "Displayname", ""))
+	fmt.Println(createUser("testuser2", "abc", "Displayname", ""))
+	fmt.Println(createUser("testuser3", "abc", "Displayname", ""))
+	fmt.Println(createUser("testuser4", "abc", "Displayname", ""))
+	fmt.Println(createUser("testuser5", "abc", "Displayname", ""))
 	fmt.Println(createGroup("Admin", true))
 	fmt.Println(addUserToGroup(1, 1))
-	fmt.Println(addPerm( /*userOrGroupId*/ 1, /*isUser*/ 0, /*permissions*/ []int64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
+	fmt.Println(addPerm( /*userOrGroupId*/ 1, /*isUser*/ 0, /*permissions*/ []int64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30}))
 	fmt.Println(hasPerm( /*userId*/ 1, /*permission*/ 10))
 	fmt.Println(getPerms( /*userId*/ 1))
+	fmt.Println(getGroups(1))
 
 	/*
-		perms	create_user		1	Create a new user
-		perms	delete_user		2	Delete any user
-		perms	list_users		3	List all users
-		perms	edit_user		4	Edit any user
-		perms	create_group	5	Create a new group
-		perms	delete_group	6	Delete any group
-		perms	list_groups		7	List all groups
-		perms	edit_group		8	Edit any group
-		perms	edit_perms		9	Edit the name and description of perms
-		perms	change_perms	10	Change the global perms for users and groups
+		perms	create_user			1	Create a new user
+		perms	delete_user			2	Delete any user
+		perms	list_users			3	List all users
+		perms	edit_user			4	Edit any user
+		perms	create_group		5	Create a new group
+		perms	delete_group		6	Delete any group
+		perms	list_groups			7	List all groups
+		perms	edit_group			8	Edit any group
+		perms	edit_perms			9	Edit the name and description of perms
+		perms	change_perms		10	Change the global perms for users and groups
+		perms	create_site			11
+		perms	delete_site			12
+		perms	list_sites			13
+		perms	edit_site			14
+		perms	create_alias		15
+		perms	delete_alias		16
+		perms	list_aliases		17
+		perms	edit_alias			18
+		perms	create_layout		19
+		perms	delete_layout		20
+		perms	list_layouts		21
+		perms	edit_layout			22
+		perms	create_data			23
+		perms	delete_data			24
+		perms	list_datasets		25
+		perms	edit_data			26
+		perms	read_data			27
+		perms	read_layout			28
+		perms	read_site			29
+		perms	change_data_perms	30
 	*/
 
 	/*	fmt.Println(logUserIn("root", "geheim", "fauwhwaduwdawdf", "saddfsdfsdf"))
@@ -551,19 +704,20 @@ func getPerms(userId int64) []int64 {
 		log.Fatal(err)
 	}
 
-	rows, err = database.Query("SELECT groupId FROM userGroups WHERE userId = " + strconv.FormatInt(userId, 10))
+	/*rows, err = database.Query("SELECT groupId FROM userGroups WHERE userId = " + strconv.FormatInt(userId, 10))
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
+	defer rows.Close()*/
 
-	for rows.Next() {
-		var gid int64
+	for _, element := range getGroups(userId) {
+		/*var gid int64
 		if err := rows.Scan(&gid); err != nil {
 			log.Fatal(err)
-		}
-		rows, err := database.Query("SELECT permission FROM perms WHERE userOrGroupId = " + strconv.FormatInt(gid, 10) + " AND isUser = 0")
+		}*/
+		rows, err := database.Query("SELECT permission FROM perms WHERE userOrGroupId = " + strconv.FormatInt(element, 10) + " AND isUser = 0")
+		defer rows.Close()
 
 		if err != nil {
 			log.Fatal(err)
@@ -588,6 +742,28 @@ func getPerms(userId int64) []int64 {
 
 	return pids
 }
+
+func getGroups(userId int64) []int64 {
+	var pids []int64
+	pids = append(pids, 0)
+
+	rows, err := database.Query("SELECT groupId FROM userGroups WHERE userId = " + strconv.FormatInt(userId, 10))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var gid int64
+		if err := rows.Scan(&gid); err != nil {
+			log.Fatal(err)
+		}
+		pids = append(pids, gid)
+	}
+
+	return pids
+}
 func addPerm(userOrGroupId int64, isUser int64, permissions []int64) string {
 	for _, element := range permissions {
 		/*		fmt.Println(element)
@@ -597,6 +773,8 @@ func addPerm(userOrGroupId int64, isUser int64, permissions []int64) string {
 
 			fmt.Println("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(userOrGroupId, 10) + " AND isUser = " + strconv.FormatInt(isUser, 10) + " AND permission = " + strconv.FormatInt(element, 10))
 			*/
+
+		defer uid.Close()
 
 		var gid int
 		if uid != nil {
@@ -639,7 +817,7 @@ func hasPerm(userId int64, permission int64) bool {
 
 		fmt.Println("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(userOrGroupId, 10) + " AND isUser = " + strconv.FormatInt(isUser, 10) + " AND permission = " + strconv.FormatInt(element, 10))
 		*/
-
+	defer uid.Close()
 	var gid int
 	if uid != nil {
 		uid.Next()
@@ -648,20 +826,23 @@ func hasPerm(userId int64, permission int64) bool {
 
 	if gid == 0 && err == nil {
 
-		rows, err := database.Query("SELECT groupId FROM userGroups WHERE userId = " + strconv.FormatInt(userId, 10))
+		/*rows, err := database.Query("SELECT groupId FROM userGroups WHERE userId = " + strconv.FormatInt(userId, 10))
 		if err != nil {
 			log.Fatal(err)
 			return false
 		}
-		defer rows.Close()
-		for rows.Next() {
-			var groupId int64
+		defer rows.Close()*/
+		for _, element := range getGroups(userId) {
+			/*var groupId int64
 			if err := rows.Scan(&groupId); err != nil {
 				log.Fatal(err)
 				return false
-			}
+			}*/
 
-			uid, err = database.Query("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(groupId, 10) + " AND isUser = 0 AND permission = " + strconv.FormatInt(permission, 10))
+			uid, err = database.Query("SELECT permId FROM perms WHERE userOrGroupId = " + strconv.FormatInt(element, 10) + " AND isUser = 0 AND permission = " + strconv.FormatInt(permission, 10))
+
+			defer uid.Close()
+
 			var gid int
 			if uid != nil {
 				uid.Next()
@@ -670,12 +851,12 @@ func hasPerm(userId int64, permission int64) bool {
 			if gid != 0 {
 				return true
 			}
-			fmt.Println(groupId)
-		}
-		if err := rows.Err(); err != nil {
+			/*			fmt.Println(groupId)
+			*/}
+		/*if err := rows.Err(); err != nil {
 			log.Fatal(err)
 			return false
-		}
+		}*/
 
 	} else if uid != nil && err == nil {
 		/*			return "User with id " + strconv.FormatInt(userId, 10) + " already in group " + strconv.FormatInt(groupId, 10) + "."
@@ -718,6 +899,7 @@ func tokenLogIn(token string) (username string, action int) {
 	//Now the Program does a query to ask if there is a Person that alreadly
 	//has this token
 	uid, err := database.Query("SELECT userid FROM tokens WHERE token = \"" + token + "\"")
+	defer uid.Close()
 
 	//if it would accur that there are several people with that username
 	//we choose the first one (it wouldn#t matter but cannot be number 0)
@@ -729,6 +911,7 @@ func tokenLogIn(token string) (username string, action int) {
 
 	if err == nil {
 		pass, errr := database.Query("SELECT username FROM user WHERE userid = ?", usid)
+		defer pass.Close()
 		if errr == nil {
 			var uname string
 			for pass.Next() {
@@ -762,6 +945,7 @@ func getSiteTroughAlias(alias string) (site string) {
 	}
 
 	uid, err := database.Query("SELECT siteId FROM siteAliases WHERE alias = \"" + alias + "\"")
+	defer uid.Close()
 
 	var sid int
 	if uid != nil {
@@ -789,6 +973,7 @@ func logUserIn(username, password, token string, autoLoginToken string) string {
 	//Now the Program does a query to ask if there is a Person that alreadly
 	//has this username
 	uid, err := database.Query("SELECT userid FROM user WHERE username = \"" + username + "\"")
+	defer uid.Close()
 
 	//if it would accur that there are several people with that username
 	//we choose the first one (it wouldn#t matter but cannot be number 0)
@@ -808,6 +993,7 @@ func logUserIn(username, password, token string, autoLoginToken string) string {
 
 		//now i ask the server for the userpassword which is stored as hash.
 		pass, errr := database.Query("SELECT password FROM user WHERE userid = ?", usid)
+		defer pass.Close()
 
 		//if no error happened everything stays normal
 		if errr == nil {
@@ -855,6 +1041,8 @@ func logUserIn(username, password, token string, autoLoginToken string) string {
 func logUserInWithToken(autoLoginToken string, token string, ) string {
 
 	uid, err := database.Query("SELECT userid FROM autoLoginTokens WHERE token = \"" + autoLoginToken + "\"")
+	defer uid.Close()
+
 	var usid int
 	if uid != nil {
 		uid.Next()
@@ -871,6 +1059,8 @@ func logUserInWithToken(autoLoginToken string, token string, ) string {
 		return "FAILED_INVALID"
 	} else {
 		uid, err := database.Query("SELECT username FROM user WHERE userid = \"" + strconv.Itoa(usid) + "\"")
+		defer uid.Close()
+
 		var username string
 		if uid != nil {
 			uid.Next()
@@ -900,6 +1090,7 @@ func createUser(username, password, displayname, email string) string {
 	//Now the Program does a query to ask if there is a Person that alreadly
 	//has this username
 	uid, err := database.Query("SELECT userid FROM user WHERE username = '" + username + "'")
+	defer uid.Close()
 
 	//if it would accur that there are several people with that username
 	//we choose the first one (it wouldn't matter but cannot be number 0)
@@ -960,6 +1151,7 @@ func createUser(username, password, displayname, email string) string {
 //The createGroup function
 func addUserToGroup(userId int64, groupId int64) string {
 	uid, err := database.Query("SELECT userId FROM userGroups WHERE userId = '" + strconv.FormatInt(userId, 10) + "' AND groupId = '" + strconv.FormatInt(groupId, 10) + "'")
+	defer uid.Close()
 	var gid int
 	if uid != nil {
 		uid.Next()
@@ -993,6 +1185,7 @@ func addUserToGroup(userId int64, groupId int64) string {
 
 func createGroup(groupname string, visible bool) string {
 	uid, err := database.Query("SELECT groupId FROM groups WHERE groupName = '" + groupname + "'")
+	defer uid.Close()
 	var gid int
 	if uid != nil {
 		uid.Next()

@@ -140,8 +140,7 @@ class LoginComponent implements OnInit, OnDestroy {
       /* error=res;*/
       _loginChange.add(true);
 
-      _router.navigate('/site/home');
-
+      _router.navigate('/stateChange');
       _router.navigate(_router.current.path);
     } else {
       error = res;

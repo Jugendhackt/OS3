@@ -6,6 +6,7 @@ final files = new RoutePath(path: '/files');
 final messages = new RoutePath(path: '/messages');
 final groups = new RoutePath(path: '/groups');
 final users = new RoutePath(path: '/users');
+final stateChange = new RoutePath(path: '/stateChange');
 
 final sources = new RoutePath(path: '/sources');
 
