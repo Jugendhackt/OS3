@@ -15,6 +15,8 @@ import (
 	"strings"
 	"os"
 	"path/filepath"
+	"image/png"
+	"github.com/nfnt/resize"
 )
 
 var database *sql.DB
@@ -216,6 +218,7 @@ func siteHandler(w http.ResponseWriter, req *http.Request) {
 func storageHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w, req)
 	w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+	fmt.Println("++" + req.URL.Path)
 
 	sizeKey := ""
 
@@ -231,8 +234,70 @@ func storageHandler(w http.ResponseWriter, req *http.Request) {
 	uid := getUserAuth(token)
 	fmt.Println(uid)
 
-	http.ServeFile(w, req, "."+req.URL.Path)
-}
+	sl := strings.Split(req.URL.Path, ".")
+
+	ending := sl[len(sl)-1]
+	fmt.Println("ending")
+	fmt.Println(ending)
+
+	if sizeKey == "" {
+		fmt.Println("EMPTY SIZE")
+
+		http.ServeFile(w, req, "."+req.URL.Path)
+		return
+	}
+	fmt.Println("!" + ending + sizeKey)
+	if ending == "jpg" || ending == "jpeg" {
+
+	} else if ending == "png" {
+		fmt.Println("!!" + ending + sizeKey + req.URL.Path)
+
+		file, err := os.Open("." + req.URL.Path)
+		if err != nil {
+			displaymsg("Doesn't exist", &w)
+			return
+			log.Fatal(err)
+		}
+
+		// decode jpeg into image.Image
+		img, err := png.Decode(file)
+		if err != nil {
+			displaymsg("Doesn't exist", &w)
+			return
+			/*			log.Fatal(err)
+			*/}
+		file.Close()
+
+		// resize to width 1000 using Lanczos resampling
+		// and preserve aspect ratio
+		fmt.Println(img.Bounds())
+
+		size, _ := strconv.Atoi(sizeKey)
+
+		m := resize.Resize(uint(size), uint(size), img, resize.Lanczos3)
+
+		fmt.Println(m.Bounds())
+		fmt.Println("CREATED")
+		/*	out, err := os.Create("cache" + req.URL.Path)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer out.Close()*/
+
+		fmt.Println("CREATED")
+		// write new image to file
+		png.Encode(w, m)
+		fmt.Println("CREATED")
+
+		/*		http.ServeFile(w, req, "./cache"+req.URL.Path)
+		*/} else {
+		fmt.Println("SERVING")
+		http.ServeFile(w, req, /* "."+s*/ "."+req.URL.Path)
+
+	}
+
+	/*	http.ServeFile(w, req, "."+req.URL.Path)
+	*/}
 
 func dataHandler(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w, req)
@@ -288,6 +353,7 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 		}*/
 
 		http.ServeFile(w, req, /* "."+s*/ "."+req.URL.Path)
+
 	}
 
 	/*	uid := getUserAuth(st)
@@ -873,6 +939,7 @@ func hasPerm(userId int64, permission int64) bool {
 
 //Small function to enable cors
 func enableCors(w *http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path)
 
 	if origin := r.Header.Get("Origin"); origin != "" {
 		(*w).Header().Set("Access-Control-Allow-Origin", origin)
